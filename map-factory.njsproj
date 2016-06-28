@@ -41,6 +41,7 @@
     <TypeScriptCompile Include="Scripts\typings\nodeunit\nodeunit.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\object-mapper\object-mapper.d.ts" />
+    <TypeScriptCompile Include="test\examples-test.ts" />
     <TypeScriptCompile Include="test\index-test.ts" />
     <TypeScriptCompile Include="test\map-factory-test.ts" />
   </ItemGroup>
