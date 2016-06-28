@@ -4,7 +4,14 @@
   "description": "Object mapping tool",
   "main": "./dist/lib/index.js",
   "scripts": {
-    "test": "nodeunit ./dist/test/"
+    "test": "./node_modules/.bin/nodeunit ./dist/test/"
+  },
+  "bugs": {
+    "url": "https://github.com/midknight41/map-factory/issues"
+  },
+  "repository": {
+    "type" : "git",
+    "url": "https://github.com/midknight41/map-factory.git"
   },
   "keywords": [
     "object",
@@ -17,5 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "object-mapper": "^3.0.1"
+  },
+  "devDependencies": {
+    "nodeunit": "^0.9.1"
   }
 }
