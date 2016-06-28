@@ -10,7 +10,10 @@
     "object",
     "mapping"
   ],
-  "author": "Chad Macey",
+  "author": "Chad Macey <chad_macey@hotmail.com>",
+  "contributors": [
+    "Chad Macey <chad_macey@hotmail.com>"
+  ],
   "license": "MIT",
   "dependencies": {
     "object-mapper": "^3.0.1"
