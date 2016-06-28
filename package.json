@@ -1,0 +1,18 @@
+{
+  "name": "map-factory",
+  "version": "0.1.0",
+  "description": "Object mapping tool",
+  "main": "./dist/lib/index.js",
+  "scripts": {
+    "test": "nodeunit ./dist/test/"
+  },
+  "keywords": [
+    "object",
+    "mapping"
+  ],
+  "author": "Chad Macey",
+  "license": "MIT",
+  "dependencies": {
+    "object-mapper": "^3.0.1"
+  }
+}
