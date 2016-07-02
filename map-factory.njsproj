@@ -37,7 +37,10 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <TypeScriptCompile Include="lib\index.ts" />
+    <TypeScriptCompile Include="lib\interfaces.ts" />
     <TypeScriptCompile Include="lib\map-factory.ts" />
+    <TypeScriptCompile Include="lib\mapper.ts" />
+    <TypeScriptCompile Include="lib\mapping.ts" />
     <TypeScriptCompile Include="Scripts\typings\nodeunit\nodeunit.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\node\node.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\object-mapper\object-mapper.d.ts" />

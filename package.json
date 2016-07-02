@@ -4,7 +4,12 @@
   "description": "Object mapping tool",
   "main": "./dist/lib/index.js",
   "scripts": {
-    "test": "nodeunit ./dist/test/"
+    "test": "nodeunit ./dist/test/",
+    "cover": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test",
+    "coveralls": "istanbul cover ./node_modules/nodeunit/bin/nodeunit lib/Tests && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "major": "npm version major -m \"published to npm as v%s\" && git push && npm publish",
+    "minor": "npm version minor -m \"published to npm as v%s\" && git push && npm publish",
+    "patch": "npm version patch -m \"published to npm as v%s\" && git push && npm publish"
   },
   "keywords": [
     "object",
@@ -17,5 +22,12 @@
   "license": "MIT",
   "dependencies": {
     "object-mapper": "^3.0.1"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.2",
+    "gently": "0.9.2",
+    "istanbul": "^0.3.14",
+    "jscoverage": "^0.5.9",
+    "nodeunit": "^0.9.1"
   }
 }

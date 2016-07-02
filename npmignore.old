@@ -72,11 +72,17 @@ lib/node_modules
 *ncrunch*
 *crunch*.local.xml
 
-# coverage reports
-coverage
-
 # visual studio database projects
 *.dbmdl
 
 #Test files
 *.testsettings
+
+
+# npmignore - content above this line is automatically generated and modifications may be omitted
+# see npmjs.com/npmignore for more details.
+lib
+test
+Scripts
+*.njsproj
+*.sln

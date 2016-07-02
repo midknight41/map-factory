@@ -25,7 +25,7 @@ console.log(result);
   {
     "fieldName": "name1",
     "fieldId": "123"
-  };
+  }
 */
 ```
 
@@ -198,4 +198,39 @@ const source = {
     ]
   }
 */
+```
+
+### Select from multiple sources at once
+You can also provide an array or source fields and they can be extracted together. You must provide a transform for the target field.
+```js
+const createMapper = require("map-factory");
+
+const source = {
+  "apples": {
+    "count": 3
+  },
+  "oranges": {
+    "count": 4
+  }
+};
+
+const map = createMapper(source);
+
+map(["apples.count", "oranges.count"]).to("fruit.count", (appleCount, orangeCount) => {
+
+  return appleCount + orangeCount;
+
+});
+
+const result = map.execute();
+console.log(result);
+
+/*
+  {
+    fruit: {
+    count: 7
+    }
+  }
+*/
+
 ```
