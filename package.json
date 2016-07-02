@@ -7,9 +7,9 @@
     "test": "./node_modules/.bin/nodeunit ./dist/test/",
     "cover": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test",
     "coveralls": "istanbul cover ./node_modules/nodeunit/bin/nodeunit lib/Tests && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "major": "npm version major -m \"published to npm as v%s\" && git push && npm publish",
-    "minor": "npm version minor -m \"published to npm as v%s\" && git push && npm publish",
-    "patch": "npm version patch -m \"published to npm as v%s\" && git push && npm publish"
+    "major": "npm version major -m \"published to npm as v%s\" && git push --tags && npm publish",
+    "minor": "npm version minor -m \"published to npm as v%s\" && git push --tags && npm publish",
+    "patch": "npm version patch -m \"published to npm as v%s\" && git push --tags && npm publish"
   },
   "bugs": {
     "url": "https://github.com/midknight41/map-factory/issues"
