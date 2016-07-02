@@ -1,6 +1,6 @@
 # map-factory
 
-[![Coverage Status](https://coveralls.io/repos/github/midknight41/map-factory/badge.svg?branch=master)](https://coveralls.io/github/midknight41/map-factory?branch=master) ![Build](https://api.travis-ci.org/midknight41/map-factory.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/midknight41/map-factory/badge.svg?branch=master)](https://coveralls.io/github/midknight41/map-factory?branch=master) ![Build](https://api.travis-ci.org/midknight41/map-factory.svg?branch=master) ![Deps](https://david-dm.org/midknight41/map-factory.svg)
 
 A simple utility to map data from an existing object to a new one. This is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
 
