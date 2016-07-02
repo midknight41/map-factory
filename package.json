@@ -20,7 +20,10 @@
   },
   "keywords": [
     "object",
-    "mapping"
+    "mapping",
+    "mapper",
+    "fluent",
+    "transform"
   ],
   "author": "Chad Macey <chad_macey@hotmail.com>",
   "contributors": [
