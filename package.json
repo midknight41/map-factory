@@ -4,9 +4,15 @@
   "description": "Object mapping tool",
   "main": "./dist/lib/index.js",
   "scripts": {
-    "test": "./node_modules/.bin/nodeunit ./dist/test/",
+    "prebuild": "npm run clean",
+    "build": "tsc --pretty -p ./ -d",
+    "clean": "./node_modules/.bin/rimraf dist/*",
     "cover": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test",
     "coveralls": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "pretest": "npm run build",
+    "test": "nodeunit ./dist/test/",
+    "pretravis": "npm run build",
+    "travis": "npm run coveralls",
     "major": "npm version major -m \"published to npm as v%s\" && git push --tags && npm publish",
     "minor": "npm version minor -m \"published to npm as v%s\" && git push --tags && npm publish",
     "patch": "npm version patch -m \"published to npm as v%s\" && git push --tags && npm publish"
@@ -38,6 +44,8 @@
     "gently": "^0.10.0",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
-    "nodeunit": "^0.9.1"
+    "nodeunit": "^0.9.1",
+    "rimraf": "^2.5.3",
+    "typescript": "^1.8.10"
   }
 }

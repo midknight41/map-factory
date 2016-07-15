@@ -11,7 +11,7 @@ var basicMappingGroup = {
                 "name": "name1"
             }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         map("fieldName").to("field.name");
         var actual = map.execute();
         test.deepEqual(actual, expected);
@@ -19,14 +19,14 @@ var basicMappingGroup = {
     },
     "A field that doesn't exists on the source doesn't affect the resulting object": function (test) {
         var source = {
-            "fieldName": "name1",
+            "fieldName": "name1"
         };
         var expected = {
             "field": {
                 "name": "name1"
             }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         map("fieldName").to("field.name");
         map("fieldId").to("field.name");
         var actual = map.execute();
@@ -35,14 +35,14 @@ var basicMappingGroup = {
     },
     "A null source field throws an error": function (test) {
         var source = {
-            "fieldName": "name1",
+            "fieldName": "name1"
         };
         var expected = {
             "field": {
                 "name": "name1"
             }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         test.throws(function () {
             map(null).to("field.name");
         });
@@ -50,14 +50,14 @@ var basicMappingGroup = {
     },
     "A null target field throws an error": function (test) {
         var source = {
-            "fieldName": "name1",
+            "fieldName": "name1"
         };
         var expected = {
             "field": {
                 "name": "name1"
             }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         test.throws(function () {
             map("fieldName").to(null);
         });
@@ -65,9 +65,9 @@ var basicMappingGroup = {
     },
     "The source field is used if not target field is provided": function (test) {
         var source = {
-            "fieldName": "name1",
+            "fieldName": "name1"
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         map("fieldName");
         var actual = map.execute();
         test.deepEqual(actual, source, "field was not mapped to new object");
@@ -77,14 +77,14 @@ var basicMappingGroup = {
 var customFunctionsGroup = {
     "Calls a function and alters the resulting object": function (test) {
         var source = {
-            "fieldName": "name1",
+            "fieldName": "name1"
         };
         var expected = {
             "field": {
                 "name": "altered"
             }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         map("fieldName").to("field.name", function (value) { return "altered"; });
         var actual = map.execute();
         test.deepEqual(actual, expected, "field was not mapped to new object");
@@ -104,7 +104,7 @@ var multipleSelectionGroup = {
         var expected = {
             "merged": { "names": ["A", "B"] }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         map(["group1", "group2"]).to("merged", function (group1, group2) {
             return { "names": [group1.name, group2.name] };
         });
@@ -128,7 +128,7 @@ var multipleSelectionGroup = {
             "name": "joe",
             "merged": { "groups": ["A", "B"] }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         map("person.name").to("name");
         map(["group1", "group2"]).to("merged", function (group1, group2) {
             return { "groups": [group1.name, group2.name] };
@@ -153,7 +153,7 @@ var multipleSelectionGroup = {
             "name": "joe",
             "merged": { "groups": ["A", "B"] }
         };
-        var map = map_factory_1.default(source);
+        var map = map_factory_1["default"](source);
         map("person.name").to("name");
         map(["group1", "group2"]).to("merged");
         test.throws(function () {
