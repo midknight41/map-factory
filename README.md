@@ -4,6 +4,8 @@
 
 A simple utility to map data from an existing object to a new one. This is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
 
+See [Change Log](./CHANGELOG.md) for changes from previous versions.
+
 ### Map a source field to the same object structure
 Mapping is explicit so unmapped fields are discarded.
 
