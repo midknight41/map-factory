@@ -3,10 +3,10 @@ import {IMapFactory, IMapping} from "./interfaces";
 import Mapper from "./mapper";
 import Mapping from "./mapping";
 
-export default function createMapper(obj?: any): IMapFactory {
+export default function createMapper(): IMapFactory {
 
   const me = {
-    mapper: new Mapper(obj)
+    mapper: new Mapper()
   };
 
   const map: IMapFactory = function map(source: string | string[]): IMapping {

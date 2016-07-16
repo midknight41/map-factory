@@ -14,16 +14,34 @@ const basicMappingGroup: nodeunit.ITestGroup = {
       }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("fieldName").to("field.name");
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
     test.done();
   },
-  "Can omit source when creating mapping and provide in execute": function (test: nodeunit.Test): void {
+  "Throws if no source is provided": function (test: nodeunit.Test): void {
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    test.throws(() => {
+      const actual = map.execute();
+    });
+
+    test.done();
+  },
+  "Can reuse the map for multiple transforms": function (test: nodeunit.Test): void {
     const source = {
       "fieldName": "name1"
     };
@@ -85,11 +103,11 @@ const basicMappingGroup: nodeunit.ITestGroup = {
       "country": "PL"
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("country").to("country");
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
     test.done();
@@ -105,28 +123,19 @@ const basicMappingGroup: nodeunit.ITestGroup = {
       }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("fieldName").to("field.name");
     map("fieldId").to("field.name");
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
     test.done();
   },
   "A null source field throws an error": function (test: nodeunit.Test): void {
-    const source = {
-      "fieldName": "name1",
-    };
 
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
-
-    const map = createMapper(source);
+    const map = createMapper();
 
     test.throws(() => {
 
@@ -138,17 +147,8 @@ const basicMappingGroup: nodeunit.ITestGroup = {
 
   },
   "A null target field throws an error": function (test: nodeunit.Test): void {
-    const source = {
-      "fieldName": "name1",
-    };
 
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
-
-    const map = createMapper(source);
+    const map = createMapper();
 
     test.throws(() => {
 
@@ -164,11 +164,11 @@ const basicMappingGroup: nodeunit.ITestGroup = {
       "fieldName": "name1",
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("fieldName");
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, source, "field was not mapped to new object");
     test.done();
@@ -189,11 +189,11 @@ const customFunctionsGroup: nodeunit.ITestGroup = {
       }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("fieldName").to("field.name", value => "altered");
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, expected, "field was not mapped to new object");
     test.done();
@@ -216,13 +216,13 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
       "merged": { "names": ["A", "B"] }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map(["group1", "group2"]).to("merged", (group1, group2) => {
       return { "names": [group1.name, group2.name] };
     });
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, expected, "field was not mapped to new object");
     test.done();
@@ -246,14 +246,14 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
       "merged": { "groups": ["A", "B"] }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("person.name").to("name");
     map(["group1", "group2"]).to("merged", (group1, group2) => {
       return { "groups": [group1.name, group2.name] };
     });
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, expected, "field was not mapped to new object");
     test.done();
@@ -278,13 +278,13 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
       "merged": { "groups": ["A", "B"] }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("person.name").to("name");
     map(["group1", "group2"]).to("merged");
 
     test.throws(() => {
-      const actual = map.execute();
+      const actual = map.execute(source);
     });
 
     test.done();

@@ -6,28 +6,26 @@ const objectMapper: any = mod;
 export default class Mapper {
 
   public assignment: IMapping[] = [];
-  public sourceObject: Object = new Object();
   private mapCache: IMapData = null;
 
-  constructor(obj) {
-    this.sourceObject = obj;
+  constructor() {
+
   }
 
   registerMapping(mapping: IMapping) {
     this.assignment.push(mapping);
   }
 
-  public execute(sourceObject?) {
+  public execute(sourceObject) {
 
     if (sourceObject === null || sourceObject === undefined) {
-      sourceObject = this.sourceObject;
+      throw new Error("sourceObject is required");
     }
-
-
+    
     if (this.mapCache === null) {
       this.mapCache = this.createMapData();
-    } 
-    
+    }
+
     const output = objectMapper(sourceObject, {}, this.mapCache.transform);
 
     return this.appendMultiSelections(sourceObject, output, this.mapCache.multiMaps);

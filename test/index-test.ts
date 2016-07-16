@@ -15,11 +15,11 @@ const basicMappingGroup: nodeunit.ITestGroup = {
       }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("fieldName").to("field.name");
 
-    const actual = map.execute();
+    const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
     test.done();
