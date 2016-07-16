@@ -3,10 +3,10 @@ var mapper_1 = require("./mapper");
 var mapping_1 = require("./mapping");
 function createMapper(obj) {
     var me = {
-        mapper: new mapper_1.default(obj)
+        mapper: new mapper_1["default"](obj)
     };
     var map = function map(source) {
-        var mapping = new mapping_1.default(source);
+        var mapping = new mapping_1["default"](source);
         this.mapper.registerMapping(mapping);
         return mapping;
     }.bind(me);
@@ -15,6 +15,6 @@ function createMapper(obj) {
     }.bind(me);
     return map;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = createMapper;
+exports.__esModule = true;
+exports["default"] = createMapper;
 //# sourceMappingURL=map-factory.js.map

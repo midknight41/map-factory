@@ -1,0 +1,1 @@
+{"version":3,"file":"dist","sourceRoot":"","sources":["lib/interfaces.ts","lib/mapper.ts","lib/mapping.ts","lib/map-factory.ts","lib/index.ts","test/examples-test.ts","test/index-test.ts","test/map-factory-test.ts","test/simons-test.ts"],"names":[],"mappings":""}

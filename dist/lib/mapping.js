@@ -19,6 +19,6 @@ var Mapping = (function () {
     };
     return Mapping;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Mapping;
+exports.__esModule = true;
+exports["default"] = Mapping;
 //# sourceMappingURL=mapping.js.map

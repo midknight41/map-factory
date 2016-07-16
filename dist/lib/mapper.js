@@ -60,6 +60,6 @@ var Mapper = (function () {
     };
     return Mapper;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Mapper;
+exports.__esModule = true;
+exports["default"] = Mapper;
 //# sourceMappingURL=mapper.js.map
