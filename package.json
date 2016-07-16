@@ -15,11 +15,11 @@
     "pretravis": "npm run build",
     "travis": "npm run coveralls",
     "premajor": "npm run build",
-    "major": "npm version major -m \"published to npm as v%s\" && git push --all --tags && npm publish",
+    "major": "npm version major -m \"published to npm as v%s\" && git push --all && git push --tags && npm publish",
     "preminor": "npm run build",
-    "minor": "npm version minor -m \"published to npm as v%s\" && git push --all --tags && npm publish",
+    "minor": "npm version minor -m \"published to npm as v%s\" && git push --all && git push --tags && npm publish",
     "prepatch": "npm run build",
-    "patch": "npm version patch -m \"published to npm as v%s\" && git push --all --tags && npm publish"
+    "patch": "npm version patch -m \"published to npm as v%s\" && git push --all && git push --tags && npm publish"
   },
   "bugs": {
     "url": "https://github.com/midknight41/map-factory/issues"
@@ -51,5 +51,6 @@
     "nodeunit": "^0.9.1",
     "rimraf": "^2.5.3",
     "typescript": "^1.8.10"
-  }
+  },
+  "files": ["dist"]
 }
