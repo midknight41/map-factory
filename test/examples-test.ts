@@ -18,12 +18,12 @@ const exampleGroup: nodeunit.ITestGroup = {
       "fieldDescription": "description"
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("fieldName");
     map("fieldId");
 
-    const result = map.execute();
+    const result = map.execute(source);
     console.log(result);
 
     // End example
@@ -48,12 +48,12 @@ const exampleGroup: nodeunit.ITestGroup = {
       "fieldDescription": "description"
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("fieldName").to("field.name");
     map("fieldId").to("field.id");
 
-    const result = map.execute();
+    const result = map.execute(source);
     console.log(result);
 
     // End example
@@ -93,13 +93,13 @@ const exampleGroup: nodeunit.ITestGroup = {
       }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("person.email").to("user.login");
     map("account.id").to("user.accountId");
     map("account.entitlements.[].name").to("user.entitlements");
 
-    const result = map.execute();
+    const result = map.execute(source);
     console.log(result);
 
     // End example
@@ -107,7 +107,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     test.deepEqual(result, expected);
     test.done();
   },
-  "Supports deep references for source and target objects - 2": function (test: nodeunit.Test): void {
+  "You can also reference specific items in an array": function (test: nodeunit.Test): void {
 
     const expected = {
       "topStory": {
@@ -137,11 +137,11 @@ const exampleGroup: nodeunit.ITestGroup = {
       ]
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("articles.[0]").to("topStory");
 
-    const result = map.execute();
+    const result = map.execute(source);
     console.log(result);
 
     // End example
@@ -149,7 +149,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     test.deepEqual(result, expected);
     test.done();
   },
-  "Supports deep references for source and target objects - 3": function (test: nodeunit.Test): void {
+  "More complicated transformations can be handled by providing a function": function (test: nodeunit.Test): void {
 
     const expected = {
       "topStory": {
@@ -187,7 +187,7 @@ const exampleGroup: nodeunit.ITestGroup = {
       ]
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map("articles.[0]").to("topStory");
     map("articles").to("otherStories", articles => {
@@ -199,7 +199,7 @@ const exampleGroup: nodeunit.ITestGroup = {
 
     });
 
-    const result = map.execute();
+    const result = map.execute(source);
     console.log(result);
 
     // End example
@@ -207,7 +207,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     test.deepEqual(result, expected);
     test.done();
   },
-  "Multiple selections can be selected at once": function (test: nodeunit.Test): void {
+  "Select from multiple sources at once": function (test: nodeunit.Test): void {
 
     const expected = {
       "fruit": {
@@ -226,7 +226,7 @@ const exampleGroup: nodeunit.ITestGroup = {
       }
     };
 
-    const map = createMapper(source);
+    const map = createMapper();
 
     map(["apples.count", "oranges.count"]).to("fruit.count", (appleCount, orangeCount) => {
 
@@ -234,7 +234,7 @@ const exampleGroup: nodeunit.ITestGroup = {
 
     });
 
-    const result = map.execute();
+    const result = map.execute(source);
     console.log(result);
 
     // End example

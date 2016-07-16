@@ -16,12 +16,12 @@ const source = {
   "fieldDescription": "description"
 };
 
-const map = createMapper(source);
+const map = createMapper();
 
 map("fieldName");
 map("fieldId");
 
-const result = map.execute();
+const result = map.execute(source);
 console.log(result);
 
 /*
@@ -44,12 +44,12 @@ const source = {
   "fieldDescription": "description"
 };
 
-const map = createMapper(source);
+const map = createMapper();
 
 map("fieldName").to("field.name");
 map("fieldId").to("field.id");
 
-const result = map.execute();
+const result = map.execute(source);
 console.log(result);
 
 /*
@@ -64,13 +64,11 @@ console.log(result);
 ### Supports deep references for source and target objects  
 
 ```js
-const createMapper = require("map-factory");
-
 const source = {
   "person": {
     "name": "John",
     "email": "john@someplace.com",
-    "phone": "(712) 123 4567"  
+    "phone": "(712) 123 4567"
   },
   "account": {
     "id": "abc123",
@@ -78,20 +76,20 @@ const source = {
       "id": 1,
       "name": "game-1"
     },
-    {
-      "id": 2,
-      "name": "game-2"
-    }]
+      {
+        "id": 2,
+        "name": "game-2"
+      }]
   }
 };
 
-const map = createMapper(source);
+const map = createMapper();
 
 map("person.email").to("user.login");
 map("account.id").to("user.accountId");
 map("account.entitlements.[].name").to("user.entitlements");
 
-const result = map.execute();
+const result = map.execute(source);
 console.log(result);
 
 /*
@@ -111,28 +109,28 @@ You can also reference specific items in an array.
 const createMapper = require("map-factory");
 
 const source = {
-     "articles": [
-       {
-         "id": 1,
-         "title": "Top Article",
-         "author": "Joe Doe",
-         "body": "..."
-       },
-       {
-         "id": 2,
-         "title": "Second Article",
-         "author": "Joe Doe",
-         "body": "..."
-       }
-     ]
-   };
+  "articles": [
+    {
+      "id": 1,
+      "title": "Top Article",
+      "author": "Joe Doe",
+      "body": "..."
+    },
+    {
+      "id": 2,
+      "title": "Second Article",
+      "author": "Joe Doe",
+      "body": "..."
+    }
+  ]
+};
 
-   const map = createMapper(source);
+const map = createMapper();
 
-   map("articles.[0]").to("topStory");
+map("articles.[0]").to("topStory");
 
-   const result = map.execute();
-   console.log(result);
+const result = map.execute(source);
+console.log(result);
 
 /*
 {
@@ -152,36 +150,36 @@ More complicated transformations can be handled by providing a function.
 const createMapper = require("map-factory");
 
 const source = {
-      "articles": [
-        {
-          "id": 1,
-          "title": "Top Article",
-          "author": "Joe Doe",
-          "body": "..."
-        },
-        {
-          "id": 2,
-          "title": "Second Article",
-          "author": "Joe Doe",
-          "body": "..."
-        }
-      ]
-    };
+  "articles": [
+    {
+      "id": 1,
+      "title": "Top Article",
+      "author": "Joe Doe",
+      "body": "..."
+    },
+    {
+      "id": 2,
+      "title": "Second Article",
+      "author": "Joe Doe",
+      "body": "..."
+    }
+  ]
+};
 
-    const map = createMapper(source);
+const map = createMapper();
 
-    map("articles.[0]").to("topStory");
-    map("articles").to("otherStories", articles => {
+map("articles.[0]").to("topStory");
+map("articles").to("otherStories", articles => {
 
-      // We don't want to include the top story
-      articles.shift();
+  // We don't want to include the top story
+  articles.shift();
 
-      return articles;
+  return articles;
 
-    });
+});
 
-    const result = map.execute();
-    console.log(result);
+const result = map.execute(source);
+console.log(result);
 
 /*
   {
@@ -217,7 +215,7 @@ const source = {
   }
 };
 
-const map = createMapper(source);
+const map = createMapper();
 
 map(["apples.count", "oranges.count"]).to("fruit.count", (appleCount, orangeCount) => {
 
@@ -225,7 +223,7 @@ map(["apples.count", "oranges.count"]).to("fruit.count", (appleCount, orangeCoun
 
 });
 
-const result = map.execute();
+const result = map.execute(source);
 console.log(result);
 
 /*
