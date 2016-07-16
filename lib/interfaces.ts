@@ -1,7 +1,7 @@
 ﻿
 export interface IMapFactory {
   (stringOrArray: string | string[]): IMapping;
-  execute();
+  execute(obj?);
 }
 
 export interface IMapping {
@@ -14,4 +14,9 @@ export interface IMapping {
 export interface IKeyDefinition {
   key: string;
   transform: Function;
+}
+
+export interface IMapData {
+  transform: Object;
+  multiMaps: Object[];
 }

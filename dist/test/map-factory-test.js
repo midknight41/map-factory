@@ -17,6 +17,59 @@ var basicMappingGroup = {
         test.deepEqual(actual, expected);
         test.done();
     },
+    "Can omit source when creating mapping and provide in execute": function (test) {
+        var source = {
+            "fieldName": "name1"
+        };
+        var expected = {
+            "field": {
+                "name": "name1"
+            }
+        };
+        var map = map_factory_1.default();
+        map("fieldName").to("field.name");
+        var actual = map.execute(source);
+        test.deepEqual(actual, expected);
+        test.done();
+    },
+    "Can reuse map for different transform": function (test) {
+        var source = {
+            "fieldName": "name1"
+        };
+        var source2 = {
+            "fieldName": "name2"
+        };
+        var expected = {
+            "field": {
+                "name": "name1"
+            }
+        };
+        var expected2 = {
+            "field": {
+                "name": "name2"
+            }
+        };
+        var map = map_factory_1.default();
+        map("fieldName").to("field.name");
+        var actual = map.execute(source);
+        var actual2 = map.execute(source2);
+        test.deepEqual(actual, expected);
+        test.deepEqual(actual2, expected2);
+        test.done();
+    },
+    "Can map from a source where source name is not formatted as a string": function (test) {
+        var source = {
+            country: "PL"
+        };
+        var expected = {
+            "country": "PL"
+        };
+        var map = map_factory_1.default(source);
+        map("country").to("country");
+        var actual = map.execute();
+        test.deepEqual(actual, expected);
+        test.done();
+    },
     "A field that doesn't exists on the source doesn't affect the resulting object": function (test) {
         var source = {
             "fieldName": "name1",
@@ -63,7 +116,7 @@ var basicMappingGroup = {
         });
         test.done();
     },
-    "The source field is used if not target field is provided": function (test) {
+    "The source field is used if no target field is provided": function (test) {
         var source = {
             "fieldName": "name1",
         };

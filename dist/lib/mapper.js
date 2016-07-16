@@ -5,14 +5,27 @@ var Mapper = (function () {
     function Mapper(obj) {
         this.assignment = [];
         this.sourceObject = new Object();
+        this.mapCache = null;
         this.sourceObject = obj;
     }
     Mapper.prototype.registerMapping = function (mapping) {
         this.assignment.push(mapping);
     };
-    Mapper.prototype.execute = function () {
-        var transform = {};
-        var multiMaps = [];
+    Mapper.prototype.execute = function (sourceObject) {
+        if (sourceObject === null || sourceObject === undefined) {
+            sourceObject = this.sourceObject;
+        }
+        if (this.mapCache === null) {
+            this.mapCache = this.createMapData();
+        }
+        var output = objectMapper(sourceObject, {}, this.mapCache.transform);
+        return this.appendMultiSelections(sourceObject, output, this.mapCache.multiMaps);
+    };
+    Mapper.prototype.createMapData = function () {
+        var mapData = {
+            transform: {},
+            multiMaps: []
+        };
         for (var _i = 0, _a = this.assignment; _i < _a.length; _i++) {
             var item = _a[_i];
             var sourceKey = item.source;
@@ -20,16 +33,15 @@ var Mapper = (function () {
             if (Array.isArray(item.source)) {
                 if (!target.transform)
                     throw new Error("Multiple selections must map to a transform. No transform provided.");
-                multiMaps.push(item);
+                mapData.multiMaps.push(item);
                 continue;
             }
             ;
             if (!target)
                 target = sourceKey;
-            transform[sourceKey] = target;
+            mapData.transform[sourceKey] = target;
         }
-        var output = objectMapper(this.sourceObject, {}, transform);
-        return this.appendMultiSelections(this.sourceObject, output, multiMaps);
+        return mapData;
     };
     Mapper.prototype.appendMultiSelections = function (source, target, multiMaps) {
         var output = target;

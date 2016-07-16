@@ -5,8 +5,7 @@ import createMapper from "../lib/map-factory";
 const basicMappingGroup: nodeunit.ITestGroup = {
   "Can map one field that exists to another": function (test: nodeunit.Test): void {
     const source = {
-      "fieldName"
-      : "name1"
+      "fieldName": "name1"
     };
 
     const expected = {
@@ -18,6 +17,77 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     const map = createMapper(source);
 
     map("fieldName").to("field.name");
+
+    const actual = map.execute();
+
+    test.deepEqual(actual, expected);
+    test.done();
+  },
+  "Can omit source when creating mapping and provide in execute": function (test: nodeunit.Test): void {
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      } 
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected);
+    test.done();
+  },
+  "Can reuse map for different transform": function (test: nodeunit.Test): void {
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const source2 = {
+      "fieldName": "name2"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const expected2 = {
+      "field": {
+        "name": "name2"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.execute(source);
+    const actual2 = map.execute(source2);
+
+    test.deepEqual(actual, expected);
+    test.deepEqual(actual2, expected2);
+
+    test.done();
+  },
+  "Can map from a source where source name is not formatted as a string": function (test: nodeunit.Test): void {
+    const source = {
+      country: "PL"
+    };
+
+    const expected = {
+      "country": "PL"
+    };
+
+    const map = createMapper(source);
+
+    map("country").to("country");
 
     const actual = map.execute();
 
@@ -89,7 +159,7 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     test.done();
 
   },
-  "The source field is used if not target field is provided": function (test: nodeunit.Test): void {
+  "The source field is used if no target field is provided": function (test: nodeunit.Test): void {
     const source = {
       "fieldName": "name1",
     };
@@ -143,13 +213,13 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
     };
 
     const expected = {
-      "merged": {"names": ["A", "B"] }
+      "merged": { "names": ["A", "B"] }
     };
 
     const map = createMapper(source);
 
     map(["group1", "group2"]).to("merged", (group1, group2) => {
-      return {"names": [group1.name, group2.name] };
+      return { "names": [group1.name, group2.name] };
     });
 
     const actual = map.execute();

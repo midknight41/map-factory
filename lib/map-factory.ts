@@ -3,7 +3,7 @@ import {IMapFactory, IMapping} from "./interfaces";
 import Mapper from "./mapper";
 import Mapping from "./mapping";
 
-export default function createMapper(obj: any): IMapFactory {
+export default function createMapper(obj?: any): IMapFactory {
 
   const me = {
     mapper: new Mapper(obj)
@@ -18,8 +18,8 @@ export default function createMapper(obj: any): IMapFactory {
 
   }.bind(me);
 
-  map.execute = function () {
-    return this.mapper.execute();
+  map.execute = function (obj?) {
+    return this.mapper.execute(obj);
   }.bind(me);
 
   return map;

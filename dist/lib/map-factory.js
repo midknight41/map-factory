@@ -10,8 +10,8 @@ function createMapper(obj) {
         this.mapper.registerMapping(mapping);
         return mapping;
     }.bind(me);
-    map.execute = function () {
-        return this.mapper.execute();
+    map.execute = function (obj) {
+        return this.mapper.execute(obj);
     }.bind(me);
     return map;
 }
