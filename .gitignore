@@ -33,7 +33,6 @@ obj/
 [Rr]elease*/
 Ankh.NoLoad
 *.nodevsdbg
-*.js.map
 *.csproj
 *.csproj.user
 *.sln
@@ -67,6 +66,11 @@ packages/
 #nodeModules
 node_modules
 lib/node_modules
+lib/*.js.map
+lib/*.js
+test/*.js.map
+test/*.js
+
 
 #ncrunch
 *ncrunch*

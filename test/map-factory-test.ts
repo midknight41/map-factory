@@ -65,7 +65,7 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     };
 
     const map = createMapper();
-
+    
     map("fieldName").to("field.name");
 
     const actual = map.execute(source);

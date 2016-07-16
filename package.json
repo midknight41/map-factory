@@ -7,14 +7,18 @@
     "prebuild": "npm run clean",
     "build": "tsc --pretty -p ./ -d",
     "clean": "./node_modules/.bin/rimraf dist/*",
+    "precover": "npm run build",
     "cover": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test",
     "coveralls": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "pretest": "npm run build",
     "test": "nodeunit ./dist/test/",
     "pretravis": "npm run build",
     "travis": "npm run coveralls",
+    "premajor": "npm run build",
     "major": "npm version major -m \"published to npm as v%s\" && git push --all --tags && npm publish",
+    "preminor": "npm run build",
     "minor": "npm version minor -m \"published to npm as v%s\" && git push --all --tags && npm publish",
+    "prepatch": "npm run build",
     "patch": "npm version patch -m \"published to npm as v%s\" && git push --all --tags && npm publish"
   },
   "bugs": {
