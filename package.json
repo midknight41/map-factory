@@ -1,6 +1,6 @@
 {
   "name": "map-factory",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Object mapping tool",
   "main": "./dist/lib/index.js",
   "scripts": {
@@ -52,5 +52,7 @@
     "rimraf": "^2.5.3",
     "typescript": "^1.8.10"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }
