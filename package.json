@@ -1,6 +1,6 @@
 {
   "name": "map-factory",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Object mapping tool",
   "main": "./dist/lib/index.js",
   "scripts": {
