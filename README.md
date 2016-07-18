@@ -203,6 +203,42 @@ console.log(result);
 */
 ```
 
+An existing object can be provided as the target object.
+
+```js
+const createMapper = require("map-factory");
+
+const source = {
+     "fieldName": "name1",
+     "fieldId": "123",
+     "fieldDescription": "description"
+   };
+
+const destination = {
+ "existing": "data"
+};
+
+const map = createMapper();
+
+map("fieldName").to("field.name");
+map("fieldId").to("field.id");
+
+const result = map.execute(source, destination);
+console.log(result);
+
+/*
+  {
+    "existing": "data",
+    "field": {
+        "name": "name1",
+        "id": "123"
+    }
+  }
+*/
+
+```
+
+
 ### Select from multiple sources at once
 You can also provide an array or source fields and they can be extracted together. You must provide a transform for the target field.
 ```js

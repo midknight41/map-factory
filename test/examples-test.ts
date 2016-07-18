@@ -207,6 +207,41 @@ const exampleGroup: nodeunit.ITestGroup = {
     test.deepEqual(result, expected);
     test.done();
   },
+  "An existing object can be provided as the target object": function (test: nodeunit.Test): void {
+
+    const expected = {
+      "field": {
+        "name": "name1",
+        "id": "123"
+      },
+      "existing": "data"
+    };
+
+    // Start example
+
+    const source = {
+      "fieldName": "name1",
+      "fieldId": "123",
+      "fieldDescription": "description"
+    };
+
+    const destination = {
+      "existing": "data"
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+    map("fieldId").to("field.id");
+
+    const result = map.execute(source, destination);
+    console.log(result);
+
+    // End example
+
+    test.deepEqual(result, expected);
+    test.done();
+  },
   "Select from multiple sources at once": function (test: nodeunit.Test): void {
 
     const expected = {

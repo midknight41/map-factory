@@ -1,3 +1,11 @@
+### 1.1.0
+
+Added feature to ```map.execute``` which allows you to provide an existing object as the target object.
+
+### 1.0.1
+
+Previous did not publish properly.
+
 ### 1.0.0
 
 Semver MAJOR: moved ```source``` to ```map.execute()```;
