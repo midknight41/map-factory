@@ -1,7 +1,7 @@
 ﻿
 export interface IMapFactory {
   (stringOrArray: string | string[]): IMapping;
-  execute(obj?);
+  execute(source?, destination?);
 }
 
 export interface IMapping {

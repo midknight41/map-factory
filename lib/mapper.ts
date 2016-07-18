@@ -16,19 +16,23 @@ export default class Mapper {
     this.assignment.push(mapping);
   }
 
-  public execute(sourceObject) {
+  public execute(source, destination) {
 
-    if (sourceObject === null || sourceObject === undefined) {
-      throw new Error("sourceObject is required");
+    if (source === null || source === undefined) {
+      throw new Error("A source object is required");
     }
-    
+
+    if (destination === null || destination === undefined) {
+      destination = {};
+    }
+
     if (this.mapCache === null) {
       this.mapCache = this.createMapData();
     }
 
-    const output = objectMapper(sourceObject, {}, this.mapCache.transform);
+    const output = objectMapper(source, destination, this.mapCache.transform);
 
-    return this.appendMultiSelections(sourceObject, output, this.mapCache.multiMaps);
+    return this.appendMultiSelections(source, output, this.mapCache.multiMaps);
 
   }
 

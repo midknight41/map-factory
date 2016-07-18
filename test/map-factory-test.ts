@@ -49,7 +49,7 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     const expected = {
       "field": {
         "name": "name1"
-      } 
+      }
     };
 
     const map = createMapper();
@@ -83,7 +83,7 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     };
 
     const map = createMapper();
-    
+
     map("fieldName").to("field.name");
 
     const actual = map.execute(source);
@@ -176,6 +176,64 @@ const basicMappingGroup: nodeunit.ITestGroup = {
   }
 
 }
+
+
+const sourceAndDestinationGroup: nodeunit.ITestGroup = {
+  "Can map fields from a source onto an existing destination object": function (test: nodeunit.Test): void {
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const destination = {
+      "existing": "field"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      },
+      "existing": "field"
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.execute(source, destination);
+
+    test.deepEqual(actual, expected);
+    test.done();
+
+  },
+  "Can map a field from source over an existing field on a destination object": function (test: nodeunit.Test): void {
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const destination = {
+      "field": {
+        "name": "wrong"
+      }
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.execute(source, destination);
+
+    test.deepEqual(actual, expected);
+    test.done();
+
+  }
+}
+
 
 const customFunctionsGroup: nodeunit.ITestGroup = {
   "Calls a function and alters the resulting object": function (test: nodeunit.Test): void {
@@ -293,5 +351,6 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
 }
 
 exports.basicMapping = basicMappingGroup;
+exports.sourceAndDestination = sourceAndDestinationGroup;
 exports.customFunctions = customFunctionsGroup;
 exports.multipleSelection = multipleSelectionGroup;

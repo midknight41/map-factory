@@ -18,8 +18,8 @@ export default function createMapper(): IMapFactory {
 
   }.bind(me);
 
-  map.execute = function (obj?) {
-    return this.mapper.execute(obj);
+  map.execute = function (source?, destination?) {
+    return this.mapper.execute(source, destination);
   }.bind(me);
 
   return map;
