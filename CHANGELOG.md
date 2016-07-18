@@ -4,7 +4,7 @@ Added feature to ```map.execute``` which allows you to provide an existing objec
 
 ### 1.0.1
 
-Previous did not publish properly.
+Previous version did not publish properly.
 
 ### 1.0.0
 
