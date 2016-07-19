@@ -6,7 +6,8 @@ A simple utility to map data from an existing object to a new one. This is an al
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
 
-### Map a source field to the same object structure
+## Map a source field to the same object structure
+
 Mapping is explicit so unmapped fields are discarded.
 
 ```js
@@ -34,7 +35,8 @@ console.log(result);
 */
 ```
 
-### Map a source field to a different object structure  
+## Map a source field to a different object structure
+
 Of course, we probably want a different structure for our target object.
 
 ```js
@@ -63,7 +65,8 @@ console.log(result);
   }
 */
 ```
-### Supports deep references for source and target objects  
+
+## Supports deep references for source and target objects
 
 ```js
 const source = {
@@ -238,9 +241,10 @@ console.log(result);
 
 ```
 
+## Select from multiple sources at once
 
-### Select from multiple sources at once
-You can also provide an array or source fields and they can be extracted together. You must provide a transform for the target field.
+You can also provide an array of source fields and they can be extracted together if you provide a transform for the target field.
+
 ```js
 const createMapper = require("map-factory");
 
@@ -272,4 +276,61 @@ console.log(result);
   }
 */
 
+```
+
+## Common patterns
+
+### Dealing with multiple sources of data
+
+There are two ways to deal with multiple sources of data. The first method is useful when you are retrieving all of your data at once. It involves taking your source data and appending it all onto a single object.
+
+The advantage of this method is that you can create a single transform mapping object which is used to map all of your data together and that you do not have to mutate your objects.
+
+The other option is to decorate your existing data objects in a piece by piece fashion using the merge ability. For instance,
+
+```js
+
+getPost(id) {
+  return Q.all([
+      this.blogRepos.getPost(id),
+      this.blogRepos.getPostComments(id)
+    ]).
+    .spread((post, comments) => this.postMapper.execute({post, comments}))
+    .then(decoratePostAuthor);
+}
+```
+
+And here is an example of how a service that implements this pattern could look.
+
+```js
+class BlogService {
+
+  constructor() {
+    this.blogRepos = new BlogRepositior();
+
+    // initialise mappers
+    this.postMapper = createMapper();
+    this.postMapper("post.body").to("blog.post");
+    this.postMapper("comments").to("blog.post.comments");
+    this.postMapper("comments.topComment").to("blog.post.comments[0]");
+
+    this.postAuthorMapper = createMapper();
+    this.postAuthorMapper("user.id").to("blog.author.id");
+    this.postAuthorMapper("user.name").to("blog.author.name");
+    this.postAuthorMapper("user.email").to("blog.author.email");
+  }
+
+  decoratePostAuthor(post) {
+    return this.blogRepos.getUser(post.author.id)
+      .then(user => this.postAuthorMapper.execute(post, user));
+  }
+
+  getPost(id) {
+    return Q.all([
+        this.blogRepos.getPost(id),
+        this.blogRepos.getPostComments(id)
+      ]).
+      .spread((post, comments) => this.postMapper.execute({post, comments}));
+  }
+}
 ```
