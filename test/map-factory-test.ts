@@ -1,9 +1,11 @@
-﻿import * as nodeunit from "nodeunit";
+import * as nodeunit from "nodeunit";
 import createMapper from "../lib/map-factory";
-// var createMapper = require("../lib/index");
+
 
 const basicMappingGroup: nodeunit.ITestGroup = {
+
   "Can map one field that exists to another": function (test: nodeunit.Test): void {
+
     const source = {
       "fieldName": "name1"
     };
@@ -21,8 +23,10 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
-    test.done();
+
+    return test.done();
   },
+
   "Throws if no source is provided": function (test: nodeunit.Test): void {
 
     const expected = {
@@ -39,9 +43,11 @@ const basicMappingGroup: nodeunit.ITestGroup = {
       const actual = map.execute();
     });
 
-    test.done();
+    return test.done();
   },
+
   "Can reuse the map for multiple transforms": function (test: nodeunit.Test): void {
+
     const source = {
       "fieldName": "name1"
     };
@@ -59,9 +65,12 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
-    test.done();
+
+    return test.done();
   },
+
   "Can reuse map for different transform": function (test: nodeunit.Test): void {
+
     const source = {
       "fieldName": "name1"
     };
@@ -92,9 +101,11 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     test.deepEqual(actual, expected);
     test.deepEqual(actual2, expected2);
 
-    test.done();
+    return test.done();
   },
+
   "Can map from a source where source name is not formatted as a string": function (test: nodeunit.Test): void {
+
     const source = {
       country: "PL"
     };
@@ -110,11 +121,14 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
-    test.done();
+
+    return test.done();
   },
+
   "A field that doesn't exists on the source doesn't affect the resulting object": function (test: nodeunit.Test): void {
+
     const source = {
-      "fieldName": "name1",
+      "fieldName": "name1"
     };
 
     const expected = {
@@ -131,8 +145,10 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, expected);
-    test.done();
+
+    return test.done();
   },
+
   "A null source field throws an error": function (test: nodeunit.Test): void {
 
     const map = createMapper();
@@ -143,9 +159,10 @@ const basicMappingGroup: nodeunit.ITestGroup = {
 
     });
 
-    test.done();
+    return test.done();
 
   },
+
   "A null target field throws an error": function (test: nodeunit.Test): void {
 
     const map = createMapper();
@@ -156,12 +173,14 @@ const basicMappingGroup: nodeunit.ITestGroup = {
 
     });
 
-    test.done();
+    return test.done();
 
   },
+
   "The source field is used if no target field is provided": function (test: nodeunit.Test): void {
+
     const source = {
-      "fieldName": "name1",
+      "fieldName": "name1"
     };
 
     const map = createMapper();
@@ -171,15 +190,16 @@ const basicMappingGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, source, "field was not mapped to new object");
-    test.done();
 
+    return test.done();
   }
-
-}
+};
 
 
 const sourceAndDestinationGroup: nodeunit.ITestGroup = {
+
   "Can map fields from a source onto an existing destination object": function (test: nodeunit.Test): void {
+
     const source = {
       "fieldName": "name1"
     };
@@ -202,10 +222,12 @@ const sourceAndDestinationGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source, destination);
 
     test.deepEqual(actual, expected);
-    test.done();
 
+    return test.done();
   },
+
   "Can map a field from source over an existing field on a destination object": function (test: nodeunit.Test): void {
+
     const source = {
       "fieldName": "name1"
     };
@@ -229,16 +251,18 @@ const sourceAndDestinationGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source, destination);
 
     test.deepEqual(actual, expected);
-    test.done();
 
+    return test.done();
   }
-}
+};
 
 
 const customFunctionsGroup: nodeunit.ITestGroup = {
+
   "Calls a function and alters the resulting object": function (test: nodeunit.Test): void {
+
     const source = {
-      "fieldName": "name1",
+      "fieldName": "name1"
     };
 
     const expected = {
@@ -254,13 +278,15 @@ const customFunctionsGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, expected, "field was not mapped to new object");
-    test.done();
 
+    return test.done();
   }
-}
+};
 
 const multipleSelectionGroup: nodeunit.ITestGroup = {
+
   "Can extract multiple selections into a single transform": function (test: nodeunit.Test): void {
+
     const source = {
       "group1": {
         "name": "A"
@@ -283,10 +309,12 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, expected, "field was not mapped to new object");
-    test.done();
 
+    return test.done();
   },
+
   "Can extract multiple selections into a single transform while allowing simpler mappings to work": function (test: nodeunit.Test): void {
+
     const source = {
       "person": {
         "name": "joe"
@@ -314,9 +342,10 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
     const actual = map.execute(source);
 
     test.deepEqual(actual, expected, "field was not mapped to new object");
-    test.done();
 
+    return test.done();
   },
+
   "If Multiple selections aren't mapped to a transform and error will occur": function (test: nodeunit.Test): void {
 
     const source = {
@@ -345,10 +374,9 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
       const actual = map.execute(source);
     });
 
-    test.done();
-
+    return test.done();
   }
-}
+};
 
 exports.basicMapping = basicMappingGroup;
 exports.sourceAndDestination = sourceAndDestinationGroup;

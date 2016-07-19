@@ -1,4 +1,5 @@
-﻿import * as nodeunit from "nodeunit";
+import * as nodeunit from "nodeunit";
+// tslint:disable-next-line no-var-requires
 const createMapper = require("../lib/index");
 
 const exampleGroup: nodeunit.ITestGroup = {
@@ -8,7 +9,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     const expected = {
       "fieldName": "name1",
       "fieldId": "123"
-    }
+    };
 
     // Start example
 
@@ -24,13 +25,14 @@ const exampleGroup: nodeunit.ITestGroup = {
     map("fieldId");
 
     const result = map.execute(source);
-    console.log(result);
 
     // End example
 
     test.deepEqual(result, expected);
-    test.done();
+
+    return test.done();
   },
+
   "Map a source field to a different object structure": function (test: nodeunit.Test): void {
 
     const expected = {
@@ -54,13 +56,14 @@ const exampleGroup: nodeunit.ITestGroup = {
     map("fieldId").to("field.id");
 
     const result = map.execute(source);
-    console.log(result);
 
     // End example
 
     test.deepEqual(result, expected);
-    test.done();
+
+    return test.done();
   },
+
   "Supports deep references for source and target objects": function (test: nodeunit.Test): void {
 
     const expected = {
@@ -100,13 +103,14 @@ const exampleGroup: nodeunit.ITestGroup = {
     map("account.entitlements.[].name").to("user.entitlements");
 
     const result = map.execute(source);
-    console.log(result);
 
     // End example
 
     test.deepEqual(result, expected);
-    test.done();
+
+    return test.done();
   },
+
   "You can also reference specific items in an array": function (test: nodeunit.Test): void {
 
     const expected = {
@@ -142,13 +146,14 @@ const exampleGroup: nodeunit.ITestGroup = {
     map("articles.[0]").to("topStory");
 
     const result = map.execute(source);
-    console.log(result);
 
     // End example
 
     test.deepEqual(result, expected);
-    test.done();
+
+    return test.done();
   },
+
   "More complicated transformations can be handled by providing a function": function (test: nodeunit.Test): void {
 
     const expected = {
@@ -200,13 +205,14 @@ const exampleGroup: nodeunit.ITestGroup = {
     });
 
     const result = map.execute(source);
-    console.log(result);
 
     // End example
 
     test.deepEqual(result, expected);
-    test.done();
+
+    return test.done();
   },
+
   "An existing object can be provided as the target object": function (test: nodeunit.Test): void {
 
     const expected = {
@@ -235,13 +241,14 @@ const exampleGroup: nodeunit.ITestGroup = {
     map("fieldId").to("field.id");
 
     const result = map.execute(source, destination);
-    console.log(result);
 
     // End example
 
     test.deepEqual(result, expected);
-    test.done();
+
+    return test.done();
   },
+
   "Select from multiple sources at once": function (test: nodeunit.Test): void {
 
     const expected = {
@@ -270,13 +277,13 @@ const exampleGroup: nodeunit.ITestGroup = {
     });
 
     const result = map.execute(source);
-    console.log(result);
 
     // End example
 
     test.deepEqual(result, expected);
-    test.done();
+
+    return test.done();
   }
-}
+};
 
 exports.examples = exampleGroup;
