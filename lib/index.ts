@@ -1,3 +1,3 @@
-﻿import createMapper from "./map-factory";
+import createMapper from "./map-factory";
 
 module.exports = createMapper;

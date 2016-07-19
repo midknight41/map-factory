@@ -1,4 +1,4 @@
-﻿import * as mod from "object-mapper";
+import * as mod from "object-mapper";
 import {IMapFactory, IMapping, IKeyDefinition, IMapData} from "./interfaces";
 
 const objectMapper: any = mod;
@@ -8,11 +8,8 @@ export default class Mapper {
   public assignment: IMapping[] = [];
   private mapCache: IMapData = null;
 
-  constructor() {
-
-  }
-
   registerMapping(mapping: IMapping) {
+
     this.assignment.push(mapping);
   }
 
@@ -33,7 +30,6 @@ export default class Mapper {
     const output = objectMapper(source, destination, this.mapCache.transform);
 
     return this.appendMultiSelections(source, output, this.mapCache.multiMaps);
-
   }
 
   private createMapData(): IMapData {
@@ -50,21 +46,22 @@ export default class Mapper {
 
       if (Array.isArray(item.source)) {
 
-        if (!target.transform) throw new Error("Multiple selections must map to a transform. No transform provided.");
+        if (!target.transform) {
+          throw new Error("Multiple selections must map to a transform. No transform provided.");
+        }
 
         mapData.multiMaps.push(item);
         continue;
-      };
+      }
 
-      if (!target) target = sourceKey;
+      if (!target) {
+        target = sourceKey;
+      }
 
       mapData.transform[sourceKey] = target;
-
     }
 
     return mapData;
-
-
   }
 
   private appendMultiSelections(source, target, multiMaps) {
@@ -82,14 +79,9 @@ export default class Mapper {
       }
 
       const result = item.target.transform.apply(null, params);
-
       output = objectMapper.setKeyValue(output, item.target.key, result);
-
     }
 
     return output;
-
   }
-
-
 }
