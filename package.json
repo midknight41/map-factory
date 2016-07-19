@@ -10,15 +10,16 @@
     "precover": "npm run build",
     "cover": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test",
     "coveralls": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "lint": "tslint -c tslint.json -e 'dist/**/*' -e 'node_modules/**/*' -e 'Scripts/**/*' '**/*.ts'",
     "pretest": "npm run build",
-    "test": "nodeunit ./dist/test/",
+    "test": "npm run lint && nodeunit ./dist/test/",
     "pretravis": "npm run build",
     "travis": "npm run coveralls",
-    "premajor": "npm run build",
+    "premajor": "npm run test",
     "major": "npm version major -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
-    "preminor": "npm run build",
+    "preminor": "npm run test",
     "minor": "npm version minor -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
-    "prepatch": "npm run build",
+    "prepatch": "npm run test",
     "patch": "npm version patch -m \"published to npm as v%s\" && git push --follow-tags && npm publish"
   },
   "bugs": {
@@ -50,6 +51,7 @@
     "jscoverage": "^0.6.0",
     "nodeunit": "^0.9.1",
     "rimraf": "^2.5.3",
+    "tslint": "^3.13.0",
     "typescript": "^1.8.10"
   },
   "files": [

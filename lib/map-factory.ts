@@ -1,7 +1,7 @@
-﻿import * as mod from "object-mapper";
-import {IMapFactory, IMapping} from "./interfaces";
+import * as mod from "object-mapper";
 import Mapper from "./mapper";
 import Mapping from "./mapping";
+import {IMapFactory, IMapping} from "./interfaces";
 
 export default function createMapper(): IMapFactory {
 
@@ -23,5 +23,4 @@ export default function createMapper(): IMapFactory {
   }.bind(me);
 
   return map;
-
 }
