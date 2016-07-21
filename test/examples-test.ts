@@ -283,7 +283,117 @@ const exampleGroup: nodeunit.ITestGroup = {
     test.deepEqual(result, expected);
 
     return test.done();
+  },
+  "create a single transform mapping object which is used to map all of your data together": function (test: nodeunit.Test) {
+
+    const expected = {
+      "blog": {
+        "post": {
+          "text": "<p>Some Text</p>",
+          "comments": ["not too bad", "pretty good", "awful"],
+          "topComment": "not too bad"
+        },
+        "author": {
+          "id": 123,
+          "name": "John Doe",
+          "email": "john.doe@nobody.com"
+        }
+      }
+    };
+
+    // Start example
+
+    // assume the following inputs
+    const post = {
+      "body": "<p>Some Text</p>"
+    };
+
+    const comments = {
+      "list": ["not too bad", "pretty good", "awful"]
+    };
+
+    const user = {
+      "id": 123,
+      "name": "John Doe",
+      "email": "john.doe@nobody.com"
+    };
+
+    // combine multiple objects into a single source object
+    const source = { post, comments, user };
+
+    const map = createMapper();
+
+    map("post.body").to("blog.post.text");
+    map("comments.list").to("blog.post.comments");
+    map("comments.list[0]").to("blog.post.topComment");
+    map("user.id").to("blog.author.id");
+    map("user.name").to("blog.author.name");
+    map("user.email").to("blog.author.email");
+
+    const final = map.execute(source);
+
+    // End example
+
+    test.deepEqual(final, expected);
+    test.done();
+
+  },
+  "Or use multiple mappers and chain them together": function (test: nodeunit.Test) {
+
+
+    const expected = {
+      "blog": {
+        "post": {
+          "text": "<p>Some Text</p>",
+          "comments": ["not too bad", "pretty good", "awful"],
+          "topComment": "not too bad"
+        },
+        "author": {
+          "id": 123,
+          "name": "John Doe",
+          "email": "john.doe@nobody.com"
+        }
+      }
+    };
+
+    // Start Example
+
+    // assume the following inputs
+    const post = {
+      "body": "<p>Some Text</p>"
+    };
+
+    const comments = {
+      "list": ["not too bad", "pretty good", "awful"]
+    };
+
+    const user = {
+      "id": 123,
+      "name": "John Doe",
+      "email": "john.doe@nobody.com"
+    };
+
+    const postMapper = createMapper();
+    const commentMapper = createMapper();
+    const authorMapper = createMapper();
+
+    postMapper.map("body").to("blog.post.text");
+    commentMapper.map("list").to("blog.post.comments");
+    commentMapper.map("list[0]").to("blog.post.topComment");
+    authorMapper.map("id").to("blog.author.id");
+    authorMapper.map("name").to("blog.author.name");
+    authorMapper.map("email").to("blog.author.email");
+
+    let result = postMapper.execute(post);
+    result = commentMapper.execute(comments, result);
+    result = authorMapper.execute(user, result);
+
+    // End example
+
+    test.deepEqual(result, expected);
+    test.done();
   }
+
 };
 
 exports.examples = exampleGroup;

@@ -9,6 +9,7 @@ export interface IMapData {
 }
 export interface IMapFactory {
   (stringOrArray: string | string[]): IMapping;
+  map(stringOrArray: string | string[]): IMapping;
   execute(source?, destination?);
 }
 

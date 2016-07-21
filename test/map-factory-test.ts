@@ -1,8 +1,39 @@
 import * as nodeunit from "nodeunit";
 import createMapper from "../lib/map-factory";
 
+const mapGroup: nodeunit.ITestGroup = {
 
-const basicMappingGroup: nodeunit.ITestGroup = {
+  "default function and map() function are logically equivalent": function (test: nodeunit.Test): void {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+    const mapper = createMapper();
+
+    map("fieldName").to("field.name");
+    mapper.map("fieldName").to("field.name");
+
+    const defaultActual = map.execute(source);
+    const functionActual = mapper.execute(source);
+
+    test.deepEqual(defaultActual, expected);
+    test.deepEqual(defaultActual, functionActual);
+
+    return test.done();
+
+  }
+
+};
+
+const defaultGroup: nodeunit.ITestGroup = {
 
   "Can map one field that exists to another": function (test: nodeunit.Test): void {
 
@@ -378,7 +409,8 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
   }
 };
 
-exports.basicMapping = basicMappingGroup;
+exports.basicMapping = defaultGroup;
+exports.mapMethod = mapGroup;
 exports.sourceAndDestination = sourceAndDestinationGroup;
 exports.customFunctions = customFunctionsGroup;
 exports.multipleSelection = multipleSelectionGroup;

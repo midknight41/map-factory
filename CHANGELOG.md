@@ -1,3 +1,7 @@
+### 1.2.0
+
+Add map method which will improve readability in some use cases
+
 ### 1.1.0
 
 Added feature to ```map.execute``` which allows you to provide an existing object as the target object.
