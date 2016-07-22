@@ -9,7 +9,7 @@ export default function createMapper(): IMapFactory {
     mapper: new Mapper()
   };
 
-  const map: IMapFactory = function map(source: string | string[]): IMapping {
+  const mapper: IMapFactory = function map(source: string | string[]): IMapping {
 
     const mapping = new Mapping(source);
     this.mapper.registerMapping(mapping);
@@ -18,9 +18,18 @@ export default function createMapper(): IMapFactory {
 
   }.bind(me);
 
-  map.execute = function (source?, destination?) {
+  mapper.map = function (source: string | string[]): IMapping {
+
+    const mapping = new Mapping(source);
+    this.mapper.registerMapping(mapping);
+
+    return mapping;
+
+  }.bind(me);
+
+  mapper.execute = function (source?, destination?) {
     return this.mapper.execute(source, destination);
   }.bind(me);
 
-  return map;
+  return mapper;
 }

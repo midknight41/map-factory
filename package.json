@@ -13,6 +13,8 @@
     "lint": "tslint -c tslint.json -e 'dist/**/*' -e 'node_modules/**/*' -e 'Scripts/**/*' '**/*.ts'",
     "pretest": "npm run build",
     "test": "npm run lint && nodeunit ./dist/test/",
+    "pret": "npm run build",
+    "t": "nodeunit ./dist/test/",
     "pretravis": "npm run build",
     "travis": "npm run coveralls",
     "premajor": "npm run test",
