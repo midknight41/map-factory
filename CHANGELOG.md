@@ -1,6 +1,7 @@
 ### 1.2.0
 
 Add map method which will improve readability in some use cases
+Added support for fluent coding style
 
 ### 1.1.0
 

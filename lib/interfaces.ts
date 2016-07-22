@@ -17,4 +17,7 @@ export interface IMapping {
   source: string | string[];
   target: string | IKeyDefinition;
   to(target: string, fnc?: Function);
+  map(stringOrArray: string | string[]): IMapping;
+  execute(source?, destination?);
+
 }

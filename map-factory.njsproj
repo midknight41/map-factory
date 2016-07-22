@@ -35,8 +35,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".travis.yml" />
+    <Content Include="CHANGELOG.md" />
+    <Content Include="LICENSE" />
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <Content Include="tsconfig.json" />
+    <Content Include="tslint.json" />
     <TypeScriptCompile Include="lib\index.ts" />
     <TypeScriptCompile Include="lib\interfaces.ts" />
     <TypeScriptCompile Include="lib\map-factory.ts" />

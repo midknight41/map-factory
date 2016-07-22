@@ -1,5 +1,7 @@
 import * as nodeunit from "nodeunit";
 import createMapper from "../lib/map-factory";
+import Mapper from "../lib/mapper";
+import Mapping from "../lib/mapping";
 
 const mapGroup: nodeunit.ITestGroup = {
 
@@ -30,8 +32,146 @@ const mapGroup: nodeunit.ITestGroup = {
     return test.done();
 
   }
+};
+
+const fluentChainingGroup: nodeunit.ITestGroup = {
+
+  "map() returns a chainable object": function (test: nodeunit.Test): void {
+
+    const mapper = createMapper();
+
+    const actual = mapper.map("userId");
+
+    test.notEqual(actual, null);
+    test.equal(actual instanceof Mapping, true);
+
+    return test.done();
+
+  },
+  "to() returns a chainable object": function (test: nodeunit.Test): void {
+
+    const mapper = createMapper();
+
+    const actual = mapper.map("userId").to("user.id");
+
+    test.notEqual(actual, null);
+    test.equal(actual instanceof Mapper, true);
+
+    return test.done();
+
+  },
+  "to() with a function returns a chainable object": function (test: nodeunit.Test): void {
+
+    const mapper = createMapper();
+
+    const actual: Object = mapper.map("userId").to("user.id", value => {
+      return "a";
+    });
+
+    test.notEqual(actual, null);
+    test.equal(actual instanceof Mapper, true);
+
+    return test.done();
+
+  },
+  "mapper can fluently chain call map() after the map() method": function (test: nodeunit.Test): void {
+
+    const source = {
+      "userId": 123,
+      "userName": "my name"
+    };
+
+    const expected = {
+      "userId": 123,
+      "name": "my name"
+    };
+
+    const mapper = createMapper();
+
+    mapper
+      .map("userId")
+      .map("userName").to("name");
+
+    const actual = mapper.execute(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+
+  },
+  "mapper can fluently chain call map() after the to() method": function (test: nodeunit.Test): void {
+
+    const source = {
+      "userId": 123,
+      "userName": "my name"
+    };
+
+    const expected = {
+      "id": 123,
+      "name": "my name"
+    };
+
+    const mapper = createMapper();
+
+    mapper
+      .map("userId").to("id")
+      .map("userName").to("name");
+
+    const actual = mapper.execute(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+
+  },
+  "mapper can fluently chain call execute() after the to() method": function (test: nodeunit.Test): void {
+
+    const source = {
+      "userId": 123,
+      "userName": "my name"
+    };
+
+    const expected = {
+      "id": 123,
+      "name": "my name"
+    };
+
+    const mapper = createMapper();
+
+    const actual = mapper
+      .map("userId").to("id")
+      .map("userName").to("name")
+      .execute(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+
+  },
+  "mapper can fluently chain call execute() after the map() method": function (test: nodeunit.Test): void {
+
+    const source = {
+      "userId": 123
+    };
+
+    const expected = {
+      "userId": 123
+    };
+
+    const mapper = createMapper();
+
+    const actual = mapper
+      .map("userId")
+      .execute(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+
+  }
 
 };
+
 
 const defaultGroup: nodeunit.ITestGroup = {
 
@@ -414,3 +554,4 @@ exports.mapMethod = mapGroup;
 exports.sourceAndDestination = sourceAndDestinationGroup;
 exports.customFunctions = customFunctionsGroup;
 exports.multipleSelection = multipleSelectionGroup;
+exports.fluentChaining = fluentChainingGroup;
