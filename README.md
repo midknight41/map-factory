@@ -4,9 +4,44 @@
 
 [![NPM](https://nodei.co/npm/map-factory.png?downloads=true)](https://www.npmjs.com/package/map-factory/)
 
-A simple utility to map data from an existing object to a new one. This is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
+A simple utility that greatly simplifies mapping data from one shape to another. **map-factory** provides a fluent interface and supports deep references, custom transformations, and object merging.
+
+This is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
+
+## Usage
+
+**map-factory** supports two similar interfaces. Which you use is up to you and your use case.
+
+The first is a fluent interface:
+
+```js
+const createMapper = require("map-factory");
+
+const mapper = createMapper();
+
+mapper
+  .map("sourceField").to("source.field")
+  .map("sourceId").to("source.id");
+
+const result = map.execute(source);
+```
+
+Alternatively you can you the slightly shorter version:
+
+```js
+const createMapper = require("map-factory");
+
+const map = createMapper();
+
+map("sourceField").to("source.field");
+map("sourceId").to("source.id");
+
+const result = map.execute(source);
+```
+
+There is no functional difference between the two and they can be used interchangeably.
 
 ## Map a source field to the same object structure
 
@@ -373,12 +408,17 @@ const postMapper = createMapper();
 const commentMapper = createMapper();
 const authorMapper = createMapper();
 
-postMapper.map("body").to("blog.post.text");
-commentMapper.map("list").to("blog.post.comments");
-commentMapper.map("list[0]").to("blog.post.topComment");
-authorMapper.map("id").to("blog.author.id");
-authorMapper.map("name").to("blog.author.name");
-authorMapper.map("email").to("blog.author.email");
+postMapper
+  .map("body").to("blog.post.text");
+
+commentMapper
+  .map("list").to("blog.post.comments")
+  .map("list[0]").to("blog.post.topComment");
+
+authorMapper
+  .map("id").to("blog.author.id")
+  .map("name").to("blog.author.name")
+  .map("email").to("blog.author.email");
 
 let result = postMapper.execute(post);
 result = commentMapper.execute(comments, result);

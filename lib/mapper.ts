@@ -1,5 +1,6 @@
 import * as mod from "object-mapper";
 import {IMapFactory, IMapping, IKeyDefinition, IMapData} from "./interfaces";
+import Mapping from "./mapping";
 
 const objectMapper: any = mod;
 
@@ -11,6 +12,15 @@ export default class Mapper {
   registerMapping(mapping: IMapping) {
 
     this.assignment.push(mapping);
+  }
+
+  public map(source: string | string[]) {
+
+    const mapping = new Mapping(source, this);
+    this.registerMapping(mapping);
+
+    return mapping;
+
   }
 
   public execute(source, destination) {

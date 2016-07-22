@@ -377,12 +377,17 @@ const exampleGroup: nodeunit.ITestGroup = {
     const commentMapper = createMapper();
     const authorMapper = createMapper();
 
-    postMapper.map("body").to("blog.post.text");
-    commentMapper.map("list").to("blog.post.comments");
-    commentMapper.map("list[0]").to("blog.post.topComment");
-    authorMapper.map("id").to("blog.author.id");
-    authorMapper.map("name").to("blog.author.name");
-    authorMapper.map("email").to("blog.author.email");
+    postMapper
+      .map("body").to("blog.post.text");
+
+    commentMapper
+      .map("list").to("blog.post.comments")
+      .map("list[0]").to("blog.post.topComment");
+
+    authorMapper
+      .map("id").to("blog.author.id")
+      .map("name").to("blog.author.name")
+      .map("email").to("blog.author.email");
 
     let result = postMapper.execute(post);
     result = commentMapper.execute(comments, result);
