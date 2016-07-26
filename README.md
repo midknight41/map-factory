@@ -4,17 +4,46 @@
 
 [![NPM](https://nodei.co/npm/map-factory.png?downloads=true)](https://www.npmjs.com/package/map-factory/)
 
-A simple utility that greatly simplifies mapping data from one shape to another. **map-factory** provides a fluent interface and supports deep references, custom transformations, and object merging.
+A simple object mapping utility that makes it easy to map data from one object to another. **map-factory** provides a fluent interface and supports deep references, custom transformations, and object merging.
 
-This is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
+Features:
+- Deep references with dot notation
+- Custom transformations
+- Fluent (chainable) interface
+- Select from multiple source fields in a single statement
+
+Examples:
+- [Mapping data to a new structure](#mapping)
+- [Working with arrays](#arrays)
+- [Transformations](#transforms)
+- [Working with multiple source objects](#multisource)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
 
+## Installation
+
+```
+npm install map-factory
+```
+
 ## Usage
 
-**map-factory** supports two similar interfaces. Which you use is up to you and your use case.
+**map-factory** supports two similar interfaces. Which you use is up to you and your use case. There is no functional difference.
 
-The first is a fluent interface:
+The basic syntax is:
+
+```js
+const createMapper = require("map-factory");
+
+const map = createMapper();
+
+map("sourceField").to("source.field");
+map("sourceId").to("source.id");
+
+const result = map.execute(source);
+```
+
+Alternatively you can use the fluent interface which support method chaining. This syntax is better when you need to refer to multiple mappers in your code.
 
 ```js
 const createMapper = require("map-factory");
@@ -28,53 +57,11 @@ mapper
 const result = map.execute(source);
 ```
 
-Alternatively you can you the slightly shorter version:
+## Examples
+<a name="mapping"/>
+### Mapping data to a new structure
 
-```js
-const createMapper = require("map-factory");
-
-const map = createMapper();
-
-map("sourceField").to("source.field");
-map("sourceId").to("source.id");
-
-const result = map.execute(source);
-```
-
-There is no functional difference between the two and they can be used interchangeably.
-
-## Map a source field to the same object structure
-
-Mapping is explicit so unmapped fields are discarded.
-
-```js
-const createMapper = require("map-factory");
-
-const source = {
-  "fieldName": "name1",
-  "fieldId": "123",
-  "fieldDescription": "description"
-};
-
-const map = createMapper();
-
-map("fieldName");
-map("fieldId");
-
-const result = map.execute(source);
-console.log(result);
-
-/*
-  {
-    "fieldName": "name1",
-    "fieldId": "123"
-  }
-*/
-```
-
-## Map a source field to a different object structure
-
-Of course, we probably want a different structure for our target object.
+**map-factory** supports deep object references for both source and target fields via dot notation. Mapping is explicit so unmapped fields are discarded.
 
 ```js
 const createMapper = require("map-factory");
@@ -103,7 +90,35 @@ console.log(result);
 */
 ```
 
-## Supports deep references for source and target objects
+The ```to()``` is optional so if you want to just want to copy a subset of fields to a new object you can do the following:
+
+```js
+const createMapper = require("map-factory");
+
+const source = {
+  "fieldName": "name1",
+  "fieldId": "123",
+  "fieldDescription": "description"
+};
+
+const map = createMapper();
+
+map("fieldName");
+map("fieldId");
+
+const result = map.execute(source);
+console.log(result);
+
+/*
+  {
+    "fieldName": "name1",
+    "fieldId": "123"
+  }
+*/
+```
+<a name="arrays"/>
+### Working with arrays
+You can use ```[]``` to traverse the entries in an array. For example, here you can transform an array of objects to an array of strings.
 
 ```js
 const source = {
@@ -185,8 +200,9 @@ console.log(result);
 }
 */
 ```
-
-More complicated transformations can be handled by providing a function.
+<a name="transforms"/>
+### Transformations
+More complicated transformations can be handled by providing a function. The selected source data will be passed to the function.
 
 ```js
 const createMapper = require("map-factory");
@@ -213,7 +229,7 @@ const map = createMapper();
 map("articles.[0]").to("topStory");
 map("articles").to("otherStories", articles => {
 
-  // We don't want to include the top story
+  // We don't want to include the top story in with the other stories
   articles.shift();
 
   return articles;
@@ -242,43 +258,6 @@ console.log(result);
   }
 */
 ```
-
-An existing object can be provided as the target object.
-
-```js
-const createMapper = require("map-factory");
-
-const source = {
-     "fieldName": "name1",
-     "fieldId": "123",
-     "fieldDescription": "description"
-   };
-
-const destination = {
- "existing": "data"
-};
-
-const map = createMapper();
-
-map("fieldName").to("field.name");
-map("fieldId").to("field.id");
-
-const result = map.execute(source, destination);
-console.log(result);
-
-/*
-  {
-    "existing": "data",
-    "field": {
-        "name": "name1",
-        "id": "123"
-    }
-  }
-*/
-
-```
-
-## Select from multiple sources at once
 
 You can also provide an array of source fields and they can be extracted together if you provide a transform for the target field.
 
@@ -316,7 +295,7 @@ console.log(result);
 ```
 
 ## Common patterns
-
+<a name="multisource"/>
 ### Dealing with multiple sources of data
 
 There are two ways to deal with multiple sources of data.
@@ -381,6 +360,41 @@ console.log(final);
     }
   }
 */
+```
+
+An existing object can be provided as the target object.
+
+```js
+const createMapper = require("map-factory");
+
+const source = {
+     "fieldName": "name1",
+     "fieldId": "123",
+     "fieldDescription": "description"
+   };
+
+const destination = {
+ "existing": "data"
+};
+
+const map = createMapper();
+
+map("fieldName").to("field.name");
+map("fieldId").to("field.id");
+
+const result = map.execute(source, destination);
+console.log(result);
+
+/*
+  {
+    "existing": "data",
+    "field": {
+        "name": "name1",
+        "id": "123"
+    }
+  }
+*/
+
 ```
 
 #### Merge objects with multiple mappers
@@ -451,3 +465,5 @@ class BlogService {
 
 }
 ```
+
+This module is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
