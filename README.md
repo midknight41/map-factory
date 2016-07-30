@@ -19,13 +19,16 @@ The first is a fluent interface:
 ```js
 const createMapper = require("map-factory");
 
-const mapper = createMapper();
+const source = {
+  "sourceField": "sourceField",
+  "sourceId": "sourceId"
+}
 
-mapper
+const mapper = createMapper()
   .map("sourceField").to("source.field")
   .map("sourceId").to("source.id");
 
-const result = map.execute(source);
+const result = mapper.execute(source);
 ```
 
 Alternatively you can you the slightly shorter version:
@@ -33,8 +36,12 @@ Alternatively you can you the slightly shorter version:
 ```js
 const createMapper = require("map-factory");
 
-const map = createMapper();
+const source = {
+  "sourceField": "sourceField",
+  "sourceId": "sourceId"
+}
 
+const map = createMapper();
 map("sourceField").to("source.field");
 map("sourceId").to("source.id");
 
@@ -57,7 +64,6 @@ const source = {
 };
 
 const map = createMapper();
-
 map("fieldName");
 map("fieldId");
 
@@ -86,7 +92,6 @@ const source = {
 };
 
 const map = createMapper();
-
 map("fieldName").to("field.name");
 map("fieldId").to("field.id");
 
@@ -106,6 +111,8 @@ console.log(result);
 ## Supports deep references for source and target objects
 
 ```js
+const createMapper = require("map-factory");
+
 const source = {
   "person": {
     "name": "John",
@@ -126,7 +133,6 @@ const source = {
 };
 
 const map = createMapper();
-
 map("person.email").to("user.login");
 map("account.id").to("user.accountId");
 map("account.entitlements.[].name").to("user.entitlements");
@@ -168,7 +174,6 @@ const source = {
 };
 
 const map = createMapper();
-
 map("articles.[0]").to("topStory");
 
 const result = map.execute(source);
@@ -209,7 +214,6 @@ const source = {
 };
 
 const map = createMapper();
-
 map("articles.[0]").to("topStory");
 map("articles").to("otherStories", articles => {
 
@@ -259,7 +263,6 @@ const destination = {
 };
 
 const map = createMapper();
-
 map("fieldName").to("field.name");
 map("fieldId").to("field.id");
 
