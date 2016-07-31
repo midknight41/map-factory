@@ -461,7 +461,7 @@ const post = {
   }
 }
 
-blogService.decorateBlogPostWithAuthor(1, post)
+return blogService.decorateBlogPostWithAuthor(1, post)
   .then(result => {
     assert.deepEqual(result, {
       "blog": {
@@ -478,5 +478,4 @@ blogService.decorateBlogPostWithAuthor(1, post)
       }
     });
   });
-
 ```
