@@ -15,7 +15,6 @@
     "test": "npm run lint && nodeunit ./dist/test/",
     "pret": "npm run build",
     "t": "nodeunit ./dist/test/",
-    "pretravis": "npm run build",
     "travis": "npm run test",
     "premajor": "npm run test",
     "major": "npm version major -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
