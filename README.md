@@ -1,32 +1,31 @@
 # map-factory
-
 [![Coverage Status](https://coveralls.io/repos/github/midknight41/map-factory/badge.svg?branch=master)](https://coveralls.io/github/midknight41/map-factory?branch=master) [![Build](https://api.travis-ci.org/midknight41/map-factory.svg?branch=master)](https://travis-ci.org/midknight41/map-factory) [![Deps](https://david-dm.org/midknight41/map-factory.svg)](https://david-dm.org/midknight41/map-factory#info=dependencies) [![devDependency Status](https://david-dm.org/midknight41/map-factory/dev-status.svg)](https://david-dm.org/midknight41/map-factory#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/map-factory.png?downloads=true)](https://www.npmjs.com/package/map-factory/)
 
 A simple object mapping utility that makes it easy to map data from one object to another. **map-factory** provides a fluent interface and supports deep references, custom transformations, and object merging.
 
-Features:
+
+#### Features
 - Deep references with dot notation
 - Custom transformations
 - Fluent (chainable) interface
 - Select from multiple source fields in a single statement
 
-Examples:
+#### Examples
 - [Mapping data to a new structure](#mapping)
 - [Working with arrays](#arrays)
 - [Transformations](#transforms)
 - [Working with multiple source objects](#multisource)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
-
-## Installation
+## How to install
 
 ```
 npm install map-factory
 ```
 
-## Usage
+## Getting Started
 
 **map-factory** supports two similar interfaces. Which you use is up to you and your use case. There is no functional difference.
 
@@ -43,7 +42,7 @@ map("sourceId").to("source.id");
 const result = map.execute(source);
 ```
 
-Alternatively you can use the fluent interface which support method chaining. This syntax is better when you need to refer to multiple mappers in your code.
+Alternatively you can use the fluent interface which supports method chaining. This syntax is better when you need to refer to multiple mappers in your code.
 
 ```js
 const createMapper = require("map-factory");
