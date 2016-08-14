@@ -1,83 +1,66 @@
 # map-factory
-
 [![Coverage Status](https://coveralls.io/repos/github/midknight41/map-factory/badge.svg?branch=master)](https://coveralls.io/github/midknight41/map-factory?branch=master) [![Build](https://api.travis-ci.org/midknight41/map-factory.svg?branch=master)](https://travis-ci.org/midknight41/map-factory) [![Deps](https://david-dm.org/midknight41/map-factory.svg)](https://david-dm.org/midknight41/map-factory#info=dependencies) [![devDependency Status](https://david-dm.org/midknight41/map-factory/dev-status.svg)](https://david-dm.org/midknight41/map-factory#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/map-factory.png?downloads=true)](https://www.npmjs.com/package/map-factory/)
 
-A simple utility that greatly simplifies mapping data from one shape to another. **map-factory** provides a fluent interface and supports deep references, custom transformations, and object merging.
+A simple object mapping utility that makes it easy to map data from one object to another. **map-factory** provides a fluent interface and supports deep references, custom transformations, and object merging.
 
-This is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
+
+#### Features
+- Deep references with dot notation
+- Custom transformations
+- Fluent (chainable) interface
+- Select from multiple source fields in a single statement
+
+#### Examples
+- [Mapping data to a new structure](#mapping)
+- [Working with arrays](#arrays)
+- [Transformations](#transforms)
+- [Working with multiple source objects](#multisource)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
+## How to install
 
-## Usage
-
-**map-factory** supports two similar interfaces. Which you use is up to you and your use case.
-
-The first is a fluent interface:
-
-```js
-const createMapper = require("map-factory");
-
-const source = {
-  "sourceField": "sourceField",
-  "sourceId": "sourceId"
-}
-
-const mapper = createMapper()
-  .map("sourceField").to("source.field")
-  .map("sourceId").to("source.id");
-
-const result = mapper.execute(source);
+```
+npm install map-factory
 ```
 
-Alternatively you can you the slightly shorter version:
+## Getting Started
+
+**map-factory** supports two similar interfaces. Which you use is up to you and your use case. There is no functional difference.
+
+The basic syntax is:
 
 ```js
 const createMapper = require("map-factory");
 
-const source = {
-  "sourceField": "sourceField",
-  "sourceId": "sourceId"
-}
-
 const map = createMapper();
+
 map("sourceField").to("source.field");
 map("sourceId").to("source.id");
 
 const result = map.execute(source);
 ```
 
-There is no functional difference between the two and they can be used interchangeably.
-
-## Map a source field to the same object structure
-
-Mapping is explicit so unmapped fields are discarded.
+Alternatively you can use the fluent interface which supports method chaining. This syntax is better when you need to refer to multiple mappers in your code.
 
 ```js
 const createMapper = require("map-factory");
-const assert = require("assert");
 
-const source = {
-  "fieldName": "name1",
-  "fieldId": "123",
-  "fieldDescription": "description"
-};
+const mapper = createMapper();
 
-const map = createMapper();
-map("fieldName");
-map("fieldId");
+mapper
+  .map("sourceField").to("source.field")
+  .map("sourceId").to("source.id");
 
 const result = map.execute(source);
-assert.deepEqual(result, {
-  "fieldName": "name1",
-  "fieldId": "123"
-});
 ```
 
-## Map a source field to a different object structure
+## Examples
+<a name="mapping"/>
+### Mapping data to a new structure
 
-Of course, we probably want a different structure for our target object.
+**map-factory** supports deep object references for both source and target fields via dot notation. Mapping is explicit so unmapped fields are discarded.
 
 ```js
 const createMapper = require("map-factory");
@@ -94,6 +77,7 @@ map("fieldName").to("field.name");
 map("fieldId").to("field.id");
 
 const result = map.execute(source);
+
 assert.deepEqual(result, {
   "field": {
     "name": "name1",
@@ -102,7 +86,32 @@ assert.deepEqual(result, {
 });
 ```
 
-## Supports deep references for source and target objects
+The ```to()``` is optional so if you want to just want to copy a subset of fields to a new object you can do the following:
+
+```js
+const createMapper = require("map-factory");
+const assert = require("assert");
+
+const source = {
+  "fieldName": "name1",
+  "fieldId": "123",
+  "fieldDescription": "description"
+};
+
+const map = createMapper();
+map("fieldName");
+map("fieldId");
+
+const result = map.execute(source);
+
+assert.deepEqual(result, {
+  "fieldName": "name1",
+  "fieldId": "123"
+});
+```
+<a name="arrays"/>
+### Working with arrays
+You can use ```[]``` to traverse the entries in an array. For example, here you can transform an array of objects to an array of strings.
 
 ```js
 const createMapper = require("map-factory");
@@ -133,6 +142,7 @@ map("account.id").to("user.accountId");
 map("account.entitlements.[].name").to("user.entitlements");
 
 const result = map.execute(source);
+
 assert.deepEqual(result, {
   "user": {
     "login": "john@someplace.com",
@@ -169,6 +179,7 @@ const map = createMapper();
 map("articles.[0]").to("topStory");
 
 const result = map.execute(source);
+
 assert.deepEqual(result, {
   "topStory": {
     "id": 1,
@@ -178,8 +189,9 @@ assert.deepEqual(result, {
   }
 });
 ```
-
-More complicated transformations can be handled by providing a function.
+<a name="transforms"/>
+### Transformations
+More complicated transformations can be handled by providing a function. The selected source data will be passed to the function.
 
 ```js
 const createMapper = require("map-factory");
@@ -206,7 +218,7 @@ const map = createMapper();
 map("articles.[0]").to("topStory");
 map("articles").to("otherStories", articles => {
 
-  // We don't want to include the top story
+  // We don't want to include the top story in with the other stories
   articles.shift();
 
   return articles;
@@ -232,38 +244,6 @@ assert.deepEqual(result, {
 });
 ```
 
-An existing object can be provided as the target object.
-
-```js
-const createMapper = require("map-factory");
-const assert = require("assert");
-
-const source = {
-     "fieldName": "name1",
-     "fieldId": "123",
-     "fieldDescription": "description"
-   };
-
-const destination = {
- "existing": "data"
-};
-
-const map = createMapper();
-map("fieldName").to("field.name");
-map("fieldId").to("field.id");
-
-const result = map.execute(source, destination);
-assert.deepEqual(result, {
-  "existing": "data",
-  "field": {
-      "name": "name1",
-      "id": "123"
-  }
-});
-```
-
-## Select from multiple sources at once
-
 You can also provide an array of source fields and they can be extracted together if you provide a transform for the target field.
 
 ```js
@@ -288,6 +268,7 @@ map(["apples.count", "oranges.count"]).to("fruit.count", (appleCount, orangeCoun
 });
 
 const result = map.execute(source);
+
 assert.deepEqual(result, {
   fruit: {
   count: 7
@@ -296,7 +277,7 @@ assert.deepEqual(result, {
 ```
 
 ## Common patterns
-
+<a name="multisource"/>
 ### Dealing with multiple sources of data
 
 There are two ways to deal with multiple sources of data.
@@ -342,6 +323,7 @@ map("user.name").to("blog.author.name");
 map("user.email").to("blog.author.email");
 
 const result = map.execute(source);
+
 assert.deepEqual(result, {
   "blog": {
     "post":
@@ -355,6 +337,37 @@ assert.deepEqual(result, {
       "name": "John Doe",
       "email": "john.doe@nobody.com"
     }
+  }
+});
+```
+
+An existing object can be provided as the target object.
+
+```js
+const createMapper = require("map-factory");
+const assert = require("assert");
+
+const source = {
+     "fieldName": "name1",
+     "fieldId": "123",
+     "fieldDescription": "description"
+   };
+
+const destination = {
+ "existing": "data"
+};
+
+const map = createMapper();
+map("fieldName").to("field.name");
+map("fieldId").to("field.id");
+
+const result = map.execute(source, destination);
+
+assert.deepEqual(result, {
+  "existing": "data",
+  "field": {
+      "name": "name1",
+      "id": "123"
   }
 });
 ```
@@ -479,3 +492,5 @@ return blogService.decorateBlogPostWithAuthor(1, post)
     });
   });
 ```
+
+This module is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
