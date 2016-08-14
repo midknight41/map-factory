@@ -64,6 +64,7 @@ const result = map.execute(source);
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 const source = {
   "fieldName": "name1",
@@ -72,27 +73,24 @@ const source = {
 };
 
 const map = createMapper();
-
 map("fieldName").to("field.name");
 map("fieldId").to("field.id");
 
 const result = map.execute(source);
-console.log(result);
 
-/*
-  {
-    "field": {
-      "name": "name1",
-      "id": "123"
-    }
+assert.deepEqual(result, {
+  "field": {
+    "name": "name1",
+    "id": "123"
   }
-*/
+});
 ```
 
 The ```to()``` is optional so if you want to just want to copy a subset of fields to a new object you can do the following:
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 const source = {
   "fieldName": "name1",
@@ -101,25 +99,24 @@ const source = {
 };
 
 const map = createMapper();
-
 map("fieldName");
 map("fieldId");
 
 const result = map.execute(source);
-console.log(result);
 
-/*
-  {
-    "fieldName": "name1",
-    "fieldId": "123"
-  }
-*/
+assert.deepEqual(result, {
+  "fieldName": "name1",
+  "fieldId": "123"
+});
 ```
 <a name="arrays"/>
 ### Working with arrays
 You can use ```[]``` to traverse the entries in an array. For example, here you can transform an array of objects to an array of strings.
 
 ```js
+const createMapper = require("map-factory");
+const assert = require("assert");
+
 const source = {
   "person": {
     "name": "John",
@@ -140,29 +137,26 @@ const source = {
 };
 
 const map = createMapper();
-
 map("person.email").to("user.login");
 map("account.id").to("user.accountId");
 map("account.entitlements.[].name").to("user.entitlements");
 
 const result = map.execute(source);
-console.log(result);
 
-/*
-  {
-    "user": {
-      "login": "john@someplace.com",
-      "accountId": "abc123",
-      "entitlements": ["game-1", "game-2"]
-    }
+assert.deepEqual(result, {
+  "user": {
+    "login": "john@someplace.com",
+    "accountId": "abc123",
+    "entitlements": ["game-1", "game-2"]
   }
-*/
+});
 ```
 
 You can also reference specific items in an array.
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 const source = {
   "articles": [
@@ -182,22 +176,18 @@ const source = {
 };
 
 const map = createMapper();
-
 map("articles.[0]").to("topStory");
 
 const result = map.execute(source);
-console.log(result);
 
-/*
-{
+assert.deepEqual(result, {
   "topStory": {
     "id": 1,
     "title": "Top Article",
     "author": "Joe Doe",
     "body": "..."
   }
-}
-*/
+});
 ```
 <a name="transforms"/>
 ### Transformations
@@ -205,6 +195,7 @@ More complicated transformations can be handled by providing a function. The sel
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 const source = {
   "articles": [
@@ -224,7 +215,6 @@ const source = {
 };
 
 const map = createMapper();
-
 map("articles.[0]").to("topStory");
 map("articles").to("otherStories", articles => {
 
@@ -236,32 +226,29 @@ map("articles").to("otherStories", articles => {
 });
 
 const result = map.execute(source);
-console.log(result);
-
-/*
-  {
-    "topStory": {
-      "id": 1,
-      "title": "Top Article",
+assert.deepEqual(result, {
+  "topStory": {
+    "id": 1,
+    "title": "Top Article",
+    "author": "Joe Doe",
+    "body": "..."
+  },
+  "otherStories": [
+    {
+      "id": 2,
+      "title": "Second Article",
       "author": "Joe Doe",
       "body": "..."
-    },
-    "otherStories": [
-      {
-        "id": 2,
-        "title": "Second Article",
-        "author": "Joe Doe",
-        "body": "..."
-      }
-    ]
-  }
-*/
+    }
+  ]
+});
 ```
 
 You can also provide an array of source fields and they can be extracted together if you provide a transform for the target field.
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 const source = {
   "apples": {
@@ -281,16 +268,12 @@ map(["apples.count", "oranges.count"]).to("fruit.count", (appleCount, orangeCoun
 });
 
 const result = map.execute(source);
-console.log(result);
 
-/*
-  {
-    fruit: {
-    count: 7
-    }
+assert.deepEqual(result, {
+  fruit: {
+  count: 7
   }
-*/
-
+});
 ```
 
 ## Common patterns
@@ -310,6 +293,7 @@ We'd recommend this approach for most use cases.
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 // assume the following inputs
 const post = {
@@ -338,33 +322,30 @@ map("user.id").to("blog.author.id");
 map("user.name").to("blog.author.name");
 map("user.email").to("blog.author.email");
 
-const final = map.execute(source);
-console.log(final);
+const result = map.execute(source);
 
-/*
-  {
-    "blog":
+assert.deepEqual(result, {
+  "blog": {
+    "post":
     {
-      "post":
-      {
-        "text": "<p>Some Text</p>",
-        "comments": ["not too bad", "pretty good", "awful"],
-        "topComment": "not too bad"
-      },
-      "author": {
-        "id": 123,
-        "name": "John Doe",
-        "email": "john.doe@nobody.com"
-      }
+      "text": "<p>Some Text</p>",
+      "comments": ["not too bad", "pretty good", "awful"],
+      "topComment": "not too bad"
+    },
+    "author": {
+      "id": 123,
+      "name": "John Doe",
+      "email": "john.doe@nobody.com"
     }
   }
-*/
+});
 ```
 
 An existing object can be provided as the target object.
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 const source = {
      "fieldName": "name1",
@@ -377,23 +358,18 @@ const destination = {
 };
 
 const map = createMapper();
-
 map("fieldName").to("field.name");
 map("fieldId").to("field.id");
 
 const result = map.execute(source, destination);
-console.log(result);
 
-/*
-  {
-    "existing": "data",
-    "field": {
-        "name": "name1",
-        "id": "123"
-    }
+assert.deepEqual(result, {
+  "existing": "data",
+  "field": {
+      "name": "name1",
+      "id": "123"
   }
-*/
-
+});
 ```
 
 #### Merge objects with multiple mappers
@@ -401,6 +377,7 @@ The other option is to decorate your existing data objects in a piece by piece f
 
 ```js
 const createMapper = require("map-factory");
+const assert = require("assert");
 
 // assume the following inputs
 const post = {
@@ -436,12 +413,34 @@ authorMapper
 let result = postMapper.execute(post);
 result = commentMapper.execute(comments, result);
 result = authorMapper.execute(user, result);
+
+assert.deepEqual(result, {
+  "blog": {
+    "post": {
+      "text": "<p>Some Text</p>",
+      "comments": [
+        "not too bad",
+        "pretty good",
+        "awful"
+      ],
+      "topComment": "not too bad"
+    },
+    "author": {
+      "id": 123,
+      "name": "John Doe",
+      "email": "john.doe@nobody.com"
+    }
+  }
+});
 ```
 
 The above approach appears untidy when compared with combining the data into a single object but it is useful in situations where your mapping logic is distributed.
 For example, a mapper used within a class may build its map in the constructor and execute the mapper in a method.
 
 ```js
+const createMapper = require("map-factory");
+const assert = require("assert");
+const BlogRepo = require("./artifacts/mock-blog-repo");
 
 class BlogService {
 
@@ -449,11 +448,10 @@ class BlogService {
     this.blogRepos = blogRepos;
 
     // initialise mapper
-    this.authorMapper = createMapper();
-    this.authorMapper.map("id").to("blog.author.id");
-    this.authorMapper.map("name").to("blog.author.name");
-    this.authorMapper.map("email").to("blog.author.email");
-
+    this.authorMapper = createMapper()
+      .map("id").to("blog.author.id")
+      .map("name").to("blog.author.name")
+      .map("email").to("blog.author.email");
   }
 
   // Here post is created somewhere else and we are extending it with user information
@@ -463,6 +461,36 @@ class BlogService {
   }
 
 }
+
+const blogService = new BlogService(new BlogRepo());
+
+const post = {
+  "blog": {
+    "post": {
+      "id": 10,
+      "title": "Foo bar baz",
+      "post": "<p>Foo bar baz</p><Foo bar baz</p>"
+    }
+  }
+}
+
+return blogService.decorateBlogPostWithAuthor(1, post)
+  .then(result => {
+    assert.deepEqual(result, {
+      "blog": {
+        "post": {
+          "id": 10,
+          "title": "Foo bar baz",
+          "post": "<p>Foo bar baz</p><Foo bar baz</p>"
+        },
+        "author": {
+          "id": 1,
+          "name": "foo",
+          "email": "foo@foobar.com"
+        }
+      }
+    });
+  });
 ```
 
 This module is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
