@@ -1,3 +1,15 @@
+### 1.2.3
+
+Actually fixed the links in the docs
+
+### 1.2.2
+
+Tried and failed to fix links in docs
+
+### 1.2.1
+
+Improved documentation
+
 ### 1.2.0
 
 Add map method which will improve readability in some use cases
