@@ -13,10 +13,10 @@ A simple object mapping utility that makes it easy to map data from one object t
 - Select from multiple source fields in a single statement
 
 #### Examples
-- [Mapping data to a new structure](#mapping)
-- [Working with arrays](#arrays)
-- [Transformations](#transforms)
-- [Working with multiple source objects](#multisource)
+- [Mapping data to a new structure](#mapping-data-to-a-new-structure)
+- [Working with arrays](#working-with-arrays)
+- [Transformations](#transformations)
+- [Working with multiple source objects](#dealing-with-multiple-sources-of-data)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
 ## How to install
@@ -58,9 +58,7 @@ const result = map.execute(source);
 
 ## Examples
 
-<a name="mapping">
 ### Mapping data to a new structure
-</a>
 
 **map-factory** supports deep object references for both source and target fields via dot notation. Mapping is explicit so unmapped fields are discarded.
 
@@ -111,9 +109,7 @@ assert.deepEqual(result, {
   "fieldId": "123"
 });
 ```
-<a name="arrays">
 ### Working with arrays
-</a>
 You can use ```[]``` to traverse the entries in an array. For example, here you can transform an array of objects to an array of strings.
 
 ```js
@@ -192,9 +188,7 @@ assert.deepEqual(result, {
   }
 });
 ```
-<a name="transforms">
 ### Transformations
-</a>
 More complicated transformations can be handled by providing a function. The selected source data will be passed to the function.
 
 ```js
@@ -281,9 +275,7 @@ assert.deepEqual(result, {
 ```
 
 ## Common patterns
-<a name="multisource">
 ### Dealing with multiple sources of data
-</a>
 There are two ways to deal with multiple sources of data.
 - Combine your data in to a single object before mapping
 - Use multiple mappers and combine the objects as you go
