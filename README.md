@@ -53,7 +53,7 @@ mapper
   .map("sourceField").to("source.field")
   .map("sourceId").to("source.id");
 
-const result = map.execute(source);
+const result = mapper.execute(source);
 ```
 
 ## Examples
