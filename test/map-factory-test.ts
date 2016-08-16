@@ -307,7 +307,7 @@ const defaultGroup: nodeunit.ITestGroup = {
     map("fieldName").to("field.name");
 
     test.throws(() => {
-      const actual = map.execute();
+      const actual = map.execute(null);
     });
 
     return test.done();
