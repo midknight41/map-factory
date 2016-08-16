@@ -25,6 +25,10 @@ export default class Mapping implements IMapping {
     return this.mapper.execute(source, destination);
   }
 
+  public each(sourceArray) {
+    return this.mapper.each(sourceArray);
+  }
+
   public to(target: string, fnc?: Function) {
 
     if (!target) {

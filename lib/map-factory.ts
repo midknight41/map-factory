@@ -23,5 +23,9 @@ export default function createMapper(): IMapFactory {
     return this.mapper.execute(source, destination);
   }.bind(me);
 
+  mapper.each = function (sourceArray?) {
+    return this.mapper.each(sourceArray);
+  }.bind(me);
+
   return mapper;
 }

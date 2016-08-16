@@ -172,6 +172,108 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
 
 };
 
+const eachGroup: nodeunit.ITestGroup = {
+
+  "Can process an array correctly": function (test: nodeunit.Test): void {
+    const source = [{
+      "fieldName": "name1"
+    }, {
+      "fieldName": "name2"
+    }];
+
+    const expected = [
+      {
+        "field": {
+          "name": "name1"
+        }
+      },
+      {
+        "field": {
+          "name": "name2"
+        }
+      }];
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.each(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+
+  },
+  "An empty array does not cause an error": function (test: nodeunit.Test): void {
+    const source = [];
+
+    const expected = [];
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.each(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+
+  },
+  "Multiple mappers can be used together": function (test: nodeunit.Test): void {
+    const source = {
+      one: [{value: "a", drop: "me" }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
+      two: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
+      three: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }]
+    };
+
+    const expected = {
+      one: [{newOne: "a" }, {newOne: "b" }, {newOne: "c" }],
+      two: [{newOne: "a" }, {newOne: "b" }, {newOne: "c" }],
+      three: [{newOne: "a" }, {newOne: "b" }, {newOne: "c" }]
+    };
+
+    const mainMapper = createMapper();
+    const childMapper = createMapper();
+
+    childMapper
+      .map("value").to("newOne");
+
+    mainMapper
+      .map("one").to("one", array => childMapper.each(array))
+      .map("two").to("two", array => childMapper.each(array))
+      .map("three").to("three", array => childMapper.each(array));
+
+    const actual = mainMapper.execute(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+
+  },
+  "A null parameter throws an error": function (test: nodeunit.Test): void {
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    test.throws(() => {
+      const actual = map.each(null);
+    });
+
+    return test.done();
+  },
+  "A non-array throws an error": function (test: nodeunit.Test): void {
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    test.throws(() => {
+      const actual = map.each({"a": "b"});
+    });
+
+    return test.done();
+  }
+};
 
 const defaultGroup: nodeunit.ITestGroup = {
 
@@ -199,12 +301,6 @@ const defaultGroup: nodeunit.ITestGroup = {
   },
 
   "Throws if no source is provided": function (test: nodeunit.Test): void {
-
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
 
     const map = createMapper();
 
@@ -555,3 +651,4 @@ exports.sourceAndDestination = sourceAndDestinationGroup;
 exports.customFunctions = customFunctionsGroup;
 exports.multipleSelection = multipleSelectionGroup;
 exports.fluentChaining = fluentChainingGroup;
+exports.each = eachGroup;
