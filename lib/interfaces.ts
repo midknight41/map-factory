@@ -10,7 +10,8 @@ export interface IMapData {
 export interface IMapFactory {
   (stringOrArray: string | string[]): IMapping;
   map(stringOrArray: string | string[]): IMapping;
-  execute(source?, destination?);
+  execute(source, destination?);
+  each(sourceArray: any[]);
 }
 
 export interface IMapping {
@@ -18,6 +19,7 @@ export interface IMapping {
   target: string | IKeyDefinition;
   to(target: string, fnc?: Function);
   map(stringOrArray: string | string[]): IMapping;
-  execute(source?, destination?);
+  execute(source, destination?);
+  each(sourceArray: any[]);
 
 }

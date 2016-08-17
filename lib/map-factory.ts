@@ -19,8 +19,12 @@ export default function createMapper(): IMapFactory {
 
   }.bind(me);
 
-  mapper.execute = function (source?, destination?) {
+  mapper.execute = function (source, destination?) {
     return this.mapper.execute(source, destination);
+  }.bind(me);
+
+  mapper.each = function (sourceArray: any[]) {
+    return this.mapper.each(sourceArray);
   }.bind(me);
 
   return mapper;
