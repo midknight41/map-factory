@@ -1,3 +1,7 @@
+### 1.3.0
+
+Added the ```each()``` method to help when working with multiple mappers and arrays.
+
 ### 1.2.3
 
 Actually fixed the links in the docs
