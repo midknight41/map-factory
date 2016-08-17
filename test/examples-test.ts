@@ -153,7 +153,36 @@ const exampleGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
+  "provides the each() method to help work with arrays and multiple mappers": function (test: nodeunit.Test): void {
+    const source = {
+      one: [{value: "a", drop: "me" }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
+      two: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
+      three: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }]
+    };
 
+    const expected = {
+      one: [{item: "a" }, {item: "b" }, {item: "c" }],
+      two: [{item: "a" }, {item: "b" }, {item: "c" }],
+      three: [{item: "a" }, {item: "b" }, {item: "c" }]
+    };
+
+    const mainMapper = createMapper();
+    const childMapper = createMapper();
+
+    childMapper
+      .map("value").to("item");
+
+    mainMapper
+      .map("one").to("one", array => childMapper.each(array))
+      .map("two").to("two", array => childMapper.each(array))
+      .map("three").to("three", array => childMapper.each(array));
+
+    const actual = mainMapper.execute(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+  },
   "More complicated transformations can be handled by providing a function": function (test: nodeunit.Test): void {
 
     const expected = {

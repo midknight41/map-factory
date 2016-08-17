@@ -264,11 +264,12 @@ const eachGroup: nodeunit.ITestGroup = {
   },
   "A non-array throws an error": function (test: nodeunit.Test): void {
     const map = createMapper();
+    const source: any = {"a": "b"};
 
     map("fieldName").to("field.name");
 
     test.throws(() => {
-      const actual = map.each({"a": "b"});
+      const actual = map.each(source);
     });
 
     return test.done();
@@ -299,8 +300,7 @@ const defaultGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-
-  "Throws if no source is provided": function (test: nodeunit.Test): void {
+  "Throws if a null source is provided": function (test: nodeunit.Test): void {
 
     const map = createMapper();
 
@@ -312,7 +312,18 @@ const defaultGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
+  "Throws if an undefined source is provided": function (test: nodeunit.Test): void {
 
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    test.throws(() => {
+      const actual = map.execute(undefined);
+    });
+
+    return test.done();
+  },
   "Can reuse the map for multiple transforms": function (test: nodeunit.Test): void {
 
     const source = {
