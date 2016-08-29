@@ -1,5 +1,5 @@
 import * as nodeunit from "nodeunit";
-// tslint:disable-next-line no-var-requires
+// tslint:disable-next-line:no-require-imports
 const createMapper = require("../lib/index");
 
 
