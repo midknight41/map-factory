@@ -50,7 +50,7 @@
     "gently": "^0.10.0",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
-    "nodeunit": "^0.9.3",
+    "nodeunit": "^0.10.0",
     "rimraf": "^2.5.3",
     "tslint": "3.15.1",
     "typescript": "^1.8.10"
