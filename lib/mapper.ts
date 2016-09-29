@@ -1,5 +1,5 @@
 import * as mod from "object-mapper";
-import {IMapFactory, IMapping, IKeyDefinition, IMapData} from "./interfaces";
+import { IMapFactory, IMapping, IKeyDefinition, IMapData } from "./interfaces";
 import Mapping from "./mapping";
 
 const objectMapper: any = mod;
@@ -72,7 +72,8 @@ export default class Mapper {
 
       if (Array.isArray(item.source)) {
 
-        if (!target.transform) {
+        // transforms are optional in orMode
+        if (!target.transform && item.orMode === false) {
           throw new Error("Multiple selections must map to a transform. No transform provided.");
         }
 
@@ -98,6 +99,14 @@ export default class Mapper {
 
       const params = [];
 
+      // this multi-select is be processed in orMode
+      if (item.orMode) {
+
+        output = this.applyOrMode(item, source, output);
+        continue;
+      }
+
+      // normal mode
       for (const sourceKey of item.source) {
 
         const value = objectMapper.getKeyValue(source, sourceKey);
@@ -110,4 +119,36 @@ export default class Mapper {
 
     return output;
   }
+
+  private applyOrMode(item, source, output) {
+
+    let orValue = null;
+
+    for (const sourceKey of item.source) {
+
+      orValue = objectMapper.getKeyValue(source, sourceKey);
+
+      if (orValue !== null && orValue !== undefined) {
+        break;
+      }
+    }
+
+    // TODO: transform logic is messy. Could add a hasTransform to the Mapping to tidy it.
+
+    // no transform
+    if (item.target.key === undefined) {
+
+      output = objectMapper.setKeyValue(output, item.target, orValue);
+      return output;
+    }
+
+    // has a transform
+    const params = [];
+    params.push(orValue);
+
+    const result = item.target.transform.apply(null, params);
+    output = objectMapper.setKeyValue(output, item.target.key, result);
+    return output;
+  }
+
 }

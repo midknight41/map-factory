@@ -15,10 +15,12 @@ export interface IMapFactory {
 }
 
 export interface IMapping {
+  orMode: boolean;
   source: string | string[];
   target: string | IKeyDefinition;
   to(target: string, fnc?: Function);
   map(stringOrArray: string | string[]): IMapping;
+  or(source: string);
   execute(source, destination?);
   each(sourceArray: any[]);
 

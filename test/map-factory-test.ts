@@ -222,15 +222,15 @@ const eachGroup: nodeunit.ITestGroup = {
   },
   "Multiple mappers can be used together": function (test: nodeunit.Test): void {
     const source = {
-      one: [{value: "a", drop: "me" }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
-      two: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
-      three: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }]
+      one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+      two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+      three: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }]
     };
 
     const expected = {
-      one: [{newOne: "a" }, {newOne: "b" }, {newOne: "c" }],
-      two: [{newOne: "a" }, {newOne: "b" }, {newOne: "c" }],
-      three: [{newOne: "a" }, {newOne: "b" }, {newOne: "c" }]
+      one: [{ newOne: "a" }, { newOne: "b" }, { newOne: "c" }],
+      two: [{ newOne: "a" }, { newOne: "b" }, { newOne: "c" }],
+      three: [{ newOne: "a" }, { newOne: "b" }, { newOne: "c" }]
     };
 
     const mainMapper = createMapper();
@@ -264,7 +264,7 @@ const eachGroup: nodeunit.ITestGroup = {
   },
   "A non-array throws an error": function (test: nodeunit.Test): void {
     const map = createMapper();
-    const source: any = {"a": "b"};
+    const source: any = { "a": "b" };
 
     map("fieldName").to("field.name");
 
@@ -624,7 +624,7 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "If Multiple selections aren't mapped to a transform and error will occur": function (test: nodeunit.Test): void {
+  "If multiple selections aren't mapped to a transform and error will occur": function (test: nodeunit.Test): void {
 
     const source = {
       "person": {
@@ -656,6 +656,148 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
   }
 };
 
+const orMethodGroup: nodeunit.ITestGroup = {
+
+  "Maps the first item if it is present": function (test: nodeunit.Test): void {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").or("noField").to("field.name");
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected, "or method has not selected the first item.");
+
+    return test.done();
+
+  },
+  "to method can use a transform if provided with first item": function (test: nodeunit.Test): void {
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "altered name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").or("noField").to("field.name", value => `altered ${value}`);
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected, "or method has not selected the first item.");
+
+    return test.done();
+  },
+  "Maps the second item if the first item isn't present": function (test: nodeunit.Test): void {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("noField").or("fieldName").to("field.name");
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected, "or method has not selected the second item.");
+
+    return test.done();
+  },
+  "to method can use a transform if provided with subsequent item": function (test: nodeunit.Test): void {
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "altered name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("noField").or("fieldName").to("field.name", value => `altered ${value}`);
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected, "or method has not selected the first item.");
+
+    return test.done();
+  },
+  "Throws if the initial source field is an array": function (test: nodeunit.Test): void {
+
+    const map = createMapper();
+
+
+    test.throws(() => {
+
+      map(["a", "b"]).or("fieldName").to("field.name");
+
+    });
+
+    test.done();
+
+    
+  },
+  "Throws if and subsequent source field is an array": function (test: nodeunit.Test): void {
+
+    const map:any = createMapper();
+
+    test.throws(() => {
+
+      map("fieldName").or(["a", "b"]).to("field.name");
+
+    });
+
+    test.done();
+  },
+  "Throws if source is null": function (test: nodeunit.Test): void {
+    const map: any = createMapper();
+
+    test.throws(() => {
+
+      map("fieldName").or(null).to("field.name");
+
+    });
+
+    test.done();
+
+  },
+  "Throws if source is undefined": function (test: nodeunit.Test): void {
+    const map: any = createMapper();
+
+    test.throws(() => {
+
+      map("fieldName").or(undefined).to("field.name");
+
+    });
+
+    test.done();
+
+  }
+};
+
 exports.basicMapping = defaultGroup;
 exports.mapMethod = mapGroup;
 exports.sourceAndDestination = sourceAndDestinationGroup;
@@ -663,3 +805,4 @@ exports.customFunctions = customFunctionsGroup;
 exports.multipleSelection = multipleSelectionGroup;
 exports.fluentChaining = fluentChainingGroup;
 exports.each = eachGroup;
+exports.orMethod = orMethodGroup;
