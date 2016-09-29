@@ -724,6 +724,28 @@ const orMethodGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
+  "Maps the last item in a very long chain": function (test: nodeunit.Test): void {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("a").or("b").or("c").or("d").or("e").or("fieldName").to("field.name");
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected, "or method has not selected the second item.");
+
+    return test.done();
+  },
   "to method can use a transform if provided with subsequent item": function (test: nodeunit.Test): void {
     const source = {
       "fieldName": "name1"

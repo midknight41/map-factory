@@ -38,6 +38,16 @@ export default class Mapping implements IMapping {
 
     this.orMode = true;
 
+    if (Array.isArray(this.source)) {
+
+      const sourceArray: any = this.source;
+
+      sourceArray.push(source);
+
+
+      return this;
+    }
+
     const newSource = [];
     newSource.push(this.source);
     newSource.push(source);
