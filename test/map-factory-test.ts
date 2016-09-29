@@ -758,11 +758,10 @@ const orMethodGroup: nodeunit.ITestGroup = {
 
     test.done();
 
-    
   },
   "Throws if and subsequent source field is an array": function (test: nodeunit.Test): void {
 
-    const map:any = createMapper();
+    const map: any = createMapper();
 
     test.throws(() => {
 
