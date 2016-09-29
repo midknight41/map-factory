@@ -1,6 +1,8 @@
 import * as nodeunit from "nodeunit";
 // tslint:disable-next-line:no-require-imports
 const createMapper = require("../lib/index");
+// tslint:disable-next-line:no-require-imports
+const assert = require("assert");
 
 
 const exampleGroup: nodeunit.ITestGroup = {
@@ -90,10 +92,10 @@ const exampleGroup: nodeunit.ITestGroup = {
           "id": 1,
           "name": "game-1"
         },
-          {
-            "id": 2,
-            "name": "game-2"
-          }]
+        {
+          "id": 2,
+          "name": "game-2"
+        }]
       }
     };
 
@@ -156,15 +158,15 @@ const exampleGroup: nodeunit.ITestGroup = {
   },
   "provides the each() method to help work with arrays and multiple mappers": function (test: nodeunit.Test): void {
     const source = {
-      one: [{value: "a", drop: "me" }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
-      two: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }],
-      three: [{value: "a", drop: "me"  }, {value: "b", drop: "me"  }, {value: "c", drop: "me"  }]
+      one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+      two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+      three: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }]
     };
 
     const expected = {
-      one: [{item: "a" }, {item: "b" }, {item: "c" }],
-      two: [{item: "a" }, {item: "b" }, {item: "c" }],
-      three: [{item: "a" }, {item: "b" }, {item: "c" }]
+      one: [{ item: "a" }, { item: "b" }, { item: "c" }],
+      two: [{ item: "a" }, { item: "b" }, { item: "c" }],
+      three: [{ item: "a" }, { item: "b" }, { item: "c" }]
     };
 
     const mainMapper = createMapper();
@@ -426,6 +428,26 @@ const exampleGroup: nodeunit.ITestGroup = {
     // End example
 
     test.deepEqual(result, expected);
+    test.done();
+  },
+  "or method example": function (test: nodeunit.Test) {
+
+    const source = {
+      "leasee": "Mr. Man"
+    };
+
+    const map = createMapper();
+
+    map("occupier").or("leasee").or("tenant").to("occupier");
+
+    const result = map.execute(source);
+
+
+
+    assert.deepEqual(result, {
+      "occupier": "Mr. Man"
+    });
+
     test.done();
   }
 
