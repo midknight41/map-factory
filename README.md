@@ -307,6 +307,27 @@ assert.deepEqual(result, {
 });
 ```
 
+If, however, you are trying to pick from one source or another source field, **map-factory** provides a bit of syntax sugar to make things a bit easier. Transformations are supported with this method too.
+
+```js
+const createMapper = require("map-factory");
+const assert = require("assert");
+
+const source = {
+  "leasee": "Mr. Man"
+};
+
+const map = createMapper();
+
+map("occupier").or("leasee").or("tenant").to("occupier");
+
+const result = map.execute(source);
+
+assert.deepEqual(result, {
+  "occupier": "Mr. Man"
+});
+```
+
 ## Common patterns
 ### Dealing with multiple sources of data
 There are two ways to deal with multiple sources of data.
