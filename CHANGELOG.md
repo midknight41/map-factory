@@ -1,5 +1,5 @@
 ### 1.4.0
-Added the chainable ```or()``` method to select a alterate source fields.
+Added the chainable ```or()``` method to select from alterate source fields.
 
 ```js
 
