@@ -1,3 +1,15 @@
+### 1.4.0
+Added the chainable ```or()``` method to select a alterate source fields.
+
+```js
+
+const mapper = createMapper();
+
+mapper
+	.map("occupier").or("tenant").or("leasee").to("occupier");
+
+```
+
 ### 1.3.0
 
 Added the ```each()``` method to help when working with multiple mappers and arrays.
