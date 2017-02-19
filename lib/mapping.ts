@@ -1,9 +1,10 @@
-import {IMapping, IKeyDefinition} from "./interfaces";
+import { IMapping, IKeyDefinition } from "./interfaces";
 
 export default class Mapping implements IMapping {
 
   public source: string | string[];
-  public target: string | IKeyDefinition;
+  public target: string; //  | IKeyDefinition;
+  public transform: Function;
   public mapper: any;
   public orMode: boolean = false;
 
@@ -72,17 +73,11 @@ export default class Mapping implements IMapping {
       throw new Error("the target field name cannot be null");
     }
 
-    if (fnc) {
-
-      this.target = {
-        key: target,
-        transform: fnc
-      };
-
-      return this.mapper;
-    }
-
     this.target = target;
+
+    if (fnc) {
+      this.transform = fnc;
+    }
 
     return this.mapper;
 

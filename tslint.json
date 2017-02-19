@@ -40,7 +40,6 @@
         "no-switch-case-fall-through": true,
         "no-trailing-whitespace": true,
         "no-var-keyword": true,
-        "no-unreachable": true,
         "one-line": [
             true,
             "check-catch", "check-finally", "check-else", "check-open-brace",

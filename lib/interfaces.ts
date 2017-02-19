@@ -5,7 +5,7 @@ export interface IKeyDefinition {
 
 export interface IMapData {
   transform: Object;
-  multiMaps: Object[];
+  multiMaps: IMapping[];
 }
 export interface IMapFactory {
   (stringOrArray: string | string[]): IMapping;
@@ -17,7 +17,8 @@ export interface IMapFactory {
 export interface IMapping {
   orMode: boolean;
   source: string | string[];
-  target: string | IKeyDefinition;
+  target: string; // | IKeyDefinition;
+  transform?: Function;
   to(target: string, fnc?: Function);
   map(stringOrArray: string | string[]): IMapping;
   or(source: string);

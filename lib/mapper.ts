@@ -68,12 +68,12 @@ export default class Mapper {
     for (const item of this.assignment) {
 
       const sourceKey: any = item.source;
-      let target: any = item.target;
+      let mapDetail: any = item.target;
 
       if (Array.isArray(item.source)) {
 
         // transforms are optional in orMode
-        if (!target.transform && item.orMode === false) {
+        if (!item.transform && item.orMode === false) {
           throw new Error("Multiple selections must map to a transform. No transform provided.");
         }
 
@@ -81,17 +81,28 @@ export default class Mapper {
         continue;
       }
 
-      if (!target) {
-        target = sourceKey;
+      if (!mapDetail) {
+        mapDetail = sourceKey;
       }
 
-      mapData.transform[sourceKey] = target;
+      if (item.transform) {
+        mapDetail = {
+          key: mapDetail,
+          transform: item.transform
+        };
+      }
+
+      if (mapData.transform[sourceKey] === undefined) {
+        mapData.transform[sourceKey] = [];
+      }
+
+      mapData.transform[sourceKey].push(mapDetail);
     }
 
     return mapData;
   }
 
-  private appendMultiSelections(source, target, multiMaps) {
+  private appendMultiSelections(source, target, multiMaps: IMapping[]) {
 
     let output = target;
 
@@ -106,25 +117,28 @@ export default class Mapper {
         continue;
       }
 
+      const sourceArray: any = item.source;
+
       // normal mode
-      for (const sourceKey of item.source) {
+      for (const sourceKey of sourceArray) {
 
         const value = objectMapper.getKeyValue(source, sourceKey);
         params.push(value);
       }
 
-      const result = item.target.transform.apply(null, params);
-      output = objectMapper.setKeyValue(output, item.target.key, result);
+      const result = item.transform.apply(null, params);
+      output = objectMapper.setKeyValue(output, item.target, result);
     }
 
     return output;
   }
 
-  private applyOrMode(item, source, output) {
+  private applyOrMode(item: IMapping, source, output) {
 
     let orValue = null;
+    const sourceArray: any = item.source;
 
-    for (const sourceKey of item.source) {
+    for (const sourceKey of sourceArray) {
 
       orValue = objectMapper.getKeyValue(source, sourceKey);
 
@@ -133,10 +147,8 @@ export default class Mapper {
       }
     }
 
-    // TODO: transform logic is messy. Could add a hasTransform to the Mapping to tidy it.
-
     // no transform
-    if (item.target.key === undefined) {
+    if (item.transform === undefined) {
 
       output = objectMapper.setKeyValue(output, item.target, orValue);
       return output;
@@ -146,8 +158,8 @@ export default class Mapper {
     const params = [];
     params.push(orValue);
 
-    const result = item.target.transform.apply(null, params);
-    output = objectMapper.setKeyValue(output, item.target.key, result);
+    const result = item.transform.apply(null, params);
+    output = objectMapper.setKeyValue(output, item.target, result);
     return output;
   }
 

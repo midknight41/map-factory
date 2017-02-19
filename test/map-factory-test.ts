@@ -470,6 +470,28 @@ const defaultGroup: nodeunit.ITestGroup = {
     test.deepEqual(actual, source, "field was not mapped to new object");
 
     return test.done();
+  },
+  "A source field can be mapped multiple times": function (test: nodeunit.Test): void {
+
+    const source = {
+      "fieldName": "name"
+    };
+
+    const expected = {
+      "field": "name",
+      "name": "name-long"
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field");
+    map("fieldName").to("name", value => value + "-long");
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected, "field was not mapped to new object");
+
+    return test.done();
   }
 };
 
