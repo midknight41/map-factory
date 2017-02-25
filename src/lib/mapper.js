@@ -1,20 +1,19 @@
-import * as mod from "object-mapper";
-import { IMapFactory, IMapping, IKeyDefinition, IMapData } from "./interfaces";
+import objectMapper from "object-mapper";
 import Mapping from "./mapping";
-
-const objectMapper: any = mod;
 
 export default class Mapper {
 
-  public assignment: IMapping[] = [];
-  private mapCache: IMapData = null;
+  constructor() {
+    this.assignment = [];
+    this.mapCache_ = null;
+  }
 
-  registerMapping(mapping: IMapping) {
+  registerMapping(mapping) {
 
     this.assignment.push(mapping);
   }
 
-  public map(source: string | string[]) {
+  map(source) {
 
     const mapping = new Mapping(source, this);
     this.registerMapping(mapping);
@@ -23,7 +22,7 @@ export default class Mapper {
 
   }
 
-  public each(sourceArray: any[]) {
+  each(sourceArray) {
 
     if (sourceArray === null || sourceArray === undefined) {
       throw new Error("A sourceArray object is required");
@@ -39,7 +38,7 @@ export default class Mapper {
 
   }
 
-  public execute(source, destination) {
+  execute(source, destination) {
 
     if (source === null || source === undefined) {
       throw new Error("A source object is required");
@@ -49,16 +48,16 @@ export default class Mapper {
       destination = {};
     }
 
-    if (this.mapCache === null) {
-      this.mapCache = this.createMapData();
+    if (this.mapCache_ === null) {
+      this.mapCache_ = this.createMapData_();
     }
 
-    const output = objectMapper(source, destination, this.mapCache.transform);
+    const output = objectMapper(source, destination, this.mapCache_.transform);
 
-    return this.appendMultiSelections(source, output, this.mapCache.multiMaps);
+    return this.appendMultiSelections_(source, output, this.mapCache_.multiMaps);
   }
 
-  private createMapData(): IMapData {
+  createMapData_() {
 
     const mapData = {
       transform: {},
@@ -67,8 +66,8 @@ export default class Mapper {
 
     for (const item of this.assignment) {
 
-      const sourceKey: any = item.source;
-      let mapDetail: any = item.target;
+      const sourceKey = item.source;
+      let mapDetail = item.target;
 
       if (Array.isArray(item.source)) {
 
@@ -102,7 +101,7 @@ export default class Mapper {
     return mapData;
   }
 
-  private appendMultiSelections(source, target, multiMaps: IMapping[]) {
+  appendMultiSelections_(source, target, multiMaps) {
 
     let output = target;
 
@@ -113,11 +112,11 @@ export default class Mapper {
       // this multi-select is be processed in orMode
       if (item.orMode) {
 
-        output = this.applyOrMode(item, source, output);
+        output = this.applyOrMode_(item, source, output);
         continue;
       }
 
-      const sourceArray: any = item.source;
+      const sourceArray = item.source;
 
       // normal mode
       for (const sourceKey of sourceArray) {
@@ -133,10 +132,10 @@ export default class Mapper {
     return output;
   }
 
-  private applyOrMode(item: IMapping, source, output) {
+  applyOrMode_(item, source, output) {
 
     let orValue = null;
-    const sourceArray: any = item.source;
+    const sourceArray = item.source;
 
     for (const sourceKey of sourceArray) {
 

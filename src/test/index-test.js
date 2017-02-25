@@ -1,11 +1,10 @@
-import * as nodeunit from "nodeunit";
-// tslint:disable-next-line:no-require-imports
+/* eslint-disable object-shorthand */
+
 const createMapper = require("../lib/index");
 
+const basicMappingGroup = {
 
-const basicMappingGroup: nodeunit.ITestGroup = {
-
-  "Can require the module from ES5 land": function (test: nodeunit.Test): void {
+  "Can require the module from ES5 land": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -27,7 +26,7 @@ const basicMappingGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "each method works from the index": function (test: nodeunit.Test): void {
+  "each method works from the index": function (test) {
 
     const source = [{
       "fieldName": "name1"

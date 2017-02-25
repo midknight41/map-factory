@@ -1,14 +1,7 @@
-import { IMapping, IKeyDefinition } from "./interfaces";
 
-export default class Mapping implements IMapping {
+export default class Mapping {
 
-  public source: string | string[];
-  public target: string; //  | IKeyDefinition;
-  public transform: Function;
-  public mapper: any;
-  public orMode: boolean = false;
-
-  constructor(source: string | string[], mapper) {
+  constructor(source, mapper) {
 
     if (!source) {
       throw new Error("the source field name cannot be null");
@@ -16,14 +9,15 @@ export default class Mapping implements IMapping {
 
     this.mapper = mapper;
     this.source = source;
+    this.orMode = false;
 
   }
 
-  public map(stringOrArray: string | string[]) {
+  map(stringOrArray) {
     return this.mapper.map(stringOrArray);
   }
 
-  public or(source: string) {
+  or(source) {
 
     if (!source) {
       throw new Error("'source' is required for the 'or' method");
@@ -41,7 +35,7 @@ export default class Mapping implements IMapping {
 
     if (Array.isArray(this.source)) {
 
-      const sourceArray: any = this.source;
+      const sourceArray = this.source;
 
       sourceArray.push(source);
 
@@ -59,15 +53,15 @@ export default class Mapping implements IMapping {
 
   }
 
-  public execute(source?, destination?) {
+  execute(source, destination) {
     return this.mapper.execute(source, destination);
   }
 
-  public each(sourceArray) {
+  each(sourceArray) {
     return this.mapper.each(sourceArray);
   }
 
-  public to(target: string, fnc?: Function) {
+  to(target, fnc) {
 
     if (!target) {
       throw new Error("the target field name cannot be null");

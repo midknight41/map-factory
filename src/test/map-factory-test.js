@@ -1,11 +1,12 @@
-import * as nodeunit from "nodeunit";
+/* eslint-disable object-shorthand */
+
 import createMapper from "../lib/map-factory";
 import Mapper from "../lib/mapper";
 import Mapping from "../lib/mapping";
 
-const mapGroup: nodeunit.ITestGroup = {
+const mapGroup = {
 
-  "default function and map() function are logically equivalent": function (test: nodeunit.Test): void {
+  "default function and map() function are logically equivalent": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -34,9 +35,9 @@ const mapGroup: nodeunit.ITestGroup = {
   }
 };
 
-const fluentChainingGroup: nodeunit.ITestGroup = {
+const fluentChainingGroup = {
 
-  "map() returns a chainable object": function (test: nodeunit.Test): void {
+  "map() returns a chainable object": function (test) {
 
     const mapper = createMapper();
 
@@ -48,7 +49,7 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "to() returns a chainable object": function (test: nodeunit.Test): void {
+  "to() returns a chainable object": function (test) {
 
     const mapper = createMapper();
 
@@ -60,11 +61,11 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "to() with a function returns a chainable object": function (test: nodeunit.Test): void {
+  "to() with a function returns a chainable object": function (test) {
 
     const mapper = createMapper();
 
-    const actual: Object = mapper.map("userId").to("user.id", value => {
+    const actual = mapper.map("userId").to("user.id", () => {
       return "a";
     });
 
@@ -74,7 +75,7 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "mapper can fluently chain call map() after the map() method": function (test: nodeunit.Test): void {
+  "mapper can fluently chain call map() after the map() method": function (test) {
 
     const source = {
       "userId": 123,
@@ -99,7 +100,7 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "mapper can fluently chain call map() after the to() method": function (test: nodeunit.Test): void {
+  "mapper can fluently chain call map() after the to() method": function (test) {
 
     const source = {
       "userId": 123,
@@ -124,7 +125,7 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "mapper can fluently chain call execute() after the to() method": function (test: nodeunit.Test): void {
+  "mapper can fluently chain call execute() after the to() method": function (test) {
 
     const source = {
       "userId": 123,
@@ -148,7 +149,7 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "mapper can fluently chain call execute() after the map() method": function (test: nodeunit.Test): void {
+  "mapper can fluently chain call execute() after the map() method": function (test) {
 
     const source = {
       "userId": 123
@@ -172,9 +173,9 @@ const fluentChainingGroup: nodeunit.ITestGroup = {
 
 };
 
-const eachGroup: nodeunit.ITestGroup = {
+const eachGroup = {
 
-  "Can process an array correctly": function (test: nodeunit.Test): void {
+  "Can process an array correctly": function (test) {
     const source = [{
       "fieldName": "name1"
     }, {
@@ -204,7 +205,7 @@ const eachGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "An empty array does not cause an error": function (test: nodeunit.Test): void {
+  "An empty array does not cause an error": function (test) {
     const source = [];
 
     const expected = [];
@@ -220,7 +221,7 @@ const eachGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "Multiple mappers can be used together": function (test: nodeunit.Test): void {
+  "Multiple mappers can be used together": function (test) {
     const source = {
       one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
       two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
@@ -251,80 +252,34 @@ const eachGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "A null parameter throws an error": function (test: nodeunit.Test): void {
+  "A null parameter throws an error": function (test) {
     const map = createMapper();
 
     map("fieldName").to("field.name");
 
     test.throws(() => {
-      const actual = map.each(null);
+      map.each(null);
     });
 
     return test.done();
   },
-  "A non-array throws an error": function (test: nodeunit.Test): void {
+  "A non-array throws an error": function (test) {
     const map = createMapper();
-    const source: any = { "a": "b" };
+    const source = { "a": "b" };
 
     map("fieldName").to("field.name");
 
     test.throws(() => {
-      const actual = map.each(source);
+      map.each(source);
     });
 
     return test.done();
   }
 };
 
-const defaultGroup: nodeunit.ITestGroup = {
+const defaultGroup = {
 
-  "Can map one field that exists to another": function (test: nodeunit.Test): void {
-
-    const source = {
-      "fieldName": "name1"
-    };
-
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    const actual = map.execute(source);
-
-    test.deepEqual(actual, expected);
-
-    return test.done();
-  },
-  "Throws if a null source is provided": function (test: nodeunit.Test): void {
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    test.throws(() => {
-      const actual = map.execute(null);
-    });
-
-    return test.done();
-  },
-  "Throws if an undefined source is provided": function (test: nodeunit.Test): void {
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    test.throws(() => {
-      const actual = map.execute(undefined);
-    });
-
-    return test.done();
-  },
-  "Can reuse the map for multiple transforms": function (test: nodeunit.Test): void {
+  "Can map one field that exists to another": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -346,8 +301,54 @@ const defaultGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
+  "Throws if a null source is provided": function (test) {
 
-  "Can reuse map for different transform": function (test: nodeunit.Test): void {
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    test.throws(() => {
+      map.execute(null);
+    });
+
+    return test.done();
+  },
+  "Throws if an undefined source is provided": function (test) {
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    test.throws(() => {
+      map.execute(undefined);
+    });
+
+    return test.done();
+  },
+  "Can reuse the map for multiple transforms": function (test) {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.execute(source);
+
+    test.deepEqual(actual, expected);
+
+    return test.done();
+  },
+
+  "Can reuse map for different transform": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -382,7 +383,7 @@ const defaultGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "Can map from a source where source name is not formatted as a string": function (test: nodeunit.Test): void {
+  "Can map from a source where source name is not formatted as a string": function (test) {
 
     const source = {
       country: "PL"
@@ -403,7 +404,7 @@ const defaultGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "A field that doesn't exists on the source doesn't affect the resulting object": function (test: nodeunit.Test): void {
+  "A field that doesn't exists on the source doesn't affect the resulting object": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -427,7 +428,7 @@ const defaultGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "A null source field throws an error": function (test: nodeunit.Test): void {
+  "A null source field throws an error": function (test) {
 
     const map = createMapper();
 
@@ -441,7 +442,7 @@ const defaultGroup: nodeunit.ITestGroup = {
 
   },
 
-  "A null target field throws an error": function (test: nodeunit.Test): void {
+  "A null target field throws an error": function (test) {
 
     const map = createMapper();
 
@@ -455,7 +456,7 @@ const defaultGroup: nodeunit.ITestGroup = {
 
   },
 
-  "The source field is used if no target field is provided": function (test: nodeunit.Test): void {
+  "The source field is used if no target field is provided": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -471,7 +472,7 @@ const defaultGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "A source field can be mapped multiple times": function (test: nodeunit.Test): void {
+  "A source field can be mapped multiple times": function (test) {
 
     const source = {
       "fieldName": "name"
@@ -485,7 +486,7 @@ const defaultGroup: nodeunit.ITestGroup = {
     const map = createMapper();
 
     map("fieldName").to("field");
-    map("fieldName").to("name", value => value + "-long");
+    map("fieldName").to("name", value => `${value}-long`);
 
     const actual = map.execute(source);
 
@@ -496,9 +497,9 @@ const defaultGroup: nodeunit.ITestGroup = {
 };
 
 
-const sourceAndDestinationGroup: nodeunit.ITestGroup = {
+const sourceAndDestinationGroup = {
 
-  "Can map fields from a source onto an existing destination object": function (test: nodeunit.Test): void {
+  "Can map fields from a source onto an existing destination object": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -526,7 +527,7 @@ const sourceAndDestinationGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "Can map a field from source over an existing field on a destination object": function (test: nodeunit.Test): void {
+  "Can map a field from source over an existing field on a destination object": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -557,9 +558,9 @@ const sourceAndDestinationGroup: nodeunit.ITestGroup = {
 };
 
 
-const customFunctionsGroup: nodeunit.ITestGroup = {
+const customFunctionsGroup = {
 
-  "Calls a function and alters the resulting object": function (test: nodeunit.Test): void {
+  "Calls a function and alters the resulting object": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -573,7 +574,7 @@ const customFunctionsGroup: nodeunit.ITestGroup = {
 
     const map = createMapper();
 
-    map("fieldName").to("field.name", value => "altered");
+    map("fieldName").to("field.name", () => "altered");
 
     const actual = map.execute(source);
 
@@ -583,9 +584,9 @@ const customFunctionsGroup: nodeunit.ITestGroup = {
   }
 };
 
-const multipleSelectionGroup: nodeunit.ITestGroup = {
+const multipleSelectionGroup = {
 
-  "Can extract multiple selections into a single transform": function (test: nodeunit.Test): void {
+  "Can extract multiple selections into a single transform": function (test) {
 
     const source = {
       "group1": {
@@ -613,7 +614,7 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "Can extract multiple selections into a single transform while allowing simpler mappings to work": function (test: nodeunit.Test): void {
+  "Can extract multiple selections into a single transform while allowing simpler mappings to work": function (test) {
 
     const source = {
       "person": {
@@ -646,7 +647,7 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "If multiple selections aren't mapped to a transform and error will occur": function (test: nodeunit.Test): void {
+  "If multiple selections aren't mapped to a transform and error will occur": function (test) {
 
     const source = {
       "person": {
@@ -660,27 +661,22 @@ const multipleSelectionGroup: nodeunit.ITestGroup = {
       }
     };
 
-    const expected = {
-      "name": "joe",
-      "merged": { "groups": ["A", "B"] }
-    };
-
     const map = createMapper();
 
     map("person.name").to("name");
     map(["group1", "group2"]).to("merged");
 
     test.throws(() => {
-      const actual = map.execute(source);
+      map.execute(source);
     });
 
     return test.done();
   }
 };
 
-const orMethodGroup: nodeunit.ITestGroup = {
+const orMethodGroup = {
 
-  "Maps the first item if it is present": function (test: nodeunit.Test): void {
+  "Maps the first item if it is present": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -703,7 +699,7 @@ const orMethodGroup: nodeunit.ITestGroup = {
     return test.done();
 
   },
-  "to method can use a transform if provided with first item": function (test: nodeunit.Test): void {
+  "to method can use a transform if provided with first item": function (test) {
     const source = {
       "fieldName": "name1"
     };
@@ -724,7 +720,7 @@ const orMethodGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "Maps the second item if the first item isn't present": function (test: nodeunit.Test): void {
+  "Maps the second item if the first item isn't present": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -746,7 +742,7 @@ const orMethodGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "Maps the last item in a very long chain": function (test: nodeunit.Test): void {
+  "Maps the last item in a very long chain": function (test) {
 
     const source = {
       "fieldName": "name1"
@@ -768,7 +764,7 @@ const orMethodGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "to method can use a transform if provided with subsequent item": function (test: nodeunit.Test): void {
+  "to method can use a transform if provided with subsequent item": function (test) {
     const source = {
       "fieldName": "name1"
     };
@@ -789,7 +785,7 @@ const orMethodGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "Throws if the initial source field is an array": function (test: nodeunit.Test): void {
+  "Throws if the initial source field is an array": function (test) {
 
     const map = createMapper();
 
@@ -803,9 +799,9 @@ const orMethodGroup: nodeunit.ITestGroup = {
     test.done();
 
   },
-  "Throws if and subsequent source field is an array": function (test: nodeunit.Test): void {
+  "Throws if and subsequent source field is an array": function (test) {
 
-    const map: any = createMapper();
+    const map = createMapper();
 
     test.throws(() => {
 
@@ -815,8 +811,8 @@ const orMethodGroup: nodeunit.ITestGroup = {
 
     test.done();
   },
-  "Throws if source is null": function (test: nodeunit.Test): void {
-    const map: any = createMapper();
+  "Throws if source is null": function (test) {
+    const map = createMapper();
 
     test.throws(() => {
 
@@ -827,8 +823,8 @@ const orMethodGroup: nodeunit.ITestGroup = {
     test.done();
 
   },
-  "Throws if source is undefined": function (test: nodeunit.Test): void {
-    const map: any = createMapper();
+  "Throws if source is undefined": function (test) {
+    const map = createMapper();
 
     test.throws(() => {
 

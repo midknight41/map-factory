@@ -1,13 +1,10 @@
-import * as nodeunit from "nodeunit";
-// tslint:disable-next-line:no-require-imports
+/* eslint-disable object-shorthand */
 const createMapper = require("../lib/index");
-// tslint:disable-next-line:no-require-imports
 const assert = require("assert");
 
+const exampleGroup = {
 
-const exampleGroup: nodeunit.ITestGroup = {
-
-  "Map a source field to the same object structure": function (test: nodeunit.Test): void {
+  "Map a source field to the same object structure": function (test) {
 
     const expected = {
       "fieldName": "name1",
@@ -36,7 +33,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "Map a source field to a different object structure": function (test: nodeunit.Test): void {
+  "Map a source field to a different object structure": function (test) {
 
     const expected = {
       "field": {
@@ -67,7 +64,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "Supports deep references for source and target objects": function (test: nodeunit.Test): void {
+  "Supports deep references for source and target objects": function (test) {
 
     const expected = {
       user:
@@ -114,7 +111,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "You can also reference specific items in an array": function (test: nodeunit.Test): void {
+  "You can also reference specific items in an array": function (test) {
 
     const expected = {
       "topStory": {
@@ -156,7 +153,7 @@ const exampleGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "provides the each() method to help work with arrays and multiple mappers": function (test: nodeunit.Test): void {
+  "provides the each() method to help work with arrays and multiple mappers": function (test) {
     const source = {
       one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
       two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
@@ -186,7 +183,7 @@ const exampleGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "More complicated transformations can be handled by providing a function": function (test: nodeunit.Test): void {
+  "More complicated transformations can be handled by providing a function": function (test) {
 
     const expected = {
       "topStory": {
@@ -245,7 +242,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "An existing object can be provided as the target object": function (test: nodeunit.Test): void {
+  "An existing object can be provided as the target object": function (test) {
 
     const expected = {
       "field": {
@@ -281,7 +278,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     return test.done();
   },
 
-  "Select from multiple sources at once": function (test: nodeunit.Test): void {
+  "Select from multiple sources at once": function (test) {
 
     const expected = {
       "fruit": {
@@ -316,7 +313,7 @@ const exampleGroup: nodeunit.ITestGroup = {
 
     return test.done();
   },
-  "create a single transform mapping object which is used to map all of your data together": function (test: nodeunit.Test) {
+  "create a single transform mapping object which is used to map all of your data together": function (test) {
 
     const expected = {
       "blog": {
@@ -370,7 +367,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     test.done();
 
   },
-  "Or use multiple mappers and chain them together": function (test: nodeunit.Test) {
+  "Or use multiple mappers and chain them together": function (test) {
 
 
     const expected = {
@@ -430,7 +427,7 @@ const exampleGroup: nodeunit.ITestGroup = {
     test.deepEqual(result, expected);
     test.done();
   },
-  "or method example": function (test: nodeunit.Test) {
+  "or method example": function (test) {
 
     const source = {
       "leasee": "Mr. Man"
