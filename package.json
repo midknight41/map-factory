@@ -63,8 +63,8 @@
     "nodeunit": "^0.10.0",
     "rimraf": "^2.6.0"
   },
-  "types": "./dist/lib/index.d.ts",
-  "typings": "./dist/lib/index.d.ts",
+  "types": "./dist/lib/map-factory.d.ts",
+  "typings": "./dist/lib/map-factory.d.ts",
   "files": [
     "dist"
   ]
