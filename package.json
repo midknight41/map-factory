@@ -6,6 +6,7 @@
   "scripts": {
     "prebuild": "npm run clean",
     "build": "babel ./src -d dist",
+    "postbuild": "cp ./src/lib/*.d.ts ./dist/lib/",
     "clean": "./node_modules/.bin/rimraf dist/*",
     "precover": "npm run build",
     "cover": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test",
@@ -62,6 +63,8 @@
     "nodeunit": "^0.10.0",
     "rimraf": "^2.6.0"
   },
+  "types": "./dist/lib/index.d.ts",
+  "typings": "./dist/lib/index.d.ts",
   "files": [
     "dist"
   ]
