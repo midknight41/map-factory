@@ -5,14 +5,13 @@
   "main": "./dist/lib/index.js",
   "scripts": {
     "prebuild": "npm run clean",
-    "build": "tsc --pretty -p ./ -d",
+    "build": "babel ./src -d dist",
     "clean": "./node_modules/.bin/rimraf dist/*",
     "precover": "npm run build",
     "cover": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test",
     "coveralls": "istanbul cover ./node_modules/nodeunit/bin/nodeunit ./dist/test && cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "lint": "tslint -c tslint.json -e 'dist/**/*' -e 'node_modules/**/*' -e 'Scripts/**/*' '**/*.ts'",
     "pretest": "npm run build",
-    "test": "npm run lint && nodeunit ./dist/test/",
+    "test": "nodeunit ./dist/test/",
     "pret": "npm run build",
     "t": "nodeunit ./dist/test/",
     "travis": "npm run test",
@@ -46,14 +45,22 @@
     "object-mapper": "^3.0.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-eslint": "^7.1.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.22.0",
+    "babel-plugin-transform-es2015-parameters": "^6.22.0",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-preset-env": "^1.1.8",
+    "code": "^4.0.0",
+    "eslint": "^3.15.0",
+    "lab": "^12.1.0",
+    "lab-testing": "^2.1.0",
     "coveralls": "^2.11.16",
     "gently": "^0.10.0",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
     "nodeunit": "^0.10.0",
-    "rimraf": "^2.6.0",
-    "tslint": "^4.4.2",
-    "typescript": "^2.2.0"
+    "rimraf": "^2.6.0"
   },
   "files": [
     "dist"
