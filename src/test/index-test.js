@@ -1,10 +1,16 @@
-/* eslint-disable object-shorthand */
+import { expect } from "code";
+import * as Lab from "lab";
+import getHelper from "lab-testing";
+
+const lab = exports.lab = Lab.script();
+const testing = getHelper(lab);
+const group = testing.createExperiment("map-factory");
 
 const createMapper = require("../lib/index");
 
-const basicMappingGroup = {
+group("non-import compatibility", () => {
 
-  "Can require the module from ES5 land": function (test) {
+  lab.test("Can require the module", done => {
 
     const source = {
       "fieldName": "name1"
@@ -22,11 +28,12 @@ const basicMappingGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
-  "each method works from the index": function (test) {
+    return done();
+  });
+
+  lab.test("each() method works from the index", done => {
 
     const source = [{
       "fieldName": "name1"
@@ -40,10 +47,8 @@ const basicMappingGroup = {
 
     const actual = map("fieldName").each(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  }
-};
-
-exports.basicMapping = basicMappingGroup;
+    return done();
+  });
+});
