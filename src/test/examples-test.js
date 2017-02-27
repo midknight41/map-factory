@@ -1,10 +1,16 @@
-/* eslint-disable object-shorthand */
+import { expect } from "code";
+import * as Lab from "lab";
+import getHelper from "lab-testing";
+
+const lab = exports.lab = Lab.script();
+const testing = getHelper(lab);
+const group = testing.createExperiment("map-factory");
+
 const createMapper = require("../lib/index");
-const assert = require("assert");
 
-const exampleGroup = {
+group("examples", () => {
 
-  "Map a source field to the same object structure": function (test) {
+  lab.test("Map a source field to the same object structure", done => {
 
     const expected = {
       "fieldName": "name1",
@@ -28,12 +34,13 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
 
-    return test.done();
-  },
+    expect(result).to.equal(expected);
 
-  "Map a source field to a different object structure": function (test) {
+    return done();
+  });
+
+  lab.test("Map a source field to a different object structure", done => {
 
     const expected = {
       "field": {
@@ -59,12 +66,12 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
+    expect(result).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "Supports deep references for source and target objects": function (test) {
+  lab.test("Supports deep references for source and target objects", done => {
 
     const expected = {
       user:
@@ -106,12 +113,12 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
+    expect(result).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "You can also reference specific items in an array": function (test) {
+  lab.test("You can also reference specific items in an array", done => {
 
     const expected = {
       "topStory": {
@@ -149,41 +156,42 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
+    expect(result).to.equal(expected);
 
-    return test.done();
+    return done();
   },
-  "provides the each() method to help work with arrays and multiple mappers": function (test) {
-    const source = {
-      one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
-      two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
-      three: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }]
-    };
+    "provides the each() method to help work with arrays and multiple mappers", done => {
+      const source = {
+        one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+        two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+        three: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }]
+      };
 
-    const expected = {
-      one: [{ item: "a" }, { item: "b" }, { item: "c" }],
-      two: [{ item: "a" }, { item: "b" }, { item: "c" }],
-      three: [{ item: "a" }, { item: "b" }, { item: "c" }]
-    };
+      const expected = {
+        one: [{ item: "a" }, { item: "b" }, { item: "c" }],
+        two: [{ item: "a" }, { item: "b" }, { item: "c" }],
+        three: [{ item: "a" }, { item: "b" }, { item: "c" }]
+      };
 
-    const mainMapper = createMapper();
-    const childMapper = createMapper();
+      const mainMapper = createMapper();
+      const childMapper = createMapper();
 
-    childMapper
-      .map("value").to("item");
+      childMapper
+        .map("value").to("item");
 
-    mainMapper
-      .map("one").to("one", array => childMapper.each(array))
-      .map("two").to("two", array => childMapper.each(array))
-      .map("three").to("three", array => childMapper.each(array));
+      mainMapper
+        .map("one").to("one", array => childMapper.each(array))
+        .map("two").to("two", array => childMapper.each(array))
+        .map("three").to("three", array => childMapper.each(array));
 
-    const actual = mainMapper.execute(source);
+      const actual = mainMapper.execute(source);
 
-    test.deepEqual(actual, expected);
+      expect(actual).to.equal(expected);
 
-    return test.done();
-  },
-  "More complicated transformations can be handled by providing a function": function (test) {
+      return done();
+    });
+
+  lab.test("More complicated transformations can be handled by providing a function", done => {
 
     const expected = {
       "topStory": {
@@ -237,12 +245,12 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
+    expect(result).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "An existing object can be provided as the target object": function (test) {
+  lab.test("An existing object can be provided as the target object", done => {
 
     const expected = {
       "field": {
@@ -273,12 +281,12 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
+    expect(result).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "Select from multiple sources at once": function (test) {
+  lab.test("Select from multiple sources at once", done => {
 
     const expected = {
       "fruit": {
@@ -309,11 +317,12 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
+    expect(result).to.equal(expected);
 
-    return test.done();
-  },
-  "create a single transform mapping object which is used to map all of your data together": function (test) {
+    return done();
+  });
+
+  lab.test("Create a single transform mapping object which is used to map all of your data together", done => {
 
     const expected = {
       "blog": {
@@ -363,11 +372,12 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(final, expected);
-    test.done();
+    expect(final).to.equal(expected);
+    return done();
 
-  },
-  "Or use multiple mappers and chain them together": function (test) {
+  });
+
+  lab.test("Or use multiple mappers and chain them together", done => {
 
 
     const expected = {
@@ -424,13 +434,18 @@ const exampleGroup = {
 
     // End example
 
-    test.deepEqual(result, expected);
-    test.done();
-  },
-  "or method example": function (test) {
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("The or() method example", done => {
 
     const source = {
       "leasee": "Mr. Man"
+    };
+
+    const expected = {
+      "occupier": "Mr. Man"
     };
 
     const map = createMapper();
@@ -439,15 +454,9 @@ const exampleGroup = {
 
     const result = map.execute(source);
 
+    expect(result).to.equal(expected);
 
+    return done();
+  });
 
-    assert.deepEqual(result, {
-      "occupier": "Mr. Man"
-    });
-
-    test.done();
-  }
-
-};
-
-exports.examples = exampleGroup;
+});

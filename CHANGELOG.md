@@ -1,3 +1,9 @@
+### 1.5.0
+Converted code from TypeScript to ES6 with babel
+
+### 1.4.1 
+Fixed bug where you could map from the same source field more than once.
+
 ### 1.4.0
 Added the chainable ```or()``` method to select from alterate source fields.
 

@@ -1,12 +1,18 @@
-/* eslint-disable object-shorthand */
+import { expect } from "code";
+import * as Lab from "lab";
+import getHelper from "lab-testing";
+
+const lab = exports.lab = Lab.script();
+const testing = getHelper(lab);
+const group = testing.createExperiment("map-factory");
 
 import createMapper from "../lib/map-factory";
-import Mapper from "../lib/mapper";
 import Mapping from "../lib/mapping";
+import Mapper from "../lib/mapper";
 
-const mapGroup = {
+group("alternate interfaces", () => {
 
-  "default function and map() function are logically equivalent": function (test) {
+  lab.test("default function and map() function are logically equivalent", done => {
 
     const source = {
       "fieldName": "name1"
@@ -27,41 +33,44 @@ const mapGroup = {
     const defaultActual = map.execute(source);
     const functionActual = mapper.execute(source);
 
-    test.deepEqual(defaultActual, expected);
-    test.deepEqual(defaultActual, functionActual);
+    expect(defaultActual).to.equal(expected);
+    expect(defaultActual).to.equal(functionActual);
 
-    return test.done();
+    return done();
 
-  }
-};
+  });
 
-const fluentChainingGroup = {
+});
 
-  "map() returns a chainable object": function (test) {
+group("fluent chaining ", () => {
+
+  lab.test("map() returns a chainable object", done => {
 
     const mapper = createMapper();
 
     const actual = mapper.map("userId");
 
-    test.notEqual(actual, null);
-    test.equal(actual instanceof Mapping, true);
+    expect(actual).to.not.be.null();
+    expect(actual).to.be.instanceOf(Mapping);
 
-    return test.done();
+    return done();
 
-  },
-  "to() returns a chainable object": function (test) {
+  });
+
+  lab.test("to() returns a chainable object", done => {
 
     const mapper = createMapper();
 
     const actual = mapper.map("userId").to("user.id");
 
-    test.notEqual(actual, null);
-    test.equal(actual instanceof Mapper, true);
+    expect(actual).to.not.be.null();
+    expect(actual).to.be.instanceOf(Mapper);
 
-    return test.done();
+    return done();
 
-  },
-  "to() with a function returns a chainable object": function (test) {
+  });
+
+  lab.test("to() with a function returns a chainable object", done => {
 
     const mapper = createMapper();
 
@@ -69,13 +78,14 @@ const fluentChainingGroup = {
       return "a";
     });
 
-    test.notEqual(actual, null);
-    test.equal(actual instanceof Mapper, true);
+    expect(actual).to.not.be.null();
+    expect(actual).to.be.instanceOf(Mapper);
 
-    return test.done();
+    return done();
 
-  },
-  "mapper can fluently chain call map() after the map() method": function (test) {
+  });
+
+  lab.test("mapper can fluently chain call map() after the map() method", done => {
 
     const source = {
       "userId": 123,
@@ -95,12 +105,13 @@ const fluentChainingGroup = {
 
     const actual = mapper.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
 
-  },
-  "mapper can fluently chain call map() after the to() method": function (test) {
+  });
+
+  lab.test("mapper can fluently chain call map() after the to() method", done => {
 
     const source = {
       "userId": 123,
@@ -120,12 +131,13 @@ const fluentChainingGroup = {
 
     const actual = mapper.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
 
-  },
-  "mapper can fluently chain call execute() after the to() method": function (test) {
+  });
+
+  lab.test("mapper can fluently chain call execute() after the to() method", done => {
 
     const source = {
       "userId": 123,
@@ -144,12 +156,13 @@ const fluentChainingGroup = {
       .map("userName").to("name")
       .execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
 
-  },
-  "mapper can fluently chain call execute() after the map() method": function (test) {
+  });
+
+  lab.test("mapper can fluently chain call execute() after the map() method", done => {
 
     const source = {
       "userId": 123
@@ -165,17 +178,17 @@ const fluentChainingGroup = {
       .map("userId")
       .execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
 
-  }
+  });
 
-};
+});
 
-const eachGroup = {
+group("The each() method", () => {
 
-  "Can process an array correctly": function (test) {
+  lab.test("Can process an array correctly", done => {
     const source = [{
       "fieldName": "name1"
     }, {
@@ -200,12 +213,12 @@ const eachGroup = {
 
     const actual = map.each(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
+  });
 
-  },
-  "An empty array does not cause an error": function (test) {
+  lab.test("An empty array does not cause an error", done => {
     const source = [];
 
     const expected = [];
@@ -216,12 +229,13 @@ const eachGroup = {
 
     const actual = map.each(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
 
-  },
-  "Multiple mappers can be used together": function (test) {
+  });
+
+  lab.test("Multiple mappers can be used together", done => {
     const source = {
       one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
       two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
@@ -247,39 +261,46 @@ const eachGroup = {
 
     const actual = mainMapper.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
 
-  },
-  "A null parameter throws an error": function (test) {
+  });
+
+  lab.test("A null parameter throws an error", done => {
     const map = createMapper();
 
     map("fieldName").to("field.name");
 
-    test.throws(() => {
+    const throws = function () {
       map.each(null);
-    });
+    };
 
-    return test.done();
-  },
-  "A non-array throws an error": function (test) {
+    expect(throws).to.throw();
+
+    return done();
+  });
+
+  lab.test("A non-array throws an error", done => {
     const map = createMapper();
     const source = { "a": "b" };
 
     map("fieldName").to("field.name");
 
-    test.throws(() => {
+
+    const throws = function () {
       map.each(source);
-    });
+    };
 
-    return test.done();
-  }
-};
+    expect(throws).to.throw();
 
-const defaultGroup = {
+    return done();
+  });
+});
 
-  "Can map one field that exists to another": function (test) {
+group("basic functionality", () => {
+
+  lab.test("Can map one field that exists to another", done => {
 
     const source = {
       "fieldName": "name1"
@@ -297,35 +318,46 @@ const defaultGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
-  "Throws if a null source is provided": function (test) {
+    return done();
+  });
+
+  lab.test("Throws if a null source is provided", done => {
 
     const map = createMapper();
 
     map("fieldName").to("field.name");
 
-    test.throws(() => {
+    const throws = function () {
+
       map.execute(null);
-    });
 
-    return test.done();
-  },
-  "Throws if an undefined source is provided": function (test) {
+    };
+
+    expect(throws).to.throw();
+
+    return done();
+  });
+
+  lab.test("Throws if an undefined source is provided", done => {
 
     const map = createMapper();
 
     map("fieldName").to("field.name");
 
-    test.throws(() => {
-      map.execute(undefined);
-    });
+    const throws = function () {
 
-    return test.done();
-  },
-  "Can reuse the map for multiple transforms": function (test) {
+      map.execute(undefined);
+
+    };
+
+    expect(throws).to.throw();
+
+    return done();
+  });
+
+  lab.test("Can reuse the map for multiple transforms", done => {
 
     const source = {
       "fieldName": "name1"
@@ -343,12 +375,12 @@ const defaultGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "Can reuse map for different transform": function (test) {
+  lab.test("Can reuse map for different transform", done => {
 
     const source = {
       "fieldName": "name1"
@@ -377,13 +409,13 @@ const defaultGroup = {
     const actual = map.execute(source);
     const actual2 = map.execute(source2);
 
-    test.deepEqual(actual, expected);
-    test.deepEqual(actual2, expected2);
+    expect(actual).to.equal(expected);
+    expect(actual2).to.equal(expected2);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "Can map from a source where source name is not formatted as a string": function (test) {
+  lab.test("Can map from a source where source name is not formatted as a string", done => {
 
     const source = {
       country: "PL"
@@ -399,12 +431,12 @@ const defaultGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "A field that doesn't exists on the source doesn't affect the resulting object": function (test) {
+  lab.test("A field that doesn't exists on the source doesn't affect the resulting object", done => {
 
     const source = {
       "fieldName": "name1"
@@ -423,40 +455,44 @@ const defaultGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "A null source field throws an error": function (test) {
+  lab.test("A null source field throws an error", done => {
 
     const map = createMapper();
 
-    test.throws(() => {
+    const throws = function () {
 
       map(null).to("field.name");
 
-    });
+    };
 
-    return test.done();
+    expect(throws).to.throw();
 
-  },
+    return done();
 
-  "A null target field throws an error": function (test) {
+  });
+
+  lab.test("A null target field throws an error", done => {
 
     const map = createMapper();
 
-    test.throws(() => {
+    const throws = function () {
 
       map("fieldName").to(null);
 
-    });
+    };
 
-    return test.done();
+    expect(throws).to.throw();
 
-  },
+    return done();
 
-  "The source field is used if no target field is provided": function (test) {
+  });
+
+  lab.test("The source field is used if no target field is provided", done => {
 
     const source = {
       "fieldName": "name1"
@@ -468,11 +504,12 @@ const defaultGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, source, "field was not mapped to new object");
+    expect(actual).to.equal(source);
 
-    return test.done();
-  },
-  "A source field can be mapped multiple times": function (test) {
+    return done();
+  });
+
+  lab.test("A source field can be mapped multiple times", done => {
 
     const source = {
       "fieldName": "name"
@@ -490,16 +527,16 @@ const defaultGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "field was not mapped to new object");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  }
-};
+    return done();
+  });
+});
 
 
-const sourceAndDestinationGroup = {
+group("source and destination", () => {
 
-  "Can map fields from a source onto an existing destination object": function (test) {
+  lab.test("Can map fields from a source onto an existing destination object", done => {
 
     const source = {
       "fieldName": "name1"
@@ -522,12 +559,12 @@ const sourceAndDestinationGroup = {
 
     const actual = map.execute(source, destination);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "Can map a field from source over an existing field on a destination object": function (test) {
+  lab.test("Can map a field from source over an existing field on a destination object", done => {
 
     const source = {
       "fieldName": "name1"
@@ -551,16 +588,15 @@ const sourceAndDestinationGroup = {
 
     const actual = map.execute(source, destination);
 
-    test.deepEqual(actual, expected);
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  }
-};
+    return done();
+  });
+});
 
+group("custom functions", () => {
 
-const customFunctionsGroup = {
-
-  "Calls a function and alters the resulting object": function (test) {
+  lab.test("Calls a function and alters the resulting object", done => {
 
     const source = {
       "fieldName": "name1"
@@ -578,15 +614,15 @@ const customFunctionsGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "field was not mapped to new object");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  }
-};
+    return done();
+  });
+});
 
-const multipleSelectionGroup = {
+group("multiple selections", () => {
 
-  "Can extract multiple selections into a single transform": function (test) {
+  lab.test("Can extract multiple selections into a single transform", done => {
 
     const source = {
       "group1": {
@@ -609,12 +645,12 @@ const multipleSelectionGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "field was not mapped to new object");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "Can extract multiple selections into a single transform while allowing simpler mappings to work": function (test) {
+  lab.test("Can extract multiple selections into a single transform while allowing simpler mappings to work", done => {
 
     const source = {
       "person": {
@@ -642,12 +678,12 @@ const multipleSelectionGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "field was not mapped to new object");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
+    return done();
+  });
 
-  "If multiple selections aren't mapped to a transform and error will occur": function (test) {
+  lab.test("If multiple selections aren't mapped to a transform and error will occur", done => {
 
     const source = {
       "person": {
@@ -666,17 +702,20 @@ const multipleSelectionGroup = {
     map("person.name").to("name");
     map(["group1", "group2"]).to("merged");
 
-    test.throws(() => {
+    const throws = function () {
+
       map.execute(source);
-    });
+    };
 
-    return test.done();
-  }
-};
+    expect(throws).to.throw();
 
-const orMethodGroup = {
+    return done();
+  });
+});
 
-  "Maps the first item if it is present": function (test) {
+group("The or() method", () => {
+
+  lab.test("Maps the first item if it is present", done => {
 
     const source = {
       "fieldName": "name1"
@@ -694,12 +733,13 @@ const orMethodGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "or method has not selected the first item.");
+    expect(actual).to.equal(expected);
 
-    return test.done();
+    return done();
 
-  },
-  "to method can use a transform if provided with first item": function (test) {
+  });
+
+  lab.test("to method can use a transform if provided with first item", done => {
     const source = {
       "fieldName": "name1"
     };
@@ -716,11 +756,12 @@ const orMethodGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "or method has not selected the first item.");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
-  "Maps the second item if the first item isn't present": function (test) {
+    return done();
+  });
+
+  lab.test("Maps the second item if the first item isn't present", done => {
 
     const source = {
       "fieldName": "name1"
@@ -738,11 +779,12 @@ const orMethodGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "or method has not selected the second item.");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
-  "Maps the last item in a very long chain": function (test) {
+    return done();
+  });
+
+  lab.test("Maps the last item in a very long chain", done => {
 
     const source = {
       "fieldName": "name1"
@@ -760,11 +802,12 @@ const orMethodGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "or method has not selected the second item.");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
-  "to method can use a transform if provided with subsequent item": function (test) {
+    return done();
+  });
+
+  lab.test("to method can use a transform if provided with subsequent item", done => {
     const source = {
       "fieldName": "name1"
     };
@@ -781,67 +824,70 @@ const orMethodGroup = {
 
     const actual = map.execute(source);
 
-    test.deepEqual(actual, expected, "or method has not selected the first item.");
+    expect(actual).to.equal(expected);
 
-    return test.done();
-  },
-  "Throws if the initial source field is an array": function (test) {
+    return done();
+  });
+
+  lab.test("Throws if the initial source field is an array", done => {
 
     const map = createMapper();
 
 
-    test.throws(() => {
+    const throws = function () {
 
       map(["a", "b"]).or("fieldName").to("field.name");
 
-    });
+    };
 
-    test.done();
+    expect(throws).to.throw();
 
-  },
-  "Throws if and subsequent source field is an array": function (test) {
+    done();
+
+  });
+
+  lab.test("Throws if and subsequent source field is an array", done => {
 
     const map = createMapper();
 
-    test.throws(() => {
+    const throws = function () {
 
       map("fieldName").or(["a", "b"]).to("field.name");
 
-    });
+    };
 
-    test.done();
-  },
-  "Throws if source is null": function (test) {
+    expect(throws).to.throw();
+
+    done();
+  });
+
+  lab.test("Throws if source is null", done => {
     const map = createMapper();
 
-    test.throws(() => {
+    const throws = function () {
 
       map("fieldName").or(null).to("field.name");
 
-    });
+    };
 
-    test.done();
+    expect(throws).to.throw();
 
-  },
-  "Throws if source is undefined": function (test) {
+    done();
+
+  });
+
+  lab.test("Throws if source is undefined", done => {
     const map = createMapper();
 
-    test.throws(() => {
+    const throws = function () {
 
       map("fieldName").or(undefined).to("field.name");
 
-    });
+    };
 
-    test.done();
+    expect(throws).to.throw();
 
-  }
-};
+    done();
 
-exports.basicMapping = defaultGroup;
-exports.mapMethod = mapGroup;
-exports.sourceAndDestination = sourceAndDestinationGroup;
-exports.customFunctions = customFunctionsGroup;
-exports.multipleSelection = multipleSelectionGroup;
-exports.fluentChaining = fluentChainingGroup;
-exports.each = eachGroup;
-exports.orMethod = orMethodGroup;
+  });
+});
