@@ -43,35 +43,34 @@ export default class Mapper {
 
   }
 
+  // execute(source, destination) {
+  //   if (!this.experiment) {
+  //     return this.executeOld(source, destination);
+  //   }
+
+  //   return this.executeNew(source, destination);
+  // }
+
+  // executeNew(source, destination) {
+
+  //   if (source === null || source === undefined) {
+  //     throw new Error("A source object is required");
+  //   }
+
+  //   if (destination === null || destination === undefined) {
+  //     destination = {};
+  //   }
+
+  //   if (this.mapCache_ === null) {
+  //     this.mapCache_ = this.createMapData_();
+  //   }
+
+  //   const output = this.om(source, destination, this.mapCache_.transform);
+
+  //   return this.appendMultiSelections_(source, output, this.mapCache_.multiMaps);
+  // }
+
   execute(source, destination) {
-    if (!this.experiment) {
-      return this.executeOld(source, destination);
-    }
-
-    return this.executeNew(source, destination);
-  }
-
-  executeNew(source, destination) {
-
-    if (source === null || source === undefined) {
-      throw new Error("A source object is required");
-    }
-
-    if (destination === null || destination === undefined) {
-      destination = {};
-    }
-
-    if (this.mapCache_ === null) {
-      this.mapCache_ = this.createMapData_();
-    }
-
-    const output = this.om(source, destination, this.mapCache_.transform);
-
-    return this.appendMultiSelections_(source, output, this.mapCache_.multiMaps);
-  }
-
-
-  executeOld(source, destination) {
 
     if (source === null || source === undefined) {
       throw new Error("A source object is required");
