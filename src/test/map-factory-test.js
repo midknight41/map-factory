@@ -10,6 +10,266 @@ import createMapper from "../lib/map-factory";
 import Mapping from "../lib/mapping";
 import Mapper from "../lib/mapper";
 
+group("basic functionality", () => {
+
+  lab.test("Can map one field that exists to another", done => {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test("Throws if a null source is provided", done => {
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const throws = function () {
+
+      map.execute(null);
+
+    };
+
+    expect(throws).to.throw();
+
+    return done();
+  });
+
+  lab.test("Throws if an undefined source is provided", done => {
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const throws = function () {
+
+      map.execute(undefined);
+
+    };
+
+    expect(throws).to.throw();
+
+    return done();
+  });
+
+  lab.test("Can reuse map for different transform", done => {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const source2 = {
+      "fieldName": "name2"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const expected2 = {
+      "field": {
+        "name": "name2"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    const actual = map.execute(source);
+    const actual2 = map.execute(source2);
+
+    expect(actual).to.equal(expected);
+    expect(actual2).to.equal(expected2);
+
+    return done();
+  });
+
+  lab.test("Can map from a source where source name is not formatted as a string", done => {
+
+    const source = {
+      country: "PL"
+    };
+
+    const expected = {
+      "country": "PL"
+    };
+
+    const map = createMapper();
+
+    map("country").to("country");
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test("A field that doesn't exists on the source doesn't affect the resulting object", done => {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+    map("fieldId").to("field.name");
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test("A field that doesn't exists on the source doesn't affect the resulting object when a pass-through transform is used", done => {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+    map("fieldId").to("field.name", value => value);
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test.skip("A field that doesn't exists on the source doesn't affect the resulting object when a modifying transform is used", done => {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const expected = {
+      "field": {
+        "name": "name1"
+      }
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+    map("fieldId").to("field.name", value => { return `value is: ${value}`; });
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test("A null source field throws an error", done => {
+
+    const map = createMapper();
+
+    const throws = function () {
+
+      map(null).to("field.name");
+
+    };
+
+    expect(throws).to.throw();
+
+    return done();
+
+  });
+
+  lab.test("A null target field throws an error", done => {
+
+    const map = createMapper();
+
+    const throws = function () {
+
+      map("fieldName").to(null);
+
+    };
+
+    expect(throws).to.throw();
+
+    return done();
+
+  });
+
+  lab.test("The source field is used if no target field is provided", done => {
+
+    const source = {
+      "fieldName": "name1"
+    };
+
+    const map = createMapper();
+
+    map("fieldName");
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(source);
+
+    return done();
+  });
+
+  lab.test("A source field can be mapped multiple times", done => {
+
+    const source = {
+      "fieldName": "name"
+    };
+
+    const expected = {
+      "field": "name",
+      "name": "name-long"
+    };
+
+    const map = createMapper();
+
+    map("fieldName").to("field");
+    map("fieldName").to("name", value => `${value}-long`);
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+});
+
 group("alternate interfaces", () => {
 
   lab.test("default function and map() function are logically equivalent", done => {
@@ -297,242 +557,6 @@ group("The each() method", () => {
     return done();
   });
 });
-
-group("basic functionality", () => {
-
-  lab.test("Can map one field that exists to another", done => {
-
-    const source = {
-      "fieldName": "name1"
-    };
-
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    const actual = map.execute(source);
-
-    expect(actual).to.equal(expected);
-
-    return done();
-  });
-
-  lab.test("Throws if a null source is provided", done => {
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    const throws = function () {
-
-      map.execute(null);
-
-    };
-
-    expect(throws).to.throw();
-
-    return done();
-  });
-
-  lab.test("Throws if an undefined source is provided", done => {
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    const throws = function () {
-
-      map.execute(undefined);
-
-    };
-
-    expect(throws).to.throw();
-
-    return done();
-  });
-
-  lab.test("Can reuse the map for multiple transforms", done => {
-
-    const source = {
-      "fieldName": "name1"
-    };
-
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    const actual = map.execute(source);
-
-    expect(actual).to.equal(expected);
-
-    return done();
-  });
-
-  lab.test("Can reuse map for different transform", done => {
-
-    const source = {
-      "fieldName": "name1"
-    };
-
-    const source2 = {
-      "fieldName": "name2"
-    };
-
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
-
-    const expected2 = {
-      "field": {
-        "name": "name2"
-      }
-    };
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-
-    const actual = map.execute(source);
-    const actual2 = map.execute(source2);
-
-    expect(actual).to.equal(expected);
-    expect(actual2).to.equal(expected2);
-
-    return done();
-  });
-
-  lab.test("Can map from a source where source name is not formatted as a string", done => {
-
-    const source = {
-      country: "PL"
-    };
-
-    const expected = {
-      "country": "PL"
-    };
-
-    const map = createMapper();
-
-    map("country").to("country");
-
-    const actual = map.execute(source);
-
-    expect(actual).to.equal(expected);
-
-    return done();
-  });
-
-  lab.test("A field that doesn't exists on the source doesn't affect the resulting object", done => {
-
-    const source = {
-      "fieldName": "name1"
-    };
-
-    const expected = {
-      "field": {
-        "name": "name1"
-      }
-    };
-
-    const map = createMapper();
-
-    map("fieldName").to("field.name");
-    map("fieldId").to("field.name");
-
-    const actual = map.execute(source);
-
-    expect(actual).to.equal(expected);
-
-    return done();
-  });
-
-  lab.test("A null source field throws an error", done => {
-
-    const map = createMapper();
-
-    const throws = function () {
-
-      map(null).to("field.name");
-
-    };
-
-    expect(throws).to.throw();
-
-    return done();
-
-  });
-
-  lab.test("A null target field throws an error", done => {
-
-    const map = createMapper();
-
-    const throws = function () {
-
-      map("fieldName").to(null);
-
-    };
-
-    expect(throws).to.throw();
-
-    return done();
-
-  });
-
-  lab.test("The source field is used if no target field is provided", done => {
-
-    const source = {
-      "fieldName": "name1"
-    };
-
-    const map = createMapper();
-
-    map("fieldName");
-
-    const actual = map.execute(source);
-
-    expect(actual).to.equal(source);
-
-    return done();
-  });
-
-  lab.test("A source field can be mapped multiple times", done => {
-
-    const source = {
-      "fieldName": "name"
-    };
-
-    const expected = {
-      "field": "name",
-      "name": "name-long"
-    };
-
-    const map = createMapper();
-
-    map("fieldName").to("field");
-    map("fieldName").to("name", value => `${value}-long`);
-
-    const actual = map.execute(source);
-
-    expect(actual).to.equal(expected);
-
-    return done();
-  });
-});
-
 
 group("source and destination", () => {
 
@@ -890,4 +914,98 @@ group("The or() method", () => {
     done();
 
   });
+
 });
+
+// group("array edge case", () => {
+
+//   lab.test("A deep array maps properly", done => {
+
+//     const source = {
+//       array: [{ id: 1 }, { id: 2 }, { id: 3 }]
+//     };
+
+//     const expected = {
+//       array: {
+//         levels: [{ id: 1 }, { id: 2 }, { id: 3 }]
+//       }
+//     };
+
+//     const map = createMapper();
+
+//     map("array.[].id").to("array.levels.[].id");
+
+//     const actual = map.execute(source);
+
+//     expect(actual).to.equal(expected);
+
+//     return done();
+
+//   });
+
+//   lab.test("A null source should not do funky stuff when an array is in the mix", done => {
+
+//     const source = {
+//       array: null
+//     };
+
+//     const expected = {
+//     };
+
+//     const map = createMapper();
+
+//     map(["array.[].id"]).to("array.levels.[].id", value => value);
+
+//     const actual = map.execute(source);
+
+//     expect(actual).to.equal(expected);
+
+//     return done();
+
+//   });
+
+//   lab.test("A undefined array in source should not do funky stuff when an array is in the mix", done => {
+
+//     const source = {
+//     };
+
+//     const expected = {
+//     };
+
+//     const map = createMapper();
+
+//     map(["array.[].id"]).to("array.levels.[].id", value => value);
+
+//     const actual = map.execute(source);
+
+//     expect(actual).to.equal(expected);
+
+//     return done();
+
+//   });
+
+//   lab.test("A undefined array in source should not do funky stuff when an array is in the mix", done => {
+
+//     const source = {
+//       "something": {
+//         "array": undefined,
+//         "id": "123"
+//       }
+//     };
+
+//     const expected = {
+//     };
+
+//     const map = createMapper();
+
+//     map(["something.array.[].id"]).to("something.array.levels.[].id", value => value);
+
+//     const actual = map.execute(source);
+
+//     expect(actual).to.equal(expected);
+
+//     return done();
+
+//   });
+
+// });

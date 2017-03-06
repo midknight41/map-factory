@@ -1,0 +1,8 @@
+if [ $# -eq 0 ]
+  then
+		echo "Running all Tests..."
+		lab dist/test/ -v -S --assert code
+  else
+	  echo "Running Tests for the $1 Service..."
+		lab dist/test/$1*.js -v -S --assert code
+fi

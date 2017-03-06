@@ -1,9 +1,9 @@
 import Mapper from "./mapper";
 
-export default function createMapper() {
+export default function createMapper(experimental) {
 
   const me = {
-    mapper: new Mapper()
+    mapper: new Mapper(experimental)
   };
 
   const mapper = function map(source) {
