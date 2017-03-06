@@ -17,6 +17,7 @@ A simple object mapping utility that makes it easy to map data from one object t
 - [Working with arrays](#working-with-arrays)
 - [Transformations](#transformations)
 - [Working with multiple source objects](#dealing-with-multiple-sources-of-data)
+- [Detailed selection behaviour](#detailed-selection-behaviour)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
 ## How to install
@@ -544,5 +545,34 @@ return blogService.decorateBlogPostWithAuthor(1, post)
     });
   });
 ```
+## Detailed behaviour
 
-This module is an alternative interface for the excellent [object-mapper](http://www.npmjs.com/object-mapper).
+working with objects
+
+## basic selection
+
+```
+const source = { left: true };
+map("left").to("right")
+const result = map.execute(obj);
+// result is: { right: true }
+```
+
+```
+const source = { my: { left: true }};
+map("my.left").to("your.right")
+const result = map.execute(source);
+// result is: { your: { right: true }}
+```
+
+working with arrays
+```
+const source = ["one"];
+map("[]").to("items.[]")
+const result = map.execute(source);
+// result is: {items: []}
+```
+
+
+
+This module was inspired by and based on the excellent [object-mapper](http://www.npmjs.com/object-mapper).

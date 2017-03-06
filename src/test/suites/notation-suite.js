@@ -20,6 +20,10 @@ suite.declare((lab, variables) => {
   const testing = getHelper(lab);
   const group = testing.createExperiment("map-factory", "notation");
 
+  function createSut() {
+    return createMapper({ experimental: true });
+  }
+
   const {
     LABEL,
     GET_ITEM,
@@ -35,7 +39,7 @@ suite.declare((lab, variables) => {
 
     lab.test("can be selected and mapped to the target", done => {
 
-      const mapper = createMapper();
+      const mapper = createSut();
 
       const actual = mapper
         .map(GET_ITEM).to(SET_ITEM, value => value)
@@ -49,7 +53,7 @@ suite.declare((lab, variables) => {
 
     lab.test("an array source can be selected and mapped to the target", done => {
 
-      const mapper = createMapper();
+      const mapper = createSut();
 
       const actual = mapper
         .map([GET_ITEM]).to(SET_ITEM, value => value)
@@ -67,7 +71,7 @@ suite.declare((lab, variables) => {
 
     lab.test("the target field does not get created for a basic map", done => {
 
-      const mapper = createMapper();
+      const mapper = createSut();
 
       const actual = mapper
         .map(GET_ITEM).to(SET_ITEM)
@@ -81,7 +85,7 @@ suite.declare((lab, variables) => {
 
     lab.test("the target field does get created with a modifying transform", done => {
 
-      const mapper = createMapper();
+      const mapper = createSut();
 
       const actual = mapper
         .map(GET_ITEM).to(SET_ITEM, () => MODIFY_VALUE)
@@ -95,7 +99,7 @@ suite.declare((lab, variables) => {
 
     lab.test("the target field does not get created for an array source with a pass-through transform", done => {
 
-      const mapper = createMapper();
+      const mapper = createSut();
 
       const actual = mapper
         .map([GET_ITEM]).to(SET_ITEM, value => value)
@@ -109,7 +113,7 @@ suite.declare((lab, variables) => {
 
     lab.test("the target field does get created for an array source with a modifying transform", done => {
 
-      const mapper = createMapper();
+      const mapper = createSut();
 
       const actual = mapper
         .map([GET_ITEM]).to(SET_ITEM, () => MODIFY_VALUE)

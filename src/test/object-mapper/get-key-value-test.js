@@ -6,7 +6,7 @@ const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
 const group = testing.createExperiment("map-factory", "object-mapper");
 
-import getKeyValue from "../lib/object-mapper/get-key-value";
+import getKeyValue from "../../lib/object-mapper/get-key-value";
 
 group("The getKeyValue() method", () => {
 

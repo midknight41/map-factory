@@ -15,7 +15,7 @@ const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
 const group = testing.createExperiment("map-factory", "object-mapper");
 
-import om from "../lib/object-mapper/object-mapper";
+import om from "../../lib/object-mapper/object-mapper";
 
 group("The objectMapper() method", () => {
 

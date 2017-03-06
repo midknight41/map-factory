@@ -6,11 +6,11 @@ const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
 const group = testing.createExperiment("map-factory", "object-mapper");
 
-import setKeyValue from "../lib/object-mapper/set-key-value";
+import setKeyValue from "../../lib/object-mapper/set-key-value";
 
 group("The setKeyValue() method", () => {
 
-  lab.test("set value - simple", done => {
+  lab.test("sets correct value and creates base object", done => {
     const key = "foo";
     const value = "bar";
 
@@ -23,7 +23,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - simple with base object", done => {
+  lab.test("sets correct value when base object is provided", done => {
     const key = "foo";
     const value = "bar";
 
@@ -41,7 +41,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - simple array", done => {
+  lab.test("works correctly when the root key is an array", done => {
     const key = "[]";
     const value = "bar";
 
@@ -52,7 +52,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - simple array with base array", done => {
+  lab.test("simple array with base array", done => {
     const key = "[]";
     const value = "bar";
 
@@ -64,7 +64,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - simple array in index 0", done => {
+  lab.test("simple array in index 0", done => {
     const key = "[0]";
     const value = "bar";
 
@@ -75,7 +75,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - simple array in index 0 with base array", done => {
+  lab.test("simple array in index 0 with base array", done => {
     const key = "[0]";
     const value = "bar";
 
@@ -87,7 +87,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - simple array in index 1", done => {
+  lab.test("simple array in index 1", done => {
     const key = "[1]";
     const value = "bar";
 
@@ -99,7 +99,7 @@ group("The setKeyValue() method", () => {
     return done();
   });
 
-  lab.test("set value - one level deep", done => {
+  lab.test("one level deep", done => {
     const key = "foo.bar";
     const value = "baz";
 
@@ -114,7 +114,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - object inside simple array", done => {
+  lab.test("object inside simple array", done => {
     const key = "[].foo";
     const value = "bar";
 
@@ -127,7 +127,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - array to object inside simple array", done => {
+  lab.test("array to object inside simple array", done => {
     const key = "[].foo";
     const value = ["bar", "baz"];
 
@@ -145,7 +145,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - object inside simple array defined index", done => {
+  lab.test("object inside simple array defined index", done => {
     const key = "[3].foo";
     const value = "bar";
 
@@ -158,7 +158,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - two levels deep", done => {
+  lab.test("two levels deep", done => {
     const key = "foo.bar.baz";
     const value = "foo";
 
@@ -175,7 +175,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - one level deep inside array", done => {
+  lab.test("one level deep inside array", done => {
     const key = "foo.bar[]";
     const value = "baz";
 
@@ -190,7 +190,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - one level deep inside array with one level deep", done => {
+  lab.test("one level deep inside array with one level deep", done => {
     const key = "foo.bar[].baz";
     const value = "foo";
 
@@ -207,7 +207,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - one level deep inside array with one level deep inside a existing array", done => {
+  lab.test("one level deep inside array with one level deep inside a existing array", done => {
     const key = "foo.bar[].baz";
     const value = "foo";
 
@@ -232,7 +232,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - one level deep inside array at defined index with one level deep", done => {
+  lab.test("one level deep inside array at defined index with one level deep", done => {
     const key = "foo.bar[1].baz";
     const value = "foo";
 
@@ -249,7 +249,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - array to simple object", done => {
+  lab.test("array to simple object", done => {
     const key = "foo[].baz";
     const value = ["foo", "const"];
 
@@ -269,7 +269,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - array to two level object", done => {
+  lab.test("array to two level object", done => {
     const key = "bar.foo[].baz";
     const value = ["foo", "const"];
 
@@ -291,7 +291,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - array to two level object", done => {
+  lab.test("array to two level object", done => {
     const key = "bar.foo[].baz.foo";
     const value = ["foo", "const"];
 
@@ -317,7 +317,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - array to object", done => {
+  lab.test("array to object", done => {
     const key = "foo[].bar[].baz";
     const value = ["foo", "const"];
 
@@ -336,7 +336,7 @@ group("The setKeyValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("set value - crazy", done => {
+  lab.test("crazy", done => {
     const key = "foo.bar[1].baz[2].thing";
     const value = "foo";
 
