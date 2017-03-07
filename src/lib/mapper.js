@@ -1,11 +1,16 @@
-import objectMapper from "object-mapper";
 import Mapping from "./mapping";
+// import getKeyValue from "./object-mapper/get-key-value";
+// import setKeyValue from "./object-mapper/set-key-value";
 
 export default class Mapper {
 
-  constructor() {
+  constructor(experiment, om) {
+
+    this.om = om;
     this.assignment = [];
     this.mapCache_ = null;
+    this.experiment = experiment;
+
   }
 
   registerMapping(mapping) {
@@ -38,6 +43,33 @@ export default class Mapper {
 
   }
 
+  // execute(source, destination) {
+  //   if (!this.experiment) {
+  //     return this.executeOld(source, destination);
+  //   }
+
+  //   return this.executeNew(source, destination);
+  // }
+
+  // executeNew(source, destination) {
+
+  //   if (source === null || source === undefined) {
+  //     throw new Error("A source object is required");
+  //   }
+
+  //   if (destination === null || destination === undefined) {
+  //     destination = {};
+  //   }
+
+  //   if (this.mapCache_ === null) {
+  //     this.mapCache_ = this.createMapData_();
+  //   }
+
+  //   const output = this.om(source, destination, this.mapCache_.transform);
+
+  //   return this.appendMultiSelections_(source, output, this.mapCache_.multiMaps);
+  // }
+
   execute(source, destination) {
 
     if (source === null || source === undefined) {
@@ -52,7 +84,7 @@ export default class Mapper {
       this.mapCache_ = this.createMapData_();
     }
 
-    const output = objectMapper(source, destination, this.mapCache_.transform);
+    const output = this.om(source, destination, this.mapCache_.transform);
 
     return this.appendMultiSelections_(source, output, this.mapCache_.multiMaps);
   }
@@ -121,12 +153,13 @@ export default class Mapper {
       // normal mode
       for (const sourceKey of sourceArray) {
 
-        const value = objectMapper.getKeyValue(source, sourceKey);
+        const value = this.om.getKeyValue(source, sourceKey);
         params.push(value);
       }
 
       const result = item.transform.apply(null, params);
-      output = objectMapper.setKeyValue(output, item.target, result);
+
+      output = this.om.setKeyValue(output, item.target, result);
     }
 
     return output;
@@ -139,7 +172,7 @@ export default class Mapper {
 
     for (const sourceKey of sourceArray) {
 
-      orValue = objectMapper.getKeyValue(source, sourceKey);
+      orValue = this.om.getKeyValue(source, sourceKey);
 
       if (orValue !== null && orValue !== undefined) {
         break;
@@ -149,7 +182,7 @@ export default class Mapper {
     // no transform
     if (item.transform === undefined) {
 
-      output = objectMapper.setKeyValue(output, item.target, orValue);
+      output = this.om.setKeyValue(output, item.target, orValue);
       return output;
     }
 
@@ -158,7 +191,7 @@ export default class Mapper {
     params.push(orValue);
 
     const result = item.transform.apply(null, params);
-    output = objectMapper.setKeyValue(output, item.target, result);
+    output = this.om.setKeyValue(output, item.target, result);
     return output;
   }
 

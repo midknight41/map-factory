@@ -1,9 +1,14 @@
+import ported from "./object-mapper/object-mapper";
+import original from "object-mapper";
 import Mapper from "./mapper";
 
-export default function createMapper() {
+export default function createMapper(options) {
+
+  const opts = options || {};
+  const om = (opts.experimental) ? ported : original;
 
   const me = {
-    mapper: new Mapper()
+    mapper: new Mapper(opts.experimental, om)
   };
 
   const mapper = function map(source) {

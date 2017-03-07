@@ -5,6 +5,7 @@
 
 A simple object mapping utility that makes it easy to map data from one object to another. **map-factory** provides a fluent interface and supports deep references, custom transformations, and object merging.
 
+
 #### Features
 - Deep references with dot notation
 - Custom transformations
@@ -16,6 +17,7 @@ A simple object mapping utility that makes it easy to map data from one object t
 - [Working with arrays](#working-with-arrays)
 - [Transformations](#transformations)
 - [Working with multiple source objects](#dealing-with-multiple-sources-of-data)
+- [Detailed behaviour](#detailed-behaviour)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
 ## How to install
@@ -547,5 +549,39 @@ return blogService.decorateBlogPostWithAuthor(1, post)
     });
   });
 ```
+## Detailed behaviour
+
+### working with objects
+
+```js
+const source = { left: true };
+map("left").to("right")
+const result = map.execute(obj);
+// result is: { right: true }
+```
+
+```js
+const source = { my: { left: true }};
+map("my.left").to("your.right")
+const result = map.execute(source);
+// result is: { your: { right: true }}
+```
+
+### working with arrays
+
+```js
+const source = ["one"];
+map("[]").to("items.[]")
+const result = map.execute(source);
+// result is: {items: []}
+```
+
+```js
+const source = {items: [1,2,3]};
+map("items.[]").to("[]")
+const result = map.execute(source);
+// result is: [1,2,3]
+```
+
 
 This module was inspired by and based on the excellent [object-mapper](http://www.npmjs.com/object-mapper).

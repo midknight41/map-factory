@@ -14,14 +14,16 @@
     "pretest": "npm run build",
     "test": "lab ./dist/test/ -v -S --assert code",
     "pret": "npm run build",
-    "t": "lab ./dist/test/ -v -S --assert code",
+    "t": "./test-one",
     "travis": "npm run test",
     "premajor": "npm run test",
     "major": "npm version major -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
     "preminor": "npm run test",
     "minor": "npm version minor -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
     "prepatch": "npm run test",
-    "patch": "npm version patch -m \"published to npm as v%s\" && git push --follow-tags && npm publish"
+    "patch": "npm version patch -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
+    "prebenchmark": "npm run build",
+    "benchmark": "node ./dist/benchmark/mapper-vs-custom.js"
   },
   "bugs": {
     "url": "https://github.com/midknight41/map-factory/issues"
@@ -48,10 +50,8 @@
   "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-eslint": "^7.1.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.22.0",
-    "babel-plugin-transform-es2015-parameters": "^6.22.0",
-    "babel-plugin-transform-es2015-spread": "^6.22.0",
-    "babel-preset-env": "^1.1.8",
+    "babel-preset-es2015-node4": "^2.1.1",
+    "benchmark": "^2.1.3",
     "code": "^4.0.0",
     "coveralls": "^2.11.16",
     "eslint": "^3.15.0",
@@ -59,6 +59,7 @@
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
     "lab": "^12.1.0",
+    "lab-suite": "^1.2.0",
     "lab-testing": "^2.1.0",
     "rimraf": "^2.6.0"
   },
