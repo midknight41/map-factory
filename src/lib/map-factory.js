@@ -4,17 +4,11 @@ import Mapper from "./mapper";
 
 export default function createMapper(options) {
 
-  let om = original;
-  let experimental = false;
-  if (!options) options = {};
-
-  if (options.experimental) {
-    om = ported;
-    experimental = true;
-  }
+  options = options || {};
+  const om = (options.experimental) ? ported : original;
 
   const me = {
-    mapper: new Mapper(experimental, om)
+    mapper: new Mapper(options.experimental, om)
   };
 
   const mapper = function map(source) {
