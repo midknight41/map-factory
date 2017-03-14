@@ -58,7 +58,7 @@
     "gently": "^0.10.0",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
-    "lab": "^12.1.0",
+    "lab": "^13.0.1",
     "lab-suite": "^1.2.0",
     "lab-testing": "^2.1.0",
     "rimraf": "^2.6.0"
