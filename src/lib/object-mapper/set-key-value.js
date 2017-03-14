@@ -42,6 +42,8 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
     ;
   let key = startKey;
 
+  // console.log("top", destinationObject);
+
   // can be null feature
   canBeNull = regCanBeNull.test(key);
   if (canBeNull) {
@@ -72,27 +74,31 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
 
   // console.log("key changes", startKey !== key);
 
-  if (_isEmpty(destinationObject)) {
+  const destinationStartedEmpty = _isEmpty(destinationObject);
 
+  if (destinationStartedEmpty) {
+    // console.log("destination is empty");
     if (isPropertyArray) {
 
-      // console.log("mess: isPropertyArray", fromValue, `key: "${startKey}"`, "end");
       arrayIndex = match[2] || 0;
       if (isValueArray) {
-        // console.log("mess: isValueArray", fromValue, `key: "${startKey}"`, "end");
+        // console.log("type: property array and a value array. get:", fromValue, `key: "${startKey}"`);
         destinationObject = {};
         destinationObject[key] = [];
       } else {
+        // console.log("type: property array but not value array. get:", fromValue, `key: "${startKey}"`);
         destinationObject = [];
       }
     } else {
-      // console.log("mess: 2nd else", fromValue, `key: "${startKey}"`);
+      // console.log("type: empty object and not an array. get:", fromValue, `key: "${startKey}"`);
       destinationObject = {};
     }
 
   } else {
+    // console.log("destination has a value");
+
     if (isPropertyArray) {
-      // console.log("mess: final else", fromValue, `key: "${startKey}"`);
+      // console.log("type: property array. get:", fromValue, `key: "${startKey}"`);
       arrayIndex = match[2] || 0;
     }
   }
@@ -101,8 +107,9 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
     // console.log("final pass", `key: "${startKey}"`);
 
     if (!canBeNull && (fromValue === null || fromValue === undefined)) {
+
       // console.log("resolve", fromValue, destinationObject, parentIsArray);
-      if (parentIsArray === true) return null;
+      if (parentIsArray === true && destinationStartedEmpty) return null;
 
       return destinationObject;
     }
@@ -152,7 +159,9 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
         // It's a single value we want to process
         // console.log("final _setValue call", keys[0], fromValue);
         const retval = _setValue(destinationObject[arrayIndex], keys[0], keys.slice(1), fromValue, true);
-        if(retval !== null) destinationObject[arrayIndex] = retval;
+
+        // console.log("retval", retval)
+        if (retval !== null) destinationObject[arrayIndex] = retval;
       }
     } else {
       destinationObject[key] = _setValue(destinationObject[key], keys[0], keys.slice(1), fromValue);
