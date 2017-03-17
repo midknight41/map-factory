@@ -19,6 +19,288 @@ import om from "../../lib/object-mapper/object-mapper";
 
 group("The objectMapper() method", () => {
 
+  lab.test("map object to another - with three destinations for same value", done => {
+    const baseObject = {
+      test: 1
+    };
+
+    const obj = {
+      "foo": {
+        "bar": "baz"
+      }
+    };
+
+    const expected = {
+      test: 1,
+      bar: {
+        foo: [{
+          baz: "baz",
+          foo: "baz",
+          bar: ["baz"]
+        }]
+      }
+    };
+
+    const map = {
+      "foo.bar": ["bar.foo[].baz", "bar.foo[].foo", "bar.foo[].bar[]"]
+    };
+
+    const result = om(obj, baseObject, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("map object to another - with key object notation with default value when key does not exists", done => {
+    const baseObject = {
+      test: 1
+    };
+
+    const obj = {
+      "foo": {
+        "bar": "baz"
+      }
+    };
+
+    const expected = {
+      test: 1,
+      bar: {
+        foo: [{
+          baz: 10
+        }]
+      }
+    };
+
+    const map = {
+      "notExistingKey": {
+        key: "bar.foo[].baz",
+        "default": 10
+      }
+    };
+
+    const result = om(obj, baseObject, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("map object to another - with key object notation with default function when key does not exists", done => {
+    const baseObject = {
+      test: 1
+    };
+
+    const obj = {
+      "foo": {
+        "bar": "baz"
+      }
+    };
+
+    const expected = {
+      test: 1,
+      bar: {
+        foo: [{
+          baz: "baz"
+        }]
+      }
+    };
+
+    const map = {
+      "notExistingKey": {
+        key: "bar.foo[].baz",
+        default: function (fromObject, fromKey, toObject, toKey) {
+          return fromObject.foo.bar;
+        }
+      }
+    };
+
+    const result = om(obj, baseObject, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("map object to another - with key object notation with default function returning undefined when key does not exists", done => {
+    const obj = {
+      "a": 1234,
+      "foo": {
+        "bar": "baz"
+      }
+    };
+
+    const expected = {
+      bar: {
+        bar: "baz",
+        a: 1234
+      }
+    };
+
+    const map = {
+      "foo.bar": "bar.bar",
+      "notExistingKey": {
+        key: "bar.test",
+        default: function (fromObject, fromKey, toObject, toKey) {
+          return undefined;
+        }
+      },
+      "a": "bar.a"
+    };
+
+    const result = om(obj, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("map object to another - with key array notation with default value when key does not exists", done => {
+    const baseObject = {
+      test: 1
+    };
+
+    const obj = {
+      "foo": {
+        "bar": "baz"
+      }
+    };
+
+    const expected = {
+      test: 1,
+      bar: {
+        foo: [{
+          baz: 10
+        }]
+      }
+    };
+
+    const map = {
+      "notExistingKey": [["bar.foo[].baz", null, 10]]
+    };
+
+    const result = om(obj, baseObject, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("mapping - map and append full array to existing mapped array", done => {
+    const obj = {
+      thing: [
+        { a: "a1", b: "b1" }
+        , { a: "a2", b: "b2" }
+        , { a: "a3", b: "b3" }
+      ],
+      thingOther: [{ a: "a4", b: "b4" }
+        , { a: "a5", b: "b5" }
+        , { a: "a6", b: "b6" }]
+    };
+
+    const map = {
+      "thing": "thing2[]+",
+      "thingOther": "thing2[]+"
+    };
+
+    const expected = {
+      "thing2": [
+        [{ a: "a1", b: "b1" }
+          , { a: "a2", b: "b2" }
+          , { a: "a3", b: "b3" }],
+        [{ a: "a4", b: "b4" }
+          , { a: "a5", b: "b5" }
+          , { a: "a6", b: "b6" }]
+      ]
+    };
+
+    const result = om(obj, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("map object to another - prevent null values from being mapped", done => {
+    const obj = {
+      "a": 1234,
+      "foo": {
+        "bar": null
+      }
+    };
+
+    const expected = {
+      foo: {
+        a: 1234
+      },
+      bar: {
+
+      }
+    };
+
+    const map = {
+      "foo.bar": "bar.bar",
+      "a": "foo.a"
+    };
+
+    const result = om(obj, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("map object to another - allow null values", done => {
+    const obj = {
+      "a": 1234,
+      "foo": {
+        "bar": null
+      }
+    };
+
+    const expected = {
+      foo: {
+        a: 1234
+      },
+      bar: null
+    };
+
+    const map = {
+      "foo.bar": "bar?",
+      "a": "foo.a"
+    };
+
+    const result = om(obj, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+  lab.test("map object to another - allow null values", done => {
+    const obj = {
+      "a": 1234,
+      "foo": {
+        "bar": null
+      }
+    };
+
+    const expected = {
+      foo: {
+        a: 1234
+      },
+      bar: {
+        bar: null
+      }
+    };
+
+    const map = {
+      "foo.bar": "bar.bar?",
+      "a": "foo.a"
+    };
+
+    const result = om(obj, map);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+
+});
+
+lab.experiment.skip("redundant tests", () => {
+
   lab.test("map object to another - simple", done => {
     const obj = {
       "foo": "bar"
@@ -201,38 +483,6 @@ group("The objectMapper() method", () => {
     return done();
   });
 
-  lab.test("map object to another - with three destinations for same value", done => {
-    const baseObject = {
-      test: 1
-    };
-
-    const obj = {
-      "foo": {
-        "bar": "baz"
-      }
-    };
-
-    const expected = {
-      test: 1,
-      bar: {
-        foo: [{
-          baz: "baz",
-          foo: "baz",
-          bar: ["baz"]
-        }]
-      }
-    };
-
-    const map = {
-      "foo.bar": ["bar.foo[].baz", "bar.foo[].foo", "bar.foo[].bar[]"]
-    };
-
-    const result = om(obj, baseObject, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
   lab.test("map object to another - with key object notation", done => {
     const baseObject = {
       test: 1
@@ -265,74 +515,6 @@ group("The objectMapper() method", () => {
     return done();
   });
 
-  lab.test("map object to another - with key object notation with default value when key does not exists", done => {
-    const baseObject = {
-      test: 1
-    };
-
-    const obj = {
-      "foo": {
-        "bar": "baz"
-      }
-    };
-
-    const expected = {
-      test: 1,
-      bar: {
-        foo: [{
-          baz: 10
-        }]
-      }
-    };
-
-    const map = {
-      "notExistingKey": {
-        key: "bar.foo[].baz",
-        "default": 10
-      }
-    };
-
-    const result = om(obj, baseObject, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
-  lab.test("map object to another - with key object notation with default function when key does not exists", done => {
-    const baseObject = {
-      test: 1
-    };
-
-    const obj = {
-      "foo": {
-        "bar": "baz"
-      }
-    };
-
-    const expected = {
-      test: 1,
-      bar: {
-        foo: [{
-          baz: "baz"
-        }]
-      }
-    };
-
-    const map = {
-      "notExistingKey": {
-        key: "bar.foo[].baz",
-        default: function (fromObject, fromKey, toObject, toKey) {
-          return fromObject.foo.bar;
-        }
-      }
-    };
-
-    const result = om(obj, baseObject, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
   lab.test("map object to another - when target key is undefined it should be ignored", done => {
     const obj = {
       "a": 1234,
@@ -350,38 +532,6 @@ group("The objectMapper() method", () => {
     const map = {
       "foo.bar": "bar.bar",
       "a": undefined
-    };
-
-    const result = om(obj, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
-  lab.test("map object to another - with key object notation with default function returning undefined when key does not exists", done => {
-    const obj = {
-      "a": 1234,
-      "foo": {
-        "bar": "baz"
-      }
-    };
-
-    const expected = {
-      bar: {
-        bar: "baz",
-        a: 1234
-      }
-    };
-
-    const map = {
-      "foo.bar": "bar.bar",
-      "notExistingKey": {
-        key: "bar.test",
-        default: function (fromObject, fromKey, toObject, toKey) {
-          return undefined;
-        }
-      },
-      "a": "bar.a"
     };
 
     const result = om(obj, map);
@@ -424,7 +574,6 @@ group("The objectMapper() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-
 
   lab.test("map object to another - with two destinations for same value one string and one object", done => {
     const baseObject = {
@@ -491,35 +640,7 @@ group("The objectMapper() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test("map object to another - with key array notation with default value when key does not exists", done => {
-    const baseObject = {
-      test: 1
-    };
 
-    const obj = {
-      "foo": {
-        "bar": "baz"
-      }
-    };
-
-    const expected = {
-      test: 1,
-      bar: {
-        foo: [{
-          baz: 10
-        }]
-      }
-    };
-
-    const map = {
-      "notExistingKey": [["bar.foo[].baz", null, 10]]
-    };
-
-    const result = om(obj, baseObject, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
 
   lab.test("map object to another - with key array notation with default function when key does not exists", done => {
     const baseObject = {
@@ -887,123 +1008,6 @@ group("The objectMapper() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-
-  lab.test("mapping - map and append full array to existing mapped array", done => {
-    const obj = {
-      thing: [
-        { a: "a1", b: "b1" }
-        , { a: "a2", b: "b2" }
-        , { a: "a3", b: "b3" }
-      ],
-      thingOther: [{ a: "a4", b: "b4" }
-        , { a: "a5", b: "b5" }
-        , { a: "a6", b: "b6" }]
-    };
-
-    const map = {
-      "thing": "thing2[]+",
-      "thingOther": "thing2[]+"
-    };
-
-    const expected = {
-      "thing2": [
-        [{ a: "a1", b: "b1" }
-          , { a: "a2", b: "b2" }
-          , { a: "a3", b: "b3" }],
-        [{ a: "a4", b: "b4" }
-          , { a: "a5", b: "b5" }
-          , { a: "a6", b: "b6" }]
-      ]
-    };
-
-    const result = om(obj, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
-  lab.test("map object to another - prevent null values from being mapped", done => {
-    const obj = {
-      "a": 1234,
-      "foo": {
-        "bar": null
-      }
-    };
-
-    const expected = {
-      foo: {
-        a: 1234
-      },
-      bar: {
-
-      }
-    };
-
-    const map = {
-      "foo.bar": "bar.bar",
-      "a": "foo.a"
-    };
-
-    const result = om(obj, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
-  lab.test("map object to another - allow null values", done => {
-    const obj = {
-      "a": 1234,
-      "foo": {
-        "bar": null
-      }
-    };
-
-    const expected = {
-      foo: {
-        a: 1234
-      },
-      bar: null
-    };
-
-    const map = {
-      "foo.bar": "bar?",
-      "a": "foo.a"
-    };
-
-    const result = om(obj, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
-  lab.test("map object to another - allow null values", done => {
-    const obj = {
-      "a": 1234,
-      "foo": {
-        "bar": null
-      }
-    };
-
-    const expected = {
-      foo: {
-        a: 1234
-      },
-      bar: {
-        bar: null
-      }
-    };
-
-    const map = {
-      "foo.bar": "bar.bar?",
-      "a": "foo.a"
-    };
-
-    const result = om(obj, map);
-
-    expect(result).to.equal(expected);
-    return done();
-  });
-
 
   lab.test("original constious tests", done => {
     const merge = om.merge;

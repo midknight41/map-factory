@@ -1,8 +1,20 @@
+### 1.6.1
+Fixed regression in experimental mode
+
+### 1.6.0
+Added experimental mode to begin absorbing object-mapper into code base 
+
+```js
+
+const mapper = createMapper({ experimental:true });
+
+```
+
 ### 1.5.0
 Converted code from TypeScript to ES6 with babel
 
 ### 1.4.1 
-Fixed bug where you could map from the same source field more than once.
+Fixed bug where you couldn't map from the same source field more than once.
 
 ### 1.4.0
 Added the chainable ```or()``` method to select from alterate source fields.
