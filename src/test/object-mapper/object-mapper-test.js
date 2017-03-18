@@ -17,7 +17,7 @@ const group = testing.createExperiment("map-factory", "object-mapper");
 
 import om from "../../lib/object-mapper/object-mapper";
 
-group("The objectMapper() method", () => {
+lab.experiment("The objectMapper() method", () => {
 
   lab.test("map object to another - with three destinations for same value", done => {
     const baseObject = {
@@ -269,7 +269,7 @@ group("The objectMapper() method", () => {
     return done();
   });
 
-  lab.test("map object to another - allow null values", done => {
+  lab.test("map object to another two levels - allow null values", done => {
     const obj = {
       "a": 1234,
       "foo": {
@@ -641,7 +641,6 @@ lab.experiment.skip("redundant tests", () => {
     return done();
   });
 
-
   lab.test("map object to another - with key array notation with default function when key does not exists", done => {
     const baseObject = {
       test: 1
@@ -1006,100 +1005,6 @@ lab.experiment.skip("redundant tests", () => {
     const result = om(obj, map);
 
     expect(result).to.equal(expected);
-    return done();
-  });
-
-  lab.test("original constious tests", done => {
-    const merge = om.merge;
-
-    const obj = {
-      "sku": "12345"
-      , "upc": "99999912345X"
-      , "title": "Test Item"
-      , "descriptions": ["Short description", "Long description"]
-      , "length": 5
-      , "width": 2
-      , "height": 8
-      , "inventory": {
-        "onHandQty": 0
-        , "replenishQty": null
-      }
-      , "price": 100
-    };
-
-    const map = {
-      "sku": "Envelope.Request.Item.SKU"
-      , "upc": "Envelope.Request.Item.UPC"
-      , "title": "Envelope.Request.Item.ShortTitle"
-      , "length": "Envelope.Request.Item.Dimensions.Length"
-      , "width": "Envelope.Request.Item.Dimensions.Width"
-      , "height": "Envelope.Request.Item.Dimensions.Height"
-      , "weight": [["Envelope.Request.Item.Weight", null, function () {
-        return 10;
-      }]]
-      , "weightUnits": [["Envelope.Request.Item.WeightUnits", null, function () {
-        return null;
-      }]]
-      , "inventory.onHandQty": "Envelope.Request.Item.Inventory?"
-      , "inventory.replenishQty": "Envelope.Request.Item.RelpenishQuantity?"
-      , "inventory.isInventoryItem": { key: ["Envelope.Request.Item.OnInventory", null, "YES"] }
-      , "price": ["Envelope.Request.Item.Price[].List", "Envelope.Request.Item.Price[].Value", "Test[]"]
-      , "descriptions[0]": "Envelope.Request.Item.ShortDescription"
-      , "descriptions[1]": "Envelope.Request.Item.LongDescription"
-    };
-
-    const expected = {
-      Test: [100],
-      Envelope: {
-        Request: {
-          Item: {
-            SKU: "12345",
-            UPC: "99999912345X",
-            ShortTitle: "Test Item",
-            Dimensions: {
-              Length: 5,
-              Width: 2,
-              Height: 8
-            },
-            Weight: 10,
-            Inventory: 0,
-            RelpenishQuantity: null,
-            OnInventory: "YES",
-            Price: [{
-              List: 100,
-              Value: 100
-            }],
-            ShortDescription: "Short description",
-            LongDescription: "Long description"
-          }
-        }
-      }
-    };
-
-    let result = merge(obj, {}, map);
-
-    expect(result).to.equal(expected);
-
-    map.sku = {
-      key: "Envelope.Request.Item.SKU"
-      , transform: function (val, objFrom, objTo) {
-        return "over-ridden-sku";
-      }
-    };
-
-    expected.Envelope.Request.Item.SKU = "over-ridden-sku";
-
-    result = merge(obj, {}, map);
-
-    expect(result, "override sku").to.equal(expected);
-
-    obj["inventory"] = null;
-    expected.Envelope.Request.Item.Inventory = null;
-
-    result = merge(obj, {}, map);
-
-    expect(result, "null inventory").to.equal(expected);
-
     return done();
   });
 

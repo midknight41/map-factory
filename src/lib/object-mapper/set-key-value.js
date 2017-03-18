@@ -115,6 +115,7 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
     }
     if (isValueArray) {
       if (Array.isArray(destinationObject[key]) === false) {
+        console.log("first one");
         destinationObject[key] = [];
       }
       if (appendToArray) {
@@ -135,6 +136,7 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
       // console.log("isValueArray", fromValue);
 
       if (Array.isArray(destinationObject[key]) === false) {
+        console.log("second one");
         destinationObject[key] = [];
       }
       if (Array.isArray(fromValue) && _isNextArrayProperty(keys) === false) {

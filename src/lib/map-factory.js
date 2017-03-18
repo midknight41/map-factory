@@ -5,6 +5,11 @@ export default function createMapper(options) {
 
   const opts = options || {};
 
+  // FIX THIS BEFORE PUBLISHING!!!
+  // const om = (opts.experimental) ? ported : original;
+  opts.experimental = true;
+  // END: FIX THIS BEFORE PUBLISHING!!!
+
   const me = {
     mapper: new Mapper(opts.experimental, ported)
   };
