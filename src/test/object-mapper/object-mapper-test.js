@@ -17,7 +17,7 @@ const group = testing.createExperiment("map-factory", "object-mapper");
 
 import om from "../../lib/object-mapper/object-mapper";
 
-lab.experiment("The objectMapper() method", () => {
+lab.experiment.skip("The objectMapper() method", () => {
 
   lab.test("map object to another - with three destinations for same value", done => {
     const baseObject = {
