@@ -481,7 +481,7 @@ group("The each() method", () => {
   lab.test("An empty array does not cause an error", done => {
     const source = [];
 
-    const expected = [];
+    const expected = null;
 
     const map = createMapper();
 
@@ -527,16 +527,12 @@ group("The each() method", () => {
 
   });
 
-  lab.test("A null parameter throws an error", done => {
+  lab.test("A null parameter should return null", done => {
     const map = createMapper();
 
     map("fieldName").to("field.name");
 
-    const throws = function () {
-      map.each(null);
-    };
-
-    expect(throws).to.throw();
+    expect(map.each(null)).to.equal(null);
 
     return done();
   });
