@@ -537,6 +537,16 @@ group("The each() method", () => {
     return done();
   });
 
+  lab.test("An undefined parameter should return null", done => {
+    const map = createMapper();
+
+    map("fieldName").to("field.name");
+
+    expect(map.each(undefined)).to.equal(null);
+
+    return done();
+  });
+
   lab.test("A non-array throws an error", done => {
     const map = createMapper();
     const source = { "a": "b" };
