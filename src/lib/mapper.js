@@ -29,18 +29,17 @@ export default class Mapper {
 
   each(sourceArray) {
 
-    if (sourceArray === null || sourceArray === undefined) {
-      throw new Error("A sourceArray object is required");
-    }
-
     if (Array.isArray(sourceArray) !== true) {
       throw new Error("The sourceArray parameter must be an array");
     }
 
-    return sourceArray.map(item => {
-      return this.execute(item, null);
-    });
+    if (sourceArray.length > 0) {
+      return sourceArray.map(item => {
+        return this.execute(item, null);
+      });
+    }
 
+    return null;
   }
 
   // execute(source, destination) {

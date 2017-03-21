@@ -481,7 +481,7 @@ group("The each() method", () => {
   lab.test("An empty array does not cause an error", done => {
     const source = [];
 
-    const expected = [];
+    const expected = null;
 
     const map = createMapper();
 
