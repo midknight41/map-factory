@@ -7,7 +7,7 @@ export default function createMapper(options) {
 
   // FIX THIS BEFORE PUBLISHING!!!
   // const om = (opts.experimental) ? ported : original;
-  opts.experimental = true;
+  // opts.experimental = true;
   // END: FIX THIS BEFORE PUBLISHING!!!
 
   const me = {

@@ -63,8 +63,8 @@ export default class Mapping {
 
   to(target, fnc) {
 
-    if (!target) {
-      throw new Error("the target field name cannot be null");
+    if (!target || typeof target !== "string") {
+      throw new Error("the target field name must be a string");
     }
 
     this.target = target;
