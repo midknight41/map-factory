@@ -29,6 +29,10 @@ export default class Mapper {
 
   each(sourceArray) {
 
+    if (!sourceArray) {
+      return null;
+    }
+
     if (Array.isArray(sourceArray) !== true) {
       throw new Error("The sourceArray parameter must be an array");
     }
