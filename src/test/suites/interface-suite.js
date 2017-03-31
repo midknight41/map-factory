@@ -471,7 +471,7 @@ suite.declare((lab, variables) => {
     lab.test("An empty array does not cause an error", done => {
       const source = [];
 
-      const expected = [];
+      const expected = null;
 
       const map = createSut();
 
@@ -517,16 +517,22 @@ suite.declare((lab, variables) => {
 
     });
 
-    lab.test("A null parameter throws an error", done => {
+    lab.test("An undefined parameter does not throw an error", done => {
       const map = createSut();
 
       map("fieldName").to("field.name");
 
-      const throws = function () {
-        map.each(null);
-      };
+      expect(map.each(undefined)).to.equal(null);
 
-      expect(throws).to.throw();
+      return done();
+    });
+
+    lab.test("A null parameter does not throw an error", done => {
+      const map = createSut();
+
+      map("fieldName").to("field.name");
+
+      expect(map.each(null)).to.equal(null);
 
       return done();
     });
@@ -1006,126 +1012,9 @@ suite.declare((lab, variables) => {
       map("foo.bar").to("bar.foo[].foo");
       map("foo.bar").to("bar.foo[].bar[]");
 
-
       const result = map.execute(obj, baseObject);
 
       expect(result).to.equal(expected);
-      return done();
-    });
-
-    lab.test.skip("original constious tests", done => {
-      //    const merge = om.merge;
-
-      const obj = {
-        "sku": "12345",
-        "upc": "99999912345X",
-        "title": "Test Item",
-        "descriptions": ["Short description", "Long description"],
-        "length": 5,
-        "width": 2,
-        "height": 8,
-        "inventory": {
-          "onHandQty": 0,
-          "replenishQty": null
-        },
-        "price": 100
-      };
-
-      const mapper = createSut();
-
-      mapper
-        .map("sku").to("Envelope.Request.Item.SKU")
-        .map("upc").to("Envelope.Request.Item.UPC")
-        .map("title").to("Envelope.Request.Item.ShortTitle")
-        .map("length").to("Envelope.Request.Item.Dimensions.Length")
-        .map("width").to("Envelope.Request.Item.Dimensions.Width")
-        .map("height").to("Envelope.Request.Item.Dimensions.Height")
-        .map("weight").to("Envelope.Request.Item.Weight", () => 10)
-        .map("weightUnits").to("Envelope.Request.Item.WeightUnits", () => null)
-        .map("inventory.onHandQty").to("Envelope.Request.Item.Inventory?")
-        .map("inventory.replenishQty").to("Envelope.Request.Item.RelpenishQuantity?")
-        .map("inventory.isInventoryItem").to("Envelope.Request.Item.OnInventory")
-        .map("price").to("Envelope.Request.Item.Price[].List")
-        .map("price").to("Envelope.Request.Item.Price[].Value")
-        .map("price").to("Test[]")
-        .map("descriptions[0]").to("Envelope.Request.Item.ShortDescription")
-        .map("descriptions[1]").to("Envelope.Request.Item.LongDescription");
-
-      const map = {
-        "sku": "Envelope.Request.Item.SKU"
-        , "upc": "Envelope.Request.Item.UPC"
-        , "title": "Envelope.Request.Item.ShortTitle"
-        , "length": "Envelope.Request.Item.Dimensions.Length"
-        , "width": "Envelope.Request.Item.Dimensions.Width"
-        , "height": "Envelope.Request.Item.Dimensions.Height"
-        , "weight": [
-          ["Envelope.Request.Item.Weight", null, function () {
-            return 10;
-          }]
-        ]
-        , "weightUnits": [["Envelope.Request.Item.WeightUnits", null, function () {
-          return null;
-        }]]
-        , "inventory.onHandQty": "Envelope.Request.Item.Inventory?"
-        , "inventory.replenishQty": "Envelope.Request.Item.RelpenishQuantity?"
-        , "inventory.isInventoryItem": { key: ["Envelope.Request.Item.OnInventory", null, "YES"] }
-        , "price": ["Envelope.Request.Item.Price[].List", "Envelope.Request.Item.Price[].Value", "Test[]"]
-        , "descriptions[0]": "Envelope.Request.Item.ShortDescription"
-        , "descriptions[1]": "Envelope.Request.Item.LongDescription"
-      };
-
-      const expected = {
-        Test: [100],
-        Envelope: {
-          Request: {
-            Item: {
-              SKU: "12345",
-              UPC: "99999912345X",
-              ShortTitle: "Test Item",
-              Dimensions: {
-                Length: 5,
-                Width: 2,
-                Height: 8
-              },
-              Weight: 10,
-              Inventory: 0,
-              RelpenishQuantity: null,
-              OnInventory: "YES",
-              Price: [{
-                List: 100,
-                Value: 100
-              }],
-              ShortDescription: "Short description",
-              LongDescription: "Long description"
-            }
-          }
-        }
-      };
-
-      let result = merge(obj, {}, map);
-
-      expect(result).to.equal(expected);
-
-      map.sku = {
-        key: "Envelope.Request.Item.SKU",
-        transform: (val, objFrom, objTo) => {
-          return "over-ridden-sku";
-        }
-      };
-
-      expected.Envelope.Request.Item.SKU = "over-ridden-sku";
-
-      result = merge(obj, {}, map);
-
-      expect(result, "override sku").to.equal(expected);
-
-      obj.inventory = null;
-      expected.Envelope.Request.Item.Inventory = null;
-
-      result = merge(obj, {}, map);
-
-      expect(result, "null inventory").to.equal(expected);
-
       return done();
     });
 

@@ -35,6 +35,7 @@ export default class Mapper {
   each(sourceArray) {
 
     if (!sourceArray) {
+      // This should probably return undefined
       return null;
     }
 
@@ -48,6 +49,7 @@ export default class Mapper {
       });
     }
 
+    // This should probably return undefined
     return null;
   }
 

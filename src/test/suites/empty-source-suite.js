@@ -30,7 +30,7 @@ suite.declare((lab, variables) => {
   const group = testing.createExperiment(...LABELS);
 
   function createSut() {
-    return createMapper({ experimental: true });
+    return createMapper({ experimental: EXPERIMENTAL });
   }
 
   const experimentalLabel = EXPERIMENTAL === true ? "in experimental mode" : "in normal mode";

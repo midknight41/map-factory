@@ -43,10 +43,10 @@ manyMappings.run(lab, {
   EXPERIMENTAL: true
 });
 
-// manyMappings.run(lab, {
-//   LABELS: labels,
-//   MAPPINGS: mappings,
-//   SOURCE: source,
-//   EXPECTED: expected,
-//   EXPERIMENTAL: false
-// });
+manyMappings.run(lab, {
+  LABELS: labels,
+  MAPPINGS: mappings,
+  SOURCE: source,
+  EXPECTED: expected,
+  EXPERIMENTAL: false
+});
