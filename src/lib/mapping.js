@@ -1,7 +1,7 @@
 
 export default class Mapping {
 
-  constructor(source, mapper) {
+  constructor(source, mapper, options) {
 
     if (!source) {
       throw new Error("the source field name cannot be null");
@@ -10,7 +10,21 @@ export default class Mapping {
     this.mapper = mapper;
     this.source = source;
     this.orMode = false;
+    this.alwaysSet = options.alwaysSet;
+    this.alwaysTransform = options.alwaysTransform;
 
+  }
+
+  get always() {
+    this.alwaysSet = true;
+    this.alwaysTransform = true;
+    return this;
+  }
+
+  get existing() {
+    this.alwaysSet = false;
+    this.alwaysTransform = false;
+    return this;
   }
 
   map(stringOrArray) {

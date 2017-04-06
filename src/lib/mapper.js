@@ -8,10 +8,11 @@ const OR_MODE = 2;
 
 export default class Mapper {
 
-  constructor(experimental, om) {
+  constructor(opts, om) {
 
     this.om = om;
-    this.experimental = experimental;
+    this.experimental = opts.experimental;
+    this.options = opts;
 
     this.assignment = [];
     this.mapCache_ = null;
@@ -25,7 +26,7 @@ export default class Mapper {
 
   map(source) {
 
-    const mapping = new Mapping(source, this);
+    const mapping = new Mapping(source, this, this.options);
     this.registerMapping(mapping);
 
     return mapping;
@@ -141,17 +142,20 @@ export default class Mapper {
 
   processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform }) {
 
-    // console.log("single mode", targetPath, sourcePath, transform);
     // Get source
     let value = this.om.getKeyValue(sourceObject, sourcePath);
 
-    // console.log("pre-transform value", value);
     // Apply transform - will become optional
-    value = transform(value);
+    if (value || this.options.alwaysTransform === true) {
+      value = transform(value);
+    }
 
-    // console.log("post-transform value", value);
     // Set value on destination object
-    return this.om.setKeyValue(destinationObject, targetPath, value);
+    if (value || this.options.alwaysSet === true) {
+      return this.om.setKeyValue(destinationObject, targetPath, value);
+    }
+
+    return destinationObject;
 
   }
 
