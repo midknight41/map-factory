@@ -1,3 +1,9 @@
+### 1.6.3
+Set experimental flag to eliminate some of the object-mapper code
+
+### 1.6.2
+Remove object-mapper dependency
+
 ### 1.6.1
 Fixed regression in experimental mode
 
