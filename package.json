@@ -1,7 +1,7 @@
 {
   "name": "map-factory",
-  "version": "1.6.2",
-  "description": "Object mapping tool",
+  "version": "1.6.3",
+  "description": "A simple object mapping utility that makes it easy to map data from one object to another. Create object mappers using fluent interface that supports deep references (dot notation), custom transformations, and object merging.",
   "main": "./dist/lib/index.js",
   "scripts": {
     "prebuild": "npm run clean",
@@ -36,6 +36,9 @@
     "object",
     "mapping",
     "mapper",
+    "dot-notation",
+    "recursive",
+    "keys",
     "fluent",
     "transform"
   ],
@@ -57,7 +60,7 @@
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
     "lab": "^13.0.1",
-    "lab-suite": "^1.2.0",
+    "lab-suite": "^1.3.0",
     "lab-testing": "^2.1.0",
     "rimraf": "^2.6.0"
   },

@@ -1,6 +1,7 @@
 import { IMapping } from "./interfaces";
 import Mapping from "./mapping";
 export default class Mapper {
+    constructor(options, om);
     assignment: IMapping[];
     private mapCache;
     registerMapping(mapping: IMapping): void;

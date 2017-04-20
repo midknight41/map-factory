@@ -1,56 +1,73 @@
-import { expect } from "code";
 import * as Lab from "lab";
-import getHelper from "lab-testing";
+import notationSuite from "./suites/notation-suite";
+import manyMappings from "./suites/many-mappings-suite";
 
 const lab = exports.lab = Lab.script();
-const testing = getHelper(lab);
-const group = testing.createExperiment("map-factory");
 
-const createMapper = require("../lib/index");
+notationSuite.run(lab, {
+  LABELS: ["arrays", "single mapping array"],
+  GET_ITEM: "array.[].id",
+  SET_ITEM: "array.levels.[].id",
+  SOURCE: {
+    array: [{ id: 1 }, { id: 2 }, { id: 3 }]
+  },
+  EXPECTED: {
+    array: {
+      levels: [{ id: 1 }, { id: 2 }, { id: 3 }]
+    }
+  },
+  NO_SOURCE_EXPECTED: {
+    array: {
+      levels: []
+    }
+  },
+  MODIFY_VALUE: "modified",
+  MODIFIED_EXPECTED: {
+    array: {
+      levels: [{ id: "modified" }]
+    }
+  }
+});
 
-group("working with arrays", () => {
-
-  lab.test("a mix of existing and non-existing source data works correctly", done => {
-
-    const mapper = createMapper({ "experimental": true });
-
-    const expected = {
-      "property":
-      {
-        "spaces": [{
-          "useTypeName": "Office",
-          "useTypeSector": "Business (B1a)",
-          "useTypeCategory": "Office",
-          "useTypeParentCategory": "Office"
-        }]
+// size is missing from source
+const labels = ["arrays", "mix of available and missing data"];
+const mappings = [
+  { from: "propertySpaces.[].useType.parentCategory", to: "property.spaces.[].useTypeParentCategory" },
+  { from: "propertySpaces.[].size", to: "property.spaces.[].size" }
+];
+const expected = {
+  "property":
+  {
+    "spaces": [{
+      "useTypeParentCategory": "Office"
+    }]
+  }
+};
+const source = {
+  "propertySpaces": [
+    {
+      "useType": {
+        "name": "Office",
+        "sector": "Business (B1a)",
+        "category": "Office",
+        "parentCategory": "Office"
       }
+    }
+  ]
+};
 
-    };
+// manyMappings.run(lab, {
+//   LABELS: labels,
+//   MAPPINGS: mappings,
+//   SOURCE: source,
+//   EXPECTED: expected,
+//   EXPERIMENTAL: true
+// });
 
-    mapper
-      .map("propertySpaces.[].useType.name").to("property.spaces.[].useTypeName")
-      .map("propertySpaces.[].useType.sector").to("property.spaces.[].useTypeSector")
-      .map("propertySpaces.[].useType.category").to("property.spaces.[].useTypeCategory")
-      .map("propertySpaces.[].useType.parentCategory").to("property.spaces.[].useTypeParentCategory")
-      .map("propertySpaces.[].size").to("property.spaces.[].size"); // size is missing from source
-
-    const result = mapper.execute({
-      "propertySpaces": [
-        {
-          "useType": {
-            "name": "Office",
-            "sector": "Business (B1a)",
-            "category": "Office",
-            "parentCategory": "Office"
-          }
-        }
-      ]
-    });
-
-    expect(result).to.equal(expected);
-
-    return done();
-
-  });
-
+manyMappings.run(lab, {
+  LABELS: labels,
+  MAPPINGS: mappings,
+  SOURCE: source,
+  EXPECTED: expected,
+  EXPERIMENTAL: false
 });

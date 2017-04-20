@@ -23,3 +23,8 @@ export interface IMapping {
     execute(source: any, destination?: any): any;
     each(sourceArray: any[]): any;
 }
+export interface IOptions {
+  experimental?: boolean;
+  alwaysTransform?: boolean;
+  alwaysSet?: boolean;
+}

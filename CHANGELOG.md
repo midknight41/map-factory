@@ -1,8 +1,54 @@
+### 1.7.0
+
+Introduced behaviour modifiers to make map-factory more flexible. See [README](README.md#behaviour) for more details.
+
+#### Modify default behaviour
+
+```js
+const createMapper = require("map-factory");
+
+const options = {
+  alwaysTransform: false,
+  alwaysSet: false
+};
+
+const mapper = createMapper(options);
+```
+#### Modify behaviour on a single mapping
+
+```js
+const createMapper = require("map-factory");
+
+const mapper = createMapper(options);
+
+mapper
+  .map("a").always.to("b")
+  .map("c").existing.to("d");
+```
+
+### 1.6.3
+Set experimental flag to eliminate some of the object-mapper code
+
+### 1.6.2
+Remove object-mapper dependency
+
+### 1.6.1
+Fixed regression in experimental mode
+
+### 1.6.0
+Added experimental mode to begin absorbing object-mapper into code base 
+
+```js
+
+const mapper = createMapper({ experimental:true });
+
+```
+
 ### 1.5.0
 Converted code from TypeScript to ES6 with babel
 
 ### 1.4.1 
-Fixed bug where you could map from the same source field more than once.
+Fixed bug where you couldn't map from the same source field more than once.
 
 ### 1.4.0
 Added the chainable ```or()``` method to select from alterate source fields.
