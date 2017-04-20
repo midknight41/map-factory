@@ -1,3 +1,31 @@
+### 1.7.0
+
+Introduced behaviour modifiers to make map-factory more flexible. See [README](README.md#behaviour) for more details.
+
+#### Modify default behaviour
+
+```js
+const createMapper = require("map-factory");
+
+const options = {
+  alwaysTransform: false,
+  alwaysSet: false
+};
+
+const mapper = createMapper(options);
+```
+#### Modify behaviour on a single mapping
+
+```js
+const createMapper = require("map-factory");
+
+const mapper = createMapper(options);
+
+mapper
+  .map("a").always.to("b")
+  .map("c").existing.to("d");
+```
+
 ### 1.6.3
 Set experimental flag to eliminate some of the object-mapper code
 
