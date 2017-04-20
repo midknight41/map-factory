@@ -11,6 +11,6 @@ export default class Mapping implements IMapping {
   execute(source?: any, destination?: any): any;
   each(sourceArray: any): any;
   to(target: string, fnc?: Function): any;
-  get always(): IMapping;
-  get existing(): IMapping;
+  always: IMapping;
+  existing: IMapping;
 }

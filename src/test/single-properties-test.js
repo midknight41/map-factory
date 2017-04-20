@@ -34,13 +34,13 @@ const expected = {
   "category": "Office"
 };
 
-manyMappings.run(lab, {
-  LABELS: labels,
-  MAPPINGS: mappings,
-  SOURCE: source,
-  EXPECTED: expected,
-  EXPERIMENTAL: true
-});
+// manyMappings.run(lab, {
+//   LABELS: labels,
+//   MAPPINGS: mappings,
+//   SOURCE: source,
+//   EXPECTED: expected,
+//   EXPERIMENTAL: true
+// });
 
 manyMappings.run(lab, {
   LABELS: labels,

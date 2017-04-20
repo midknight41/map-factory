@@ -3,7 +3,7 @@ import suite from "./suites/interface-suite";
 
 const lab = exports.lab = Lab.script();
 
-suite.run(lab, { EXPERIMENTAL: true });
+// suite.run(lab, { EXPERIMENTAL: true });
 suite.run(lab, { EXPERIMENTAL: false });
 
 // import { expect } from "code";

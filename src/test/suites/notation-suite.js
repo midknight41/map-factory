@@ -16,9 +16,9 @@ suite.expect("MODIFIED_EXPECTED").to.be.an.anything();
 
 suite.declare((lab, variables) => {
 
-  variables.EXPERIMENTAL = true;
-  mappingSuite.run(lab, variables);
-  emptySourceSuite.run(lab, variables);
+  // variables.EXPERIMENTAL = true;
+  // mappingSuite.run(lab, variables);
+  // emptySourceSuite.run(lab, variables);
 
   variables.EXPERIMENTAL = false;
   mappingSuite.run(lab, variables);

@@ -89,7 +89,6 @@ export default class Mapping {
 
     return this.mapper;
 
-
   }
 
 }
