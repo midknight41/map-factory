@@ -302,6 +302,81 @@ group("when executing with options set, the multi source mapper", () => {
 
   });
 
+  lab.test("suppresses a set if a transform returns null", done => {
+
+    const source = {
+      "my": {
+        "source": {
+          "is": {}
+        },
+        "other": {
+          "source": {
+            "is": {
+              "here": "value"
+            }
+          }
+        }
+      }
+    };
+
+    const expected = {
+    };
+
+    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+    let count = 0;
+
+    map(["my.source.is.missing", "my.other.source.is.here"]).to("your.source.is.missing", () => {
+      count++;
+      return null;
+    });
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+    expect(count).to.equal(1);
+
+    return done();
+
+  });
+
+  lab.test("suppresses a set if a transform returns undefined", done => {
+
+    const source = {
+      "my": {
+        "source": {
+          "is": {}
+        },
+        "other": {
+          "source": {
+            "is": {
+              "here": "value"
+            }
+          }
+        }
+      }
+    };
+
+    const expected = {
+    };
+
+    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+
+    let count = 0;
+
+    map(["my.source.is.missing", "my.other.source.is.here"]).to("your.source.is.missing", () => {
+      count++;
+      return undefined;
+    });
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+    expect(count).to.equal(1);
+
+    return done();
+
+  });
+
   lab.test("a transform executes when one source value is present", done => {
 
     const source = {
@@ -344,10 +419,55 @@ group("when executing with options set, the multi source mapper", () => {
   });
 });
 
+group("when executing with options set, the or-mode source map", () => {
+
+  lab.test("a transform executes when one source value is present in or mode", done => {
+
+    const source = {
+      "my": {
+        "source": {
+          "is": {
+            "here": "value"
+          }
+        },
+        "other": {
+          "source": {
+            "is": {}
+          }
+        }
+      }
+    };
+
+    const expected = {
+      "your": {
+        "source": {
+          "is": {
+            "here": "found"
+          }
+        }
+      }
+    };
+
+    const map = createMapper({ alwaysTransform: false, alwaysSet: true });
+
+    map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here", () => {
+      return "found";
+    });
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+
+  });
+
+});
+
 group("the always modifier", () => {
 
   alwaysSuite.run(lab, { OPTIONS: null });
-  alwaysSuite.run(lab, { });
+  alwaysSuite.run(lab, {});
   alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: false } });
   alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
   alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: true, alwaysSet: false } });
@@ -358,7 +478,7 @@ group("the always modifier", () => {
 group("the existing modifier", () => {
 
   existingSuite.run(lab, { OPTIONS: null });
-  existingSuite.run(lab, { });
+  existingSuite.run(lab, {});
   existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: false } });
   existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
   existingSuite.run(lab, { OPTIONS: { alwaysTransform: true, alwaysSet: false } });
