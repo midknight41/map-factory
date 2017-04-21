@@ -2,6 +2,8 @@ import { expect } from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
 import createMapper from "../lib/index";
+import existingSuite from "./suites/existing-modifier-suite";
+import alwaysSuite from "./suites/always-modifier-suite";
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
@@ -95,7 +97,7 @@ group("when setting options", () => {
 
 });
 
-group("when executing with options set the single source mapper", () => {
+group("when executing with options set, the single source mapper", () => {
 
   lab.test("suppresses a transform when the source value is not present", done => {
 
@@ -261,7 +263,7 @@ group("when executing with options set the single source mapper", () => {
 
 });
 
-group("when executing with options set the multi source mapper", () => {
+group("when executing with options set, the multi source mapper", () => {
 
   lab.test("suppresses a transform when the source values are all not present", done => {
 
@@ -342,3 +344,24 @@ group("when executing with options set the multi source mapper", () => {
   });
 });
 
+group("the always modifier", () => {
+
+  alwaysSuite.run(lab, { OPTIONS: null });
+  alwaysSuite.run(lab, { });
+  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: false } });
+  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
+  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: true, alwaysSet: false } });
+  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
+
+});
+
+group("the existing modifier", () => {
+
+  existingSuite.run(lab, { OPTIONS: null });
+  existingSuite.run(lab, { });
+  existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: false } });
+  existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
+  existingSuite.run(lab, { OPTIONS: { alwaysTransform: true, alwaysSet: false } });
+  existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
+
+});

@@ -19,15 +19,19 @@ export default class Mapper {
 
   }
 
-  registerMapping(mapping) {
+  registerMapping_(mapping) {
 
     this.assignment.push(mapping);
   }
 
+
   map(source) {
 
+    // create a mapping for a single or multiple source field(s) and return the mapping object
+    // the mapping object enables the fluent/chainable interface
+
     const mapping = new Mapping(source, this, this.options);
-    this.registerMapping(mapping);
+    this.registerMapping_(mapping);
 
     return mapping;
 
@@ -35,8 +39,9 @@ export default class Mapper {
 
   each(sourceArray) {
 
+    // validate inputs
     if (!sourceArray) {
-      // This should probably return undefined
+      // TODO: This should probably return undefined
       return null;
     }
 
@@ -44,22 +49,25 @@ export default class Mapper {
       throw new Error("The sourceArray parameter must be an array");
     }
 
+    // iterate over an array of values and map each one
     if (sourceArray.length > 0) {
       return sourceArray.map(item => {
         return this.execute(item, null);
       });
     }
 
-    // This should probably return undefined
+    // TODO: This should probably return undefined
     return null;
   }
 
   execute(source, destination) {
 
+    // validate inputs
     if (source === null || source === undefined) {
       throw new Error("A source object is required");
     }
 
+    // ensure we have a destination object to target
     if (destination === null || destination === undefined) {
       destination = {};
     }
@@ -70,8 +78,14 @@ export default class Mapper {
       const descriptor = this.getTransformDescriptor_(item);
 
       // annoyingly, VS Code's auto format is at odds with eslint
-
       /* eslint-disable indent */
+
+      // map-factory supports 3 modes:
+      // - single source mode -> mapper.map("field1")
+      // - multiple sources mode -> mapper.map(["field1", "field2"])
+      // - or mode -> mapper.map("field1").or("field2")
+
+      // Here we just route the mode to the appropriate logic
       switch (descriptor.mode) {
         case SINGLE_MODE:
           destination = this.processSingleItem_(source, destination, descriptor);
@@ -96,7 +110,7 @@ export default class Mapper {
 
     const sourcePath = item.source;
     let targetPath = item.target;
-    let { transform } = item;
+    let { transform, alwaysSet, alwaysTransform } = item;
     let isCustomTransform = true;
 
     const mode = this.decideMode_(item);
@@ -111,7 +125,7 @@ export default class Mapper {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, isCustomTransform };
+    return { mode, targetPath, sourcePath, transform, isCustomTransform, options: { alwaysSet, alwaysTransform } };
 
   }
 
@@ -131,18 +145,18 @@ export default class Mapper {
 
   }
 
-  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform }) {
+  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, options }) {
 
     // Get source
     let value = this.om.getKeyValue(sourceObject, sourcePath);
 
     // Apply transform - will become optional
-    if (this.exists_(value) || this.options.alwaysTransform === true) {
+    if (this.exists_(value) || options.alwaysTransform === true) {
       value = transform(value);
     }
 
     // Set value on destination object
-    if (this.exists_(value) || this.options.alwaysSet === true) {
+    if (this.exists_(value) || options.alwaysSet === true) {
       return this.om.setKeyValue(destinationObject, targetPath, value);
     }
 
@@ -150,7 +164,7 @@ export default class Mapper {
 
   }
 
-  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform }) {
+  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
 
     // console.log("multi mode", targetPath, sourcePath, transform, isCustomTransform);
 
@@ -173,17 +187,15 @@ export default class Mapper {
       values.push(value);
     }
 
-    // console.log("pre-transform value", values);
     let value;
 
-    // Apply transform - will become optional
-    if (anyValues || this.options.alwaysTransform === true) {
+    // Apply transform if appropriate
+    if (anyValues || options.alwaysTransform === true) {
       value = transform(...values);
     }
-    // console.log("post-transform value", value);
 
     // Set value on destination object
-    if (this.exists_(value) || this.options.alwaysSet === true) {
+    if (this.exists_(value) || options.alwaysSet === true) {
       return this.om.setKeyValue(destinationObject, targetPath, value);
     }
 
@@ -191,7 +203,7 @@ export default class Mapper {
 
   }
 
-  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform }) {
+  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
 
     // console.log("or mode", targetPath, sourcePath, transform, isCustomTransform);
 
