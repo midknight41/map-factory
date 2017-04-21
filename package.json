@@ -12,7 +12,7 @@
     "cover": "istanbul cover ./node_modules/lab/bin/lab ./dist/test --leaks",
     "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "pretest": "npm run build",
-    "test": "lab ./dist/test/ -v -S --assert code",
+    "test": "./node_modules/lab/bin/lab ./dist/test/ -v -S --assert code",
     "pret": "npm run build",
     "t": "./test-one",
     "travis": "npm run test",
