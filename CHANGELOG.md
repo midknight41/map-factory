@@ -1,3 +1,7 @@
+### 1.7.1
+
+Bug-fix for ```always``` and ```existing``` modifiers.
+
 ### 1.7.0
 
 Introduced behaviour modifiers to make map-factory more flexible. See [README](README.md#behaviour) for more details.

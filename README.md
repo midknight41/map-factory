@@ -18,10 +18,11 @@ A simple object mapping utility that makes it easy to map data from one object t
 - [Working with multiple source objects](#dealing-with-multiple-sources-of-data)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
+
 ## How to install
 
 ```
-npm install map-factory
+npm install map-factory -S
 ```
 
 ## Getting Started
