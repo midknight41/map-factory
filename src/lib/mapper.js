@@ -108,10 +108,12 @@ export default class Mapper {
 
   getTransformDescriptor_(item) {
 
+    /* eslint-disable prefer-const */
     const sourcePath = item.source;
     let targetPath = item.target;
     let { transform, alwaysSet, alwaysTransform } = item;
     let isCustomTransform = true;
+    /* eslint-enable prefer-const */
 
     const mode = this.decideMode_(item);
 
@@ -156,17 +158,11 @@ export default class Mapper {
     }
 
     // Set value on destination object
-    if (this.exists_(value) || options.alwaysSet === true) {
-      return this.om.setKeyValue(destinationObject, targetPath, value);
-    }
-
-    return destinationObject;
+    return this.setIfRequired_(destinationObject, targetPath, value, options);
 
   }
 
   processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
-
-    // console.log("multi mode", targetPath, sourcePath, transform, isCustomTransform);
 
     if (isCustomTransform === false) {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
@@ -195,17 +191,11 @@ export default class Mapper {
     }
 
     // Set value on destination object
-    if (this.exists_(value) || options.alwaysSet === true) {
-      return this.om.setKeyValue(destinationObject, targetPath, value);
-    }
-
-    return destinationObject;
+    return this.setIfRequired_(destinationObject, targetPath, value, options);
 
   }
 
   processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
-
-    // console.log("or mode", targetPath, sourcePath, transform, isCustomTransform);
 
     let orValue;
     const sourceArray = sourcePath;
@@ -219,23 +209,29 @@ export default class Mapper {
       }
     }
 
-    // console.log("pre-transform value", orValue);
-
     // no transform
     if (isCustomTransform === false) {
 
-      return this.om.setKeyValue(destinationObject, targetPath, orValue);
+      return this.setIfRequired_(destinationObject, targetPath, orValue, options);
     }
 
     // has a transform
-    const params = [];
-    params.push(orValue);
+    if (this.exists_(orValue) || options.alwaysTransform === true) {
+      orValue = transform(orValue);
+    }
 
-    const result = transform(...params);
+    return this.setIfRequired_(destinationObject, targetPath, orValue, options);
 
-    // console.log("post-transform value", result);
+  }
 
-    return this.om.setKeyValue(destinationObject, targetPath, result);
+  setIfRequired_(destinationObject, targetPath, value, options) {
+
+    if (this.exists_(value) || options.alwaysSet === true) {
+      return this.om.setKeyValue(destinationObject, targetPath, value);
+    }
+
+    return destinationObject;
+
   }
 
   exists_(value) {
