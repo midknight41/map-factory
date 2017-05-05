@@ -1,3 +1,7 @@
+### 1.7.2
+
+Bug-fix to make *or mode* respect behaviour modifiers. 
+
 ### 1.7.1
 
 Bug-fix for ```always``` and ```existing``` modifiers.

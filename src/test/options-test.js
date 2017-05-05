@@ -421,14 +421,12 @@ group("when executing with options set, the multi source mapper", () => {
 
 group("when executing with options set, the or-mode source map", () => {
 
-  lab.test("a transform executes when one source value is present in or mode", done => {
+  lab.test("a transform executes when no sources are present but alwaysTransform is true", done => {
 
     const source = {
       "my": {
         "source": {
-          "is": {
-            "here": "value"
-          }
+          "is": {}
         },
         "other": {
           "source": {
@@ -448,11 +446,104 @@ group("when executing with options set, the or-mode source map", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: true });
+    const map = createMapper({ alwaysTransform: true, alwaysSet: false });
 
     map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here", () => {
       return "found";
     });
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+
+  });
+
+  lab.test("a transform does not execute when no sources are present and alwaysTransform is false", done => {
+    const source = {
+      "my": {
+        "source": {
+          "is": {}
+        },
+        "other": {
+          "source": {
+            "is": {}
+          }
+        }
+      }
+    };
+
+    const expected = {};
+
+    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+
+    map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here", () => {
+      return "whoops";
+    });
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+
+  });
+
+  lab.test("no set is called when no values are present and alwaysSet is false", done => {
+
+    const source = {
+      "my": {
+        "source": {
+          "is": {}
+        },
+        "other": {
+          "source": {
+            "is": {}
+          }
+        }
+      }
+    };
+
+    const expected = {};
+
+    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+
+    map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here");
+
+    const actual = map.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+
+  });
+
+  lab.test("set is called when no values are present but alwaysSet is true", done => {
+
+    const source = {
+      "my": {
+        "source": {
+          "is": {}
+        },
+        "other": {
+          "source": {
+            "is": {}
+          }
+        }
+      }
+    };
+
+    const expected = {
+      "your": {
+        "source": {
+          "is": {}
+        }
+      }
+    };
+    const map = createMapper({ alwaysTransform: false, alwaysSet: true });
+
+    map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here");
 
     const actual = map.execute(source);
 
