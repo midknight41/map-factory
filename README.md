@@ -1,4 +1,6 @@
 # map-factory
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/midknight41/map-factory.svg)](https://greenkeeper.io/)
 [![Coverage Status](https://coveralls.io/repos/github/midknight41/map-factory/badge.svg?branch=master)](https://coveralls.io/github/midknight41/map-factory?branch=master) [![Build](https://api.travis-ci.org/midknight41/map-factory.svg?branch=master)](https://travis-ci.org/midknight41/map-factory) [![Deps](https://david-dm.org/midknight41/map-factory.svg)](https://david-dm.org/midknight41/map-factory#info=dependencies) [![devDependency Status](https://david-dm.org/midknight41/map-factory/dev-status.svg)](https://david-dm.org/midknight41/map-factory#info=devDependencies)
 
 [![NPM](https://nodei.co/npm/map-factory.png?downloads=true)](https://www.npmjs.com/package/map-factory/)
