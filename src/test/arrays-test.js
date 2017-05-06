@@ -17,9 +17,6 @@ notationSuite.run(lab, {
     }
   },
   NO_SOURCE_EXPECTED: {
-    array: {
-      levels: []
-    }
   },
   MODIFY_VALUE: "modified",
   MODIFIED_EXPECTED: {

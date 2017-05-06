@@ -5,9 +5,8 @@ export default function createMapper(options) {
 
   const opts = options || {};
 
-  // v1 will default as below but the reverse will be true in v2
-  opts.alwaysSet = typeof opts.alwaysSet === "boolean" ? opts.alwaysSet : true;
-  opts.alwaysTransform = typeof opts.alwaysTransform === "boolean" ? opts.alwaysTransform : true;
+  opts.alwaysSet = typeof opts.alwaysSet === "boolean" ? opts.alwaysSet : false;
+  opts.alwaysTransform = typeof opts.alwaysTransform === "boolean" ? opts.alwaysTransform : false;
   opts.experimental = typeof opts.experimental === "boolean" ? opts.experimental : false;
 
   const me = {

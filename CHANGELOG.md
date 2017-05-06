@@ -1,3 +1,38 @@
+### 2.0.0
+
+In ```v1``` the default behaviour was the equivalent of setting the options as ```{alwaysTransform: true, alwaysSet: true}```. In ```v2``` the default behaviour is now the equivalent of setting the options as ```{alwaysTransform: false, alwaysSet: false}```. 
+
+We feel these are generally better defaults. This is a **breaking** change.
+
+If you prefer the ```v1``` behaviour you just need to change your code as follows:
+
+#### Old Code
+```js
+const mapper = createMapper();
+```
+
+#### New Code
+```js
+const options = {
+  alwaysTransform: true,
+  alwaysSet: true
+};
+
+const mapper = createMapper(options);
+```
+
+Additionally, the ```v1``` behaviour would consider a null an acceptable value if a ```?``` was appended to the ```to()``` field. In ```v2``` this behaviour will only work in combination with the ```always``` flag.
+
+#### Old Code
+```js
+map("foo.bar").to("bar.bar?");
+```
+
+#### New Code
+```js
+map("foo.bar").always.to("bar.bar?");
+```
+
 ### 1.7.2
 
 Bug-fix to make *or mode* respect behaviour modifiers. 

@@ -6,6 +6,8 @@ const SINGLE_MODE = 0;
 const MULTI_MODE = 1;
 const OR_MODE = 2;
 
+const isValueArray = new RegExp(/^\[\]|\[\d+\]/);
+
 export default class Mapper {
 
   constructor(opts, om) {
@@ -230,9 +232,20 @@ export default class Mapper {
       return this.om.setKeyValue(destinationObject, targetPath, value);
     }
 
+    if (this.isEmptyObject_(destinationObject) && isValueArray.exec(targetPath) !== null) {
+      return [];
+    }
+
     return destinationObject;
 
   }
+
+  isEmptyObject_(object) {
+    return typeof object === "object" &&
+      Array.isArray(object) === false &&
+      Object.keys(object).length === 0;
+  }
+
 
   exists_(value) {
     return (value !== null && value !== undefined);

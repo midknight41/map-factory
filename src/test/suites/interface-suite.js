@@ -975,7 +975,7 @@ suite.declare((lab, variables) => {
 
       const map = createSut();
 
-      map("foo.bar").to("bar.bar?");
+      map("foo.bar").always.to("bar.bar?");
       map("a").to("foo.a");
 
       const result = map.execute(obj);
