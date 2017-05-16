@@ -18,8 +18,8 @@ group("when setting options", () => {
     const mapping = map("a");
 
     expect(mapping).to.be.an.object();
-    expect(mapping.alwaysSet).to.be.true();
-    expect(mapping.alwaysTransform).to.be.true();
+    expect(mapping.alwaysSet).to.be.false();
+    expect(mapping.alwaysTransform).to.be.false();
 
     return done();
 
@@ -32,8 +32,8 @@ group("when setting options", () => {
     const mapping = map("a");
 
     expect(mapping).to.be.an.object();
-    expect(mapping.alwaysSet).to.be.true();
-    expect(mapping.alwaysTransform).to.be.true();
+    expect(mapping.alwaysSet).to.be.false();
+    expect(mapping.alwaysTransform).to.be.false();
 
     return done();
 
@@ -41,13 +41,13 @@ group("when setting options", () => {
 
   lab.test("sets the alwaysTransform option correctly", done => {
 
-    const map = createMapper({ alwaysTransform: false });
+    const map = createMapper({ alwaysTransform: true });
 
     const mapping = map("a");
 
     expect(mapping).to.be.an.object();
-    expect(mapping.alwaysSet).to.be.true();
-    expect(mapping.alwaysTransform).to.be.false();
+    expect(mapping.alwaysSet).to.be.false();
+    expect(mapping.alwaysTransform).to.be.true();
 
     return done();
 
@@ -55,13 +55,13 @@ group("when setting options", () => {
 
   lab.test("sets the alwaysSet option correctly", done => {
 
-    const map = createMapper({ alwaysSet: false });
+    const map = createMapper({ alwaysSet: true });
 
     const mapping = map("a");
 
     expect(mapping).to.be.an.object();
-    expect(mapping.alwaysSet).to.be.false();
-    expect(mapping.alwaysTransform).to.be.true();
+    expect(mapping.alwaysSet).to.be.true();
+    expect(mapping.alwaysTransform).to.be.false();
 
     return done();
 

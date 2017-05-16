@@ -62,20 +62,20 @@ const result = mapper.execute(source);
 
 By default, **map-factory** will: 
 
-- always call a transform if one has been provided even if no source value was found in the source object.
-- always create a nested structure even if no source value was found on the source object. 
+- only call a transform (if one has been provided) if a source value was found in the source object.
+- only create a nested structure if a source value was found on the source object. 
 
 While this default is good some use cases it is not suitable for all use cases. To cater for this, behaviour modifiers are available.
 
 ### Modify default behaviour
 
-The ```createMapper()``` function now takes an (optional) options parameter to change the default behaviour.
+The ```createMapper()``` function takes an (optional) options parameter that will override the default behaviour.
 
-- **alwaysTransform: boolean** 
+- **alwaysTransform: boolean**
   - if *true* then a transform will always be called even if the source value was not available on the source object.
   - if *false* then a transform will only be called if the source value was available on the source object.
 
-- **alwaysSet: boolean** 
+- **alwaysSet: boolean**
   - if *true* then nested structure will be created even if the source value was not available on the source object.
   - if *false* then structure will only be create if the source value was available on the source object.
 
@@ -83,20 +83,20 @@ The ```createMapper()``` function now takes an (optional) options parameter to c
 const createMapper = require("map-factory");
 
 const options = {
-  alwaysTransform: false,
-  alwaysSet: false
+  alwaysTransform: true,
+  alwaysSet: true
 };
 
 const mapper = createMapper(options);
 ```
 ### Modify behaviour on a single mapping
 
-Additionally, you can also modify the behaviour on an individual mapping by using the ```always``` and ```existing``` modifier on the mapping like this:
+Additionally, you can also modify the behaviour on an individual mapping by using the ```always``` or ```existing``` modifiers on the mapping like this:
 
 ```js
 const createMapper = require("map-factory");
 
-const mapper = createMapper(options);
+const mapper = createMapper();
 
 mapper
   .map("a").always.to("b")

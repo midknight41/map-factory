@@ -54,12 +54,26 @@ suite.declare((lab, variables) => {
 
       });
 
-      lab.test("the target field does get created with a modifying transform", done => {
+      lab.test("the target field does not get created with a modifying transform", done => {
 
         const mapper = createSut();
 
         const actual = mapper
           .map(GET_ITEM).to(SET_ITEM, () => MODIFY_VALUE)
+          .execute({});
+
+        expect(actual).to.equal(NO_SOURCE_EXPECTED);
+
+        return done();
+
+      });
+
+      lab.test("the target field does get created with a modifying transform with always flag", done => {
+
+        const mapper = createSut();
+
+        const actual = mapper
+          .map(GET_ITEM).always.to(SET_ITEM, () => MODIFY_VALUE)
           .execute({});
 
         expect(actual).to.equal(MODIFIED_EXPECTED);
@@ -82,7 +96,21 @@ suite.declare((lab, variables) => {
 
       });
 
-      lab.test("the target field does get created for an array source with a modifying transform", done => {
+      lab.test("the target field does get created for an array source with a modifying transform with always flag", done => {
+
+        const mapper = createSut();
+
+        const actual = mapper
+          .map([GET_ITEM]).always.to(SET_ITEM, () => MODIFY_VALUE)
+          .execute({});
+
+        expect(actual).to.equal(MODIFIED_EXPECTED);
+
+        return done();
+
+      });
+
+      lab.test("the target field does not get created for an array source with a modifying transform", done => {
 
         const mapper = createSut();
 
@@ -90,7 +118,7 @@ suite.declare((lab, variables) => {
           .map([GET_ITEM]).to(SET_ITEM, () => MODIFY_VALUE)
           .execute({});
 
-        expect(actual).to.equal(MODIFIED_EXPECTED);
+        expect(actual).to.equal(NO_SOURCE_EXPECTED);
 
         return done();
 

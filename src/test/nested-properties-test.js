@@ -20,7 +20,6 @@ suite.run(lab, {
     }
   },
   NO_SOURCE_EXPECTED: {
-    field: {}
   },
   MODIFY_VALUE: "modified",
   MODIFIED_EXPECTED: {
