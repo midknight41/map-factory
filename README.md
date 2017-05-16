@@ -274,7 +274,7 @@ assert.deepEqual(actual, {
 ### Transformations
 More complicated transformations can be handled by providing a function. The selected source data will be passed to the function.
 
-Note: If you supply a transform it will **always get executed** even if the source field does not exist.
+It is worth looking at the [behaviour](#behaviour) section to understand when a transform will be called.
 
 ```js
 const createMapper = require("map-factory");
