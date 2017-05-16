@@ -1,3 +1,7 @@
+### 2.0.1
+
+Screwed up with publishing 2.0.0. This fixed that.
+
 ### 2.0.0
 
 In ```v1``` the default behaviour was the equivalent of setting the options as ```{alwaysTransform: true, alwaysSet: true}```. In ```v2``` the default behaviour is now the equivalent of setting the options as ```{alwaysTransform: false, alwaysSet: false}```. 
