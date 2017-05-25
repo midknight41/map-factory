@@ -1,3 +1,11 @@
+### 2.0.3
+
+Removed some debugging code that was accidentally left in.
+
+### 2.0.2
+
+Made the babel output ES5 to allow use in the browser.
+
 ### 2.0.1
 
 Screwed up with publishing 2.0.0. This fixed that.
