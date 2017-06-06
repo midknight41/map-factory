@@ -2,32 +2,7 @@
 
 Exposes the main two underlying functions: ```getValue``` and ```setValue```.
 
-```js
-const { getValue, setValue } = require("map-factory");
-
-const obj = {
-  my: {
-    deep: {
-      value: "here"
-    }
-  }
-};
-
-const value = getValue(obj, "my.deep.value");
-assert(value, "here");
-
-const expected = {
-  my: {
-    example: {
-      set: "done"
-    }
-  }
-};
-
-const actual = setValue({}, "my.example.set", "done"})
-assert(actual, expected);
-
-```
+See [README](README.md#extras) for more details.
 
 ### 2.0.3
 
