@@ -1,12 +1,14 @@
 import { expect } from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
+import assert from "assert";
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
 const group = testing.createExperiment("map-factory");
 
 const createMapper = require("../lib/index");
+const { getValue, setValue } = createMapper;
 
 group("examples", () => {
 
@@ -107,7 +109,7 @@ group("examples", () => {
 
     map("person.email").to("user.login");
     map("account.id").to("user.accountId");
-    map("account.entitlements.[].name").to("user.entitlements");
+    map("account.entitlements[].name").to("user.entitlements");
 
     const result = map.execute(source);
 
@@ -150,7 +152,7 @@ group("examples", () => {
 
     const map = createMapper();
 
-    map("articles.[0]").to("topStory");
+    map("articles[0]").to("topStory");
 
     const result = map.execute(source);
 
@@ -231,7 +233,7 @@ group("examples", () => {
 
     const map = createMapper();
 
-    map("articles.[0]").to("topStory");
+    map("articles[0]").to("topStory");
     map("articles").to("otherStories", articles => {
 
       // We don't want to include the top story
@@ -457,6 +459,103 @@ group("examples", () => {
     expect(result).to.equal(expected);
 
     return done();
+  });
+
+  lab.test("getValue example", done => {
+
+    //    const { getValue, setValue } = require("map-factory");
+
+    const obj = {
+      my: {
+        deep: {
+          value: "here"
+        }
+      }
+    };
+
+    const value = getValue(obj, "my.deep.value");
+    expect(value).to.equal("here");
+
+
+    return done();
+
+  });
+
+  lab.test("setValue example", done => {
+
+    const expected = {
+      my: {
+        example: {
+          set: "done"
+        }
+      }
+    };
+
+    const actual = setValue({}, "my.example.set", "done");
+    expect(actual).to.equal(expected);
+
+    return done();
+
+  });
+
+});
+
+group("example - cheatsheet", () => {
+
+  lab.test("cheatsheet", done => {
+
+    const source = {
+      my: {
+        deep: {
+          object: { name: "john" },
+          value: "abc",
+          array: [
+            { value: 1 },
+            { value: 2 },
+            { value: 3 }
+          ]
+        },
+        other: {
+          array: [4, 5, 6]
+        }
+      }
+    };
+
+    const mapper = createMapper();
+
+    mapper
+      .map("my.deep.value").to("example.basic.value")
+      .map("my.deep.object").to("example.basic.object")
+      .map("my.deep.array[0]").to("example.arrays.first")
+      .map("my.deep.array").to("example.arrays.items")
+      .map("my.deep.array[].value").to("example.arrays.values")
+      .map("my.other.array").to("example.arrays.valueArray");
+
+    const actual = mapper.execute(source);
+
+    const expected = {
+      example: {
+        basic: {
+          value: "abc",
+          object: { name: "john" }
+        },
+        arrays: {
+          first: { value: 1 },
+          items: [
+            { value: 1 },
+            { value: 2 },
+            { value: 3 }
+          ],
+          values: [1, 2, 3],
+          valueArray: [4, 5, 6]
+        }
+      }
+    };
+
+    assert.deepEqual(actual, expected);
+
+    return done();
+
   });
 
 });

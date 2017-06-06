@@ -1,3 +1,9 @@
+### 2.1.0
+
+Exposes the main two underlying functions: ```getValue``` and ```setValue```.
+
+See [README](README.md#extras) for more details.
+
 ### 2.0.3
 
 Removed some debugging code that was accidentally left in.

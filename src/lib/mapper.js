@@ -1,6 +1,6 @@
 import Mapping from "./mapping";
-// import getKeyValue from "./object-mapper/get-key-value";
-// import setKeyValue from "./object-mapper/set-key-value";
+// import getValue from "./object-mapper/get-key-value";
+// import setValue from "./object-mapper/set-key-value";
 
 const SINGLE_MODE = 0;
 const MULTI_MODE = 1;
@@ -152,7 +152,7 @@ export default class Mapper {
   processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, options }) {
 
     // Get source
-    let value = this.om.getKeyValue(sourceObject, sourcePath);
+    let value = this.om.getValue(sourceObject, sourcePath);
 
     // Apply transform - will become optional
     if (this.exists_(value) || options.alwaysTransform === true) {
@@ -176,7 +176,7 @@ export default class Mapper {
     // Get source
     for (const fromKey of sourcePath) {
 
-      const value = this.om.getKeyValue(sourceObject, fromKey);
+      const value = this.om.getValue(sourceObject, fromKey);
 
       if (this.exists_(value)) {
         anyValues = true;
@@ -204,7 +204,7 @@ export default class Mapper {
 
     for (const sourceKey of sourceArray) {
 
-      orValue = this.om.getKeyValue(sourceObject, sourceKey);
+      orValue = this.om.getValue(sourceObject, sourceKey);
 
       if (orValue !== null && orValue !== undefined) {
         break;
@@ -229,7 +229,7 @@ export default class Mapper {
   setIfRequired_(destinationObject, targetPath, value, options) {
 
     if (this.exists_(value) || options.alwaysSet === true) {
-      return this.om.setKeyValue(destinationObject, targetPath, value);
+      return this.om.setValue(destinationObject, targetPath, value);
     }
 
     if (this.isEmptyObject_(destinationObject) && isValueArray.exec(targetPath) !== null) {

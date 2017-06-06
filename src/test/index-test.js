@@ -7,6 +7,7 @@ const testing = getHelper(lab);
 const group = testing.createExperiment("map-factory");
 
 const createMapper = require("../lib/index");
+const { getValue, setValue } = require("../lib/index");
 
 group("non-import compatibility", () => {
 
@@ -51,4 +52,21 @@ group("non-import compatibility", () => {
 
     return done();
   });
+
+  lab.test("getValue is exported", done => {
+
+    expect(getValue).to.be.a.function();
+
+    return done();
+
+  });
+
+  lab.test("setValue is exported", done => {
+
+    expect(setValue).to.be.a.function();
+
+    return done();
+
+  });
+
 });
