@@ -9,7 +9,7 @@
  * @constructor
  * @returns {*}
  */
-function GetKeyValue(fromObject, fromKey) {
+function getValue(fromObject, fromKey) {
   var regDot = /\./g
     , keys
     , key
@@ -41,7 +41,7 @@ function GetKeyValue(fromObject, fromKey) {
 
   return result;
 }
-module.exports = GetKeyValue;
+module.exports = getValue;
 
 /**
  * Get the value of key within passed object, considering if there is a array or object

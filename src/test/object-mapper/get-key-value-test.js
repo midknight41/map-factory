@@ -6,9 +6,9 @@ const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
 const group = testing.createExperiment("map-factory", "object-mapper");
 
-import getKeyValue from "../../lib/object-mapper/get-key-value";
+import getValue from "../../lib/object-mapper/get-key-value";
 
-group("The getKeyValue() method", () => {
+group("The getValue() method", () => {
 
   lab.test("get value - simple", done => {
     const key = "foo";
@@ -19,7 +19,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "bar";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -35,7 +35,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "baz";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -47,7 +47,7 @@ group("The getKeyValue() method", () => {
 
     const expected = ["bar"];
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -59,7 +59,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "bar";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -77,7 +77,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "bar";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -93,7 +93,7 @@ group("The getKeyValue() method", () => {
 
     const expected = ["bar"];
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -109,7 +109,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "foo";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -127,7 +127,7 @@ group("The getKeyValue() method", () => {
 
     const expected = ["bar"];
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -145,7 +145,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "bar";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -165,7 +165,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "bar";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -191,7 +191,7 @@ group("The getKeyValue() method", () => {
       }]
     }];
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -215,7 +215,7 @@ group("The getKeyValue() method", () => {
 
     const expected = ["bar", "const"];
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();
@@ -235,7 +235,7 @@ group("The getKeyValue() method", () => {
 
     const expected = "bar";
 
-    const result = getKeyValue(obj, key);
+    const result = getValue(obj, key);
 
     expect(result).to.equal(expected);
     return done();

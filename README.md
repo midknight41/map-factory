@@ -58,6 +58,76 @@ mapper
 const result = mapper.execute(source);
 ```
 
+### Syntax
+
+Below are some examples of the syntax used to get and set data with *map-factory*. More details examples can be found in the [examples](#examples) section.
+
+Query | Description | Result
+--- | ---: | ---:
+my.deep.object | Select a nested object | ```{ name: "john" }```
+my.deep.value | Select the value of a single property on a nested object | ```"abc"```
+my.deep.array | Select all items in an array of objects | ```[{ value: 1 }, { value: 2 }, { value: 3 }]```
+my.deep.array[].value | Select the ```value``` property from all items in an array | ```[1,2,3]```
+my.other.array | Select all items from a value array | ```[4,5,6]```
+my.deep.array[0] | Select an item in an array by index | ```1```
+
+### Basic Example
+```js
+
+const createMapper = require("map-factory");
+const assert = require("assert");
+
+const source = {
+  my: {
+    deep: {
+      object: { name: "john" },
+      value: "abc",
+      array: [
+        { value: 1 },
+        { value: 2 },
+        { value: 3 }
+      ]
+    },
+    other: {
+      array: [4, 5, 6]
+    }
+  }
+};
+
+const mapper = createMapper();
+
+mapper
+  .map("my.deep.value").to("example.basic.value")
+  .map("my.deep.object").to("example.basic.object")
+  .map("my.deep.array[0]").to("example.arrays.first")
+  .map("my.deep.array").to("example.arrays.items")
+  .map("my.deep.array[].value").to("example.arrays.values")
+  .map("my.other.array").to("example.arrays.valueArray");
+
+const actual = mapper.execute(source);
+
+const expected = {
+  example: {
+    basic: {
+      value: "abc",
+      object: { name: "john" }
+    },
+    arrays: {
+      first: { value: 1 },
+      items: [
+        { value: 1 },
+        { value: 2 },
+        { value: 3 }
+      ],
+      values: [1, 2, 3],
+      valueArray: [4, 5, 6]
+    }
+  }
+};
+
+assert.deepEqual(actual, expected);
+```
+
 ## Behaviour
 
 By default, **map-factory** will: 
@@ -105,6 +175,39 @@ mapper
 
 - The ```always``` modifier is the equivalent of setting the ```alwaysTransform``` **and** ```alwaysSet``` options to true.
 - The ```existing``` modifier is the equivalent of setting the ```alwaysTransform``` **and** ```alwaysSet``` options to false.
+
+## Extras
+
+The core functions that power **map-factory** can be used directly if required.
+
+```js
+const { getValue, setValue } = require("map-factory");
+
+const obj = {
+  my: {
+    deep: {
+      value: "here"
+    }
+  }
+};
+
+const value = getValue(obj, "my.deep.value");
+assert.equal(value, "here");
+
+const expected = {
+  my: {
+    example: {
+      set: "done"
+    }
+  }
+};
+
+const actual = setValue({}, "my.example.set", "done");
+assert.deepEqual(actual, expected);
+
+```
+
+
 
 ## Examples
 
@@ -188,7 +291,7 @@ const source = {
 const map = createMapper();
 map("person.email").to("user.login");
 map("account.id").to("user.accountId");
-map("account.entitlements.[].name").to("user.entitlements");
+map("account.entitlements[].name").to("user.entitlements");
 
 const result = map.execute(source);
 
@@ -225,7 +328,7 @@ const source = {
 };
 
 const map = createMapper();
-map("articles.[0]").to("topStory");
+map("articles[0]").to("topStory");
 
 const result = map.execute(source);
 
@@ -298,7 +401,7 @@ const source = {
 };
 
 const map = createMapper();
-map("articles.[0]").to("topStory");
+map("articles[0]").to("topStory");
 map("articles").to("otherStories", articles => {
 
   if (articles) {

@@ -7,7 +7,7 @@
  * @param fromValue
  * @returns {*|{}}
  */
-function SetKeyValue(baseObject, destinationKey, fromValue) {
+function setValue(baseObject, destinationKey, fromValue) {
   const regDot = /\./g;
 
   const keys = destinationKey.split(regDot);
@@ -15,7 +15,7 @@ function SetKeyValue(baseObject, destinationKey, fromValue) {
 
   return _setValue(baseObject, key[0], keys, fromValue);
 }
-module.exports = SetKeyValue;
+module.exports = setValue;
 
 /**
  * Set the value within the passed object, considering if is a array or object set

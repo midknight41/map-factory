@@ -6,9 +6,9 @@ const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
 const group = testing.createExperiment("map-factory", "object-mapper");
 
-import setKeyValue from "../../lib/object-mapper/set-key-value";
+import setValue from "../../lib/object-mapper/set-key-value";
 
-group("The setKeyValue() method", () => {
+group("The setValue() method", () => {
 
   lab.test("sets correct value and creates base object", done => {
     const key = "foo";
@@ -18,7 +18,7 @@ group("The setKeyValue() method", () => {
       foo: "bar"
     };
 
-    const result = setKeyValue(null, key, value);
+    const result = setValue(null, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -36,7 +36,7 @@ group("The setKeyValue() method", () => {
       foo: "bar"
     };
 
-    const result = setKeyValue(base, key, value);
+    const result = setValue(base, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -47,7 +47,7 @@ group("The setKeyValue() method", () => {
 
     const expected = ["bar"];
 
-    const result = setKeyValue(null, key, value);
+    const result = setValue(null, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -59,7 +59,7 @@ group("The setKeyValue() method", () => {
     const base = ["foo"];
     const expected = ["bar"];
 
-    const result = setKeyValue(base, key, value);
+    const result = setValue(base, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -70,7 +70,7 @@ group("The setKeyValue() method", () => {
 
     const expected = ["bar"];
 
-    const result = setKeyValue(null, key, value);
+    const result = setValue(null, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -82,7 +82,7 @@ group("The setKeyValue() method", () => {
     const base = ["foo"];
     const expected = ["bar"];
 
-    const result = setKeyValue(base, key, value);
+    const result = setValue(base, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -93,7 +93,7 @@ group("The setKeyValue() method", () => {
 
     const expected = [, "bar"];
 
-    const result = setKeyValue(null, key, value);
+    const result = setValue(null, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -109,7 +109,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -122,7 +122,7 @@ group("The setKeyValue() method", () => {
       foo: "bar"
     }];
 
-    const result = setKeyValue(null, key, value);
+    const result = setValue(null, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -140,7 +140,7 @@ group("The setKeyValue() method", () => {
       }
     ];
 
-    const result = setKeyValue(null, key, value);
+    const result = setValue(null, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -153,7 +153,7 @@ group("The setKeyValue() method", () => {
       foo: "bar"
     }];
 
-    const result = setKeyValue(null, key, value);
+    const result = setValue(null, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -170,7 +170,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -185,7 +185,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -202,7 +202,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -227,7 +227,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue(base, key, value);
+    const result = setValue(base, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -244,7 +244,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -264,7 +264,7 @@ group("The setKeyValue() method", () => {
       ]
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -286,7 +286,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -312,7 +312,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -331,7 +331,7 @@ group("The setKeyValue() method", () => {
       }]
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
@@ -350,7 +350,7 @@ group("The setKeyValue() method", () => {
       }
     };
 
-    const result = setKeyValue({}, key, value);
+    const result = setValue({}, key, value);
 
     expect(result).to.equal(expected);
     return done();
