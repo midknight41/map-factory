@@ -62,6 +62,27 @@ const result = mapper.execute(source);
 
 Below are some examples of the syntax used to get and set data with *map-factory*. More details examples can be found in the [examples](#examples) section.
 
+Consider this object:
+
+```js
+const source = {
+  my: {
+    deep: {
+      object: { name: "john" },
+      value: "abc",
+      array: [
+        { value: 1 },
+        { value: 2 },
+        { value: 3 }
+      ]
+    },
+    other: {
+      array: [4, 5, 6]
+    }
+  }
+};
+```
+
 Query | Description | Result
 --- | ---: | ---:
 my.deep.object | Select a nested object | ```{ name: "john" }```
