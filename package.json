@@ -23,7 +23,8 @@
     "prepatch": "npm run test",
     "patch": "npm version patch -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
     "prebenchmark": "npm run build",
-    "benchmark": "node ./dist/benchmark/mapper-vs-custom.js"
+    "benchmark": "node ./dist/benchmark/mapper-vs-custom.js",
+    "v": "npm show ./ version"
   },
   "bugs": {
     "url": "https://github.com/midknight41/map-factory/issues"
