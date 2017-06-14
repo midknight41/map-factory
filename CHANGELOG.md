@@ -1,3 +1,7 @@
+### 2.1.1
+
+Put some dev dependencies back where they belong.
+
 ### 2.1.0
 
 Exposes the main two underlying functions: ```getValue``` and ```setValue```.
