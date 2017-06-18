@@ -1,3 +1,4 @@
+import Q from "q";
 import Mapping from "./mapping";
 // import getValue from "./object-mapper/get-key-value";
 // import setValue from "./object-mapper/set-key-value";
@@ -106,6 +107,11 @@ export default class Mapper {
     }
 
     return destination;
+  }
+
+  executeAsync(source, destination) {
+    return Q.resolve()
+      .then(() => this.execute(source, destination));
   }
 
   getTransformDescriptor_(item) {
