@@ -29,6 +29,10 @@ export default function createMapper(options) {
     return this.mapper.execute(source, destination);
   }.bind(me);
 
+  mapper.executeAsync = function (source, destination) {
+    return this.mapper.executeAsync(source, destination);
+  }.bind(me);
+
   mapper.each = function (sourceArray) {
     return this.mapper.each(sourceArray);
   }.bind(me);

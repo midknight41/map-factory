@@ -71,6 +71,10 @@ export default class Mapping {
     return this.mapper.execute(source, destination);
   }
 
+  executeAsync(source, destination) {
+    return this.mapper.executeAsync(source, destination);
+  }
+
   each(sourceArray) {
     return this.mapper.each(sourceArray);
   }

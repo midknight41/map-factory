@@ -9,6 +9,7 @@ export default class Mapping implements IMapping {
   map(stringOrArray: string | string[]): any;
   or(source: string): this;
   execute(source?: any, destination?: any): any;
+  executeAsync(source?: any, destination?: any): any;
   each(sourceArray: any): any;
   to(target: string, fnc?: Function): any;
   always: IMapping;
