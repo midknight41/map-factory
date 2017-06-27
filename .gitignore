@@ -71,6 +71,7 @@ lib/*.js.map
 lib/*.js
 test/*.js.map
 test/*.js
+.idea
 
 
 #ncrunch
