@@ -1,3 +1,7 @@
+### 2.1.2
+
+Corrected TypeScript definitions.
+
 ### 2.1.1
 
 Put some dev dependencies back where they belong.
