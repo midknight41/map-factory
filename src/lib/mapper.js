@@ -1,4 +1,3 @@
-import Q from "q";
 import Mapping from "./mapping";
 // import getValue from "./object-mapper/get-key-value";
 // import setValue from "./object-mapper/set-key-value";
@@ -110,7 +109,7 @@ export default class Mapper {
   }
 
   executeAsync(source, destination) {
-    return Q.resolve()
+    return Promise.resolve()
       .then(() => this.execute(source, destination));
   }
 

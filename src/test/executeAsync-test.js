@@ -12,16 +12,16 @@ const expected = {
 };
 let mapper;
 
-describe("Execute Async functionality of the mapper", function () {
+describe("Execute Async functionality of the mapper", () => {
 
-  beforeEach(function (done) {
+  beforeEach(done => {
     mapper = createMapper();
     done();
   });
 
-  describe("when execute async is called from the mapper instance", function () {
+  describe("when execute async is called from the mapper instance", () => {
 
-    it("should return a resolved promise with the desired result", function (done) {
+    it("should return a resolved promise with the desired result", done => {
       mapper.map("foo");
       mapper.executeAsync(source)
         .then(function (actual) {
@@ -31,9 +31,9 @@ describe("Execute Async functionality of the mapper", function () {
     });
   });
 
-  describe("when execute async is called from the default function", function () {
+  describe("when execute async is called from the default function", () => {
 
-    it("should return a resolved promise with the desired result", function (done) {
+    it("should return a resolved promise with the desired result", done => {
       mapper("foo");
       mapper.executeAsync(source)
         .then(function (actual) {
@@ -43,9 +43,9 @@ describe("Execute Async functionality of the mapper", function () {
     });
   });
 
-  describe("when execute async is called from the chain", function () {
+  describe("when execute async is called from the chain", () => {
 
-    it("should return a resolved promise with the desired result", function (done) {
+    it("should return a resolved promise with the desired result", done => {
       mapper("foo").executeAsync(source)
         .then(function (actual) {
           expect(actual).to.equal(expected);
