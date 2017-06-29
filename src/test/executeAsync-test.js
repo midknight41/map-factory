@@ -24,7 +24,7 @@ describe("Execute Async functionality of the mapper", () => {
     it("should return a resolved promise with the desired result", done => {
       mapper.map("foo");
       mapper.executeAsync(source)
-        .then(function (actual) {
+        .then(actual => {
           expect(actual).to.equal(expected);
           done();
         });
@@ -34,10 +34,11 @@ describe("Execute Async functionality of the mapper", () => {
   describe("when execute async is called from the default function", () => {
 
     it("should return a resolved promise with the desired result", done => {
-      mapper("foo");
-      mapper.executeAsync(source)
-        .then(function (actual) {
-          expect(actual).to.equal(expected);
+      mapper
+        .map("foo").to("bar")
+        .executeAsync(source)
+        .then(actual => {
+          expect(actual).to.equal({"bar": "bar"});
           done();
         });
     });
@@ -47,7 +48,7 @@ describe("Execute Async functionality of the mapper", () => {
 
     it("should return a resolved promise with the desired result", done => {
       mapper("foo").executeAsync(source)
-        .then(function (actual) {
+        .then(actual => {
           expect(actual).to.equal(expected);
           done();
         });
