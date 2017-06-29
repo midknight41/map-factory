@@ -10,6 +10,7 @@ export interface IMapFactory {
     (stringOrArray: string | string[]): IMapping;
     map(stringOrArray: string | string[]): IMapping;
     execute(source: any, destination?: any): any;
+    executeAsync(source: any, destination?: any): Promise<any>;
     each(sourceArray: any[]): any;
 }
 export interface IMapping {
@@ -21,6 +22,7 @@ export interface IMapping {
     map(stringOrArray: string | string[]): IMapping;
     or(source: string): any;
     execute(source: any, destination?: any): any;
+    executeAsync(source: any, destination?: any): Promise<any>;
     each(sourceArray: any[]): any;
 }
 export interface IOptions {

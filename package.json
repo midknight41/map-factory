@@ -44,10 +44,10 @@
   ],
   "author": "Chad Macey <chad_macey@hotmail.com>",
   "contributors": [
-    "Chad Macey <chad_macey@hotmail.com>"
+    "Chad Macey <chad_macey@hotmail.com>",
+    "Simranjeet Singh <simranjeet2589@gmail.com>"
   ],
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.22.2",
     "babel-eslint": "^7.2.3",

@@ -108,6 +108,11 @@ export default class Mapper {
     return destination;
   }
 
+  executeAsync(source, destination) {
+    return Promise.resolve()
+      .then(() => this.execute(source, destination));
+  }
+
   getTransformDescriptor_(item) {
 
     /* eslint-disable prefer-const */
