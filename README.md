@@ -90,7 +90,7 @@ my.deep.value | Select the value of a single property on a nested object | ```"a
 my.deep.array | Select all items in an array of objects | ```[{ value: 1 }, { value: 2 }, { value: 3 }]```
 my.deep.array[].value | Select the ```value``` property from all items in an array | ```[1,2,3]```
 my.other.array | Select all items from a value array | ```[4,5,6]```
-my.deep.array[0] | Select an item in an array by index | ```1```
+my.deep.array[0] | Select an item in an array by index | ```{ value: 1 }```
 
 ### Basic Example
 ```js
@@ -393,6 +393,23 @@ assert.deepEqual(actual, {
   two: [{item: "a" }, {item: "b" }, {item: "c" }],
   three: [{item: "a" }, {item: "b" }, {item: "c" }]
 });
+```
+
+If you are using using Promises with **map-factory** you can use ```executeAsync``` which returns a promise.
+
+```js
+const createMapper = require("map-factory");
+
+const mapper = createMapper();
+
+mapper
+  .map("sourceField").to("source.field")
+  .map("sourceId").to("source.id");
+
+mapper.executeAsync(source)
+  .then(result = > {
+    console.log(result);
+  });
 ```
 
 ### Transformations

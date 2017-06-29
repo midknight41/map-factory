@@ -1,8 +1,8 @@
 import * as Lab from "lab";
-import {expect} from "code";
+import { expect, fail } from "code";
 import createMapper from "../lib";
 
-const {describe, it, beforeEach} = exports.lab = Lab.script();
+const { describe, it, beforeEach } = exports.lab = Lab.script();
 const source = {
   "foo": "bar",
   "bar": "foo"
@@ -29,6 +29,21 @@ describe("Execute Async functionality of the mapper", () => {
           done();
         });
     });
+
+    it("should reject when an error is thrown", done => {
+      mapper.map("foo");
+      mapper.executeAsync(null)
+        .then(() => {
+
+          fail("unexpected success");
+        })
+        .catch(error => {
+          expect(error).to.be.an.error();
+          return done();
+        });
+    });
+
+
   });
 
   describe("when execute async is called from the default function", () => {
@@ -38,7 +53,7 @@ describe("Execute Async functionality of the mapper", () => {
         .map("foo").to("bar")
         .executeAsync(source)
         .then(actual => {
-          expect(actual).to.equal({"bar": "bar"});
+          expect(actual).to.equal({ "bar": "bar" });
           done();
         });
     });

@@ -1,3 +1,7 @@
+### 2.2.0
+
+Added ```executeAsync()``` to the mapper which will return a Promise.
+
 ### 2.1.2
 
 Corrected TypeScript definitions.

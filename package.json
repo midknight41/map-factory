@@ -56,7 +56,6 @@
     "code": "^4.1.0",
     "coveralls": "^2.11.16",
     "eslint": "^4.0.0",
-    "gently": "^0.10.0",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
     "lab": "^14.0.1",
