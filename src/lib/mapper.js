@@ -178,11 +178,7 @@ export default class Mapper {
     // default transformations
     if (this.exists_(value) && options.defaultTransformations.length > 0) {
       options.defaultTransformations.map(item => {
-        if (Array.isArray(value)) {
-          value = value.map(val => item(val));
-        } else {
-          value = item(value);
-        }
+        value = item(value);
       });
     }
 
@@ -222,12 +218,7 @@ export default class Mapper {
     // default transformations
     if (anyValues && options.defaultTransformations.length > 0) {
       options.defaultTransformations.map(item => {
-        values = values.map(val => {
-          if (typeof val === "object" && !Array.isArray(val)) {
-            return item(val);
-          }
-          return val;
-        });
+        values = item(values);
       });
     }
 

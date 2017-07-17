@@ -1,4 +1,5 @@
 import lodash from "lodash";
+import Joi from "joi";
 
 export default class Mapping {
 
@@ -103,23 +104,41 @@ export default class Mapping {
 
   removing(keys) {
     this.defaultTransformations.push(value => {
-      const valueToUse = lodash.cloneDeep(value);
-      if (Array.isArray(keys) && keys.length > 0) {
-        keys.map(key => {
-          if (typeof key !== "string") {
-            throw new Error("The type of items in an array should be string");
-          }
-          Reflect.deleteProperty(valueToUse, key);
-        });
+      const process = val => {
+        if (Array.isArray(keys) && keys.length > 0) {
+          keys.map(key => {
+            if (typeof key !== "string") {
+              throw new Error("The type of items in an array should be string");
+            }
+
+            Reflect.deleteProperty(val, key);
+          });
+
+          return val;
+        }
+
+        if (typeof keys === "string") {
+          Reflect.deleteProperty(val, keys);
+          return val;
+        }
+
+        throw new Error("The keys should be either of type string or Array of string");
+      };
+
+      let valueToUse = lodash.cloneDeep(value);
+
+      if (typeof valueToUse !== "object" && !Array.isArray(valueToUse)) {
         return valueToUse;
       }
 
-      if (typeof keys === "string") {
-        Reflect.deleteProperty(valueToUse, keys);
-        return valueToUse;
-      }
+      const isArray = Array.isArray(valueToUse) && valueToUse.length > 0;
 
-      throw new Error("The keys should be either of type string or Array of string");
+      if (isArray) {
+        valueToUse = valueToUse.map(val => process(val));
+      } else {
+        valueToUse = process(valueToUse);
+      }
+      return valueToUse;
     });
 
     return this;
