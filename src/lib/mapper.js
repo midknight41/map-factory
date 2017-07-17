@@ -134,7 +134,7 @@ export default class Mapper {
     /* eslint-disable prefer-const */
     const sourcePath = item.source;
     let targetPath = item.target;
-    let { transform, alwaysSet, alwaysTransform } = item;
+    let { transform, alwaysSet, alwaysTransform, defaultTransformations } = item;
     let isCustomTransform = true;
     /* eslint-enable prefer-const */
 
@@ -150,7 +150,7 @@ export default class Mapper {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, isCustomTransform, options: { alwaysSet, alwaysTransform } };
+    return { mode, targetPath, sourcePath, transform, isCustomTransform, options: { alwaysSet, alwaysTransform, defaultTransformations } };
 
   }
 
@@ -175,6 +175,17 @@ export default class Mapper {
     // Get source
     let value = this.om.getValue(sourceObject, sourcePath);
 
+    // default transformations
+    if (this.exists_(value) && options.defaultTransformations.length > 0) {
+      options.defaultTransformations.map(item => {
+        if (Array.isArray(value)) {
+          value = value.map(val => item(val));
+        } else {
+          value = item(value);
+        }
+      });
+    }
+
     // Apply transform - will become optional
     if (this.exists_(value) || options.alwaysTransform === true) {
       value = transform(value);
@@ -191,7 +202,7 @@ export default class Mapper {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
     }
 
-    const values = [];
+    let values = [];
     let anyValues = false;
 
     // Get source
@@ -207,6 +218,18 @@ export default class Mapper {
     }
 
     let value;
+
+    // default transformations
+    if (anyValues && options.defaultTransformations.length > 0) {
+      options.defaultTransformations.map(item => {
+        values = values.map(val => {
+          if (typeof val === "object" && !Array.isArray(val)) {
+            return item(val);
+          }
+          return val;
+        });
+      });
+    }
 
     // Apply transform if appropriate
     if (anyValues || options.alwaysTransform === true) {
@@ -230,6 +253,13 @@ export default class Mapper {
       if (orValue !== null && orValue !== undefined) {
         break;
       }
+    }
+
+    // default transformations
+    if (this.exists_(orValue) && options.defaultTransformations.length > 0) {
+      options.defaultTransformations.map(item => {
+        orValue = item(orValue);
+      });
     }
 
     // no transform

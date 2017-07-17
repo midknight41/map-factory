@@ -67,5 +67,8 @@
   "typings": "./dist/lib/map-factory.d.ts",
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
 }

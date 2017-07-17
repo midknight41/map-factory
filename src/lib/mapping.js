@@ -1,3 +1,4 @@
+import lodash from "lodash";
 
 export default class Mapping {
 
@@ -12,6 +13,7 @@ export default class Mapping {
     this.orMode = false;
     this.alwaysSet = options.alwaysSet;
     this.alwaysTransform = options.alwaysTransform;
+    this.defaultTransformations = [];
 
   }
 
@@ -97,6 +99,30 @@ export default class Mapping {
 
     return this.mapper;
 
+  }
+
+  removing(keys) {
+    this.defaultTransformations.push(value => {
+      const valueToUse = lodash.cloneDeep(value);
+      if (Array.isArray(keys) && keys.length > 0) {
+        keys.map(key => {
+          if (typeof key !== "string") {
+            throw new Error("The type of items in an array should be string");
+          }
+          Reflect.deleteProperty(valueToUse, key);
+        });
+        return valueToUse;
+      }
+
+      if (typeof keys === "string") {
+        Reflect.deleteProperty(valueToUse, keys);
+        return valueToUse;
+      }
+
+      throw new Error("The keys should be either of type string or Array of string");
+    });
+
+    return this;
   }
 
 }

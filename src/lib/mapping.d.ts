@@ -15,4 +15,5 @@ export default class Mapping implements IMapping {
   to(target: string, fnc?: Function): any;
   always: IMapping;
   existing: IMapping;
+  removing(keys: string | string[]): IMapping
 }
