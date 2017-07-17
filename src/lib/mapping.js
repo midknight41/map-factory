@@ -134,7 +134,12 @@ export default class Mapping {
       const isArray = Array.isArray(valueToUse) && valueToUse.length > 0;
 
       if (isArray) {
-        valueToUse = valueToUse.map(val => process(val));
+        valueToUse = valueToUse.map(val => {
+          if (typeof val !== "object" && !Array.isArray(val)) {
+            return val;
+          }
+          return process(val);
+        });
       } else {
         valueToUse = process(valueToUse);
       }
