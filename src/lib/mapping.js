@@ -79,6 +79,10 @@ export default class Mapping {
     return this.mapper.each(sourceArray);
   }
 
+  chain(mapper) {
+    return this.mapper.chain(mapper);
+  }
+
   to(target, fnc) {
 
     if (!target || typeof target !== "string") {
