@@ -228,7 +228,27 @@ assert.deepEqual(actual, expected);
 
 ```
 
+If working with multiple mappers you can chain them together in a pipe-like manner.
 
+```js
+const source = {
+  "foo": "bar",
+  "bar": "foo"
+};
+
+const expected = {
+  "bar": "bar"
+};
+
+ const mapper = createMapper();
+ const secondaryMapper = createMapper();
+
+mapper.map("foo");
+secondaryMapper.map("foo").to("bar");
+
+const actual = mapper.chain(secondaryMapper).execute(source);
+assert.deepEqual(actual, expected);
+```
 
 ## Examples
 

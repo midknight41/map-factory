@@ -1,3 +1,30 @@
+### 2.3.0
+
+Add ```chain``` method to the mapper which allows you to chain multiple mappers together and execute sequentially.
+
+```js
+const source = {
+  "foo": "bar",
+  "bar": "foo"
+};
+
+ const mapper = createMapper();
+ const secondaryMapper = createMapper();
+
+mapper.map("foo");
+secondaryMapper.map("foo").to("bar");
+
+const result = mapper.chain(secondaryMapper).execute(source);
+
+/**
+The expected result will be
+{
+  "bar": "bar"
+}
+**/
+
+```
+
 ### 2.2.0
 
 Added ```executeAsync()``` to the mapper which will return a Promise.
