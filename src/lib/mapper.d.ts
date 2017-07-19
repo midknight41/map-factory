@@ -1,4 +1,4 @@
-import { IMapping } from "./interfaces";
+import { IMapping, IMapFactory } from "./interfaces";
 import Mapping from "./mapping";
 export default class Mapper {
     constructor(options, om);
@@ -9,6 +9,7 @@ export default class Mapper {
     each(sourceArray: any[]): any[];
     execute(source: any, destination: any): any;
     executeAsync(source: any, destination: any): Promise<any>;
+    chain(mapper: IMapFactory):IMapFactory;
     private createMapData();
     private appendMultiSelections(source, target, multiMaps);
     private applyOrMode(item, source, output);

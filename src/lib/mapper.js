@@ -19,6 +19,8 @@ export default class Mapper {
     this.assignment = [];
     this.mapCache_ = null;
 
+    this.chainArray = [];
+
   }
 
   registerMapping_(mapping) {
@@ -105,12 +107,26 @@ export default class Mapper {
 
     }
 
+    if (this.chainArray.length > 0) {
+      this.chainArray.map(item => {
+        destination = item.execute(destination);
+      });
+    }
+
     return destination;
   }
 
   executeAsync(source, destination) {
     return Promise.resolve()
       .then(() => this.execute(source, destination));
+  }
+
+  chain(mapper) {
+    if (mapper === null || mapper === undefined) {
+      throw new Error("mapper passed in chain can neither be null or undefined");
+    }
+    this.chainArray.push(mapper);
+    return this;
   }
 
   getTransformDescriptor_(item) {

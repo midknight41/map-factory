@@ -37,5 +37,9 @@ export default function createMapper(options) {
     return this.mapper.each(sourceArray);
   }.bind(me);
 
+  mapper.chain = function (secondaryMapper) {
+    return this.mapper.chain(secondaryMapper);
+  }.bind(me);
+
   return mapper;
 }

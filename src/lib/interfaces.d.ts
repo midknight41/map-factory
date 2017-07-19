@@ -12,6 +12,7 @@ export interface IMapFactory {
     execute(source: any, destination?: any): any;
     executeAsync(source: any, destination?: any): Promise<any>;
     each(sourceArray: any[]): any;
+    chain(mapper: IMapFactory):IMapFactory;
 }
 export interface IMapping {
     orMode: boolean;
@@ -24,6 +25,7 @@ export interface IMapping {
     execute(source: any, destination?: any): any;
     executeAsync(source: any, destination?: any): Promise<any>;
     each(sourceArray: any[]): any;
+    chain(mapper: IMapFactory):IMapFactory;
 }
 export interface IOptions {
   experimental?: boolean;
