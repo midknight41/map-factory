@@ -1,5 +1,5 @@
 import * as Lab from "lab";
-import { expect, fail } from "code";
+import { expect } from "code";
 import createMapper from "../lib";
 
 const { describe, it, beforeEach } = exports.lab = Lab.script();
@@ -33,20 +33,6 @@ describe("Chain functionality of the mapper", () => {
 
   describe("when chain is called from the default function", () => {
 
-    it("should return response with the desired result", done => {
-      secondaryMapper.map("foo").to("bar");
-      const actual = mapper
-        .map("foo")
-        .chain(secondaryMapper)
-        .execute(source);
-
-      expect(actual).to.equal(expected);
-      done();
-    });
-  });
-
-  describe("when chain is called", () => {
-
     it("should return a response with the desired result", done => {
       secondaryMapper.map("foo").to("bar");
       const actual = mapper("foo").chain(secondaryMapper).execute(source);
@@ -54,4 +40,16 @@ describe("Chain functionality of the mapper", () => {
       done();
     });
   });
+
+  describe("when chain is called without any params", () => {
+
+    it("should throw an error", done => {
+      expect(() => mapper
+        .map("foo")
+        .chain()
+        .execute(source)).to.throw("mapper passed in chain can neither be null or undefined");
+      done();
+    });
+  });
+
 });

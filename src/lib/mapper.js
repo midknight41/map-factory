@@ -122,6 +122,9 @@ export default class Mapper {
   }
 
   chain(mapper) {
+    if (mapper === null || mapper === undefined) {
+      throw new Error("mapper passed in chain can neither be null or undefined");
+    }
     this.chainArray.push(mapper);
     return this;
   }
