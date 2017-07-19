@@ -1,6 +1,6 @@
 ### 2.3.0
 
-Add ```chain``` method to the mapper which allows you to chain multiple mappers together and execute sequentially.
+Added ```chain``` method to the mapper which allows you to chain multiple mappers together and execute sequentially.
 
 ```js
 const source = {
