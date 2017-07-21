@@ -109,7 +109,7 @@ describe("Default transformations functionality of the mapper", () => {
         done();
       });
       it("should throw an error", done => {
-        expect(() => mapper.execute(source)).to.throw("The keys should be either of type string or Array of string");
+        expect(() => mapper.execute(source)).to.throw("The type of items in an array should be string");
         done();
       });
     });
