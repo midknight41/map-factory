@@ -87,5 +87,31 @@ describe("Default transformations functionality of the mapper", () => {
         done();
       });
     });
+
+    describe("when keys are not passed in as valid string", () => {
+
+      before(done => {
+        mapper = createMapper();
+        mapper("foo").removing({}).to("bar");
+        done();
+      });
+      it("should throw an error", done => {
+        expect(() => mapper.execute(source)).to.throw("The keys should be either of type string or Array of string");
+        done();
+      });
+    });
+
+    describe("when keys are not passed in as valid array of strings", () => {
+
+      before(done => {
+        mapper = createMapper();
+        mapper("foo").removing([{}]).to("bar");
+        done();
+      });
+      it("should throw an error", done => {
+        expect(() => mapper.execute(source)).to.throw("The keys should be either of type string or Array of string");
+        done();
+      });
+    });
   });
 });

@@ -1,5 +1,4 @@
 import lodash from "lodash";
-import Joi from "joi";
 
 export default class Mapping {
 
