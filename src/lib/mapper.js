@@ -267,7 +267,6 @@ export default class Mapper {
       Object.keys(object).length === 0;
   }
 
-
   exists_(value) {
     return (value !== null && value !== undefined);
   }

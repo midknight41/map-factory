@@ -170,7 +170,6 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
     }
   }
 
-
   return destinationObject;
 }
 
