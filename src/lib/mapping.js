@@ -1,4 +1,4 @@
-import lodash from "lodash";
+import {cloneDeep, unset} from "lodash";
 
 export default class Mapping {
 
@@ -110,21 +110,21 @@ export default class Mapping {
               throw new Error("The type of items in an array should be string");
             }
 
-            Reflect.deleteProperty(val, key);
+            unset(val, key);
           });
 
           return val;
         }
 
         if (typeof keys === "string") {
-          Reflect.deleteProperty(val, keys);
+          unset(val, keys);
           return val;
         }
 
         throw new Error("The keys should be either of type string or Array of string");
       };
 
-      let valueToUse = lodash.cloneDeep(value);
+      let valueToUse = cloneDeep(value);
 
       if (typeof valueToUse !== "object" && !Array.isArray(valueToUse)) {
         return valueToUse;
