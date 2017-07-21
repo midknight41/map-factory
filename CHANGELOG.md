@@ -1,3 +1,7 @@
+### 2.3.1
+
+Fixed a bug where an array of undefined values was calling the transform and set when it shouldn't have.
+
 ### 2.3.0
 
 Added ```chain``` method to the mapper which allows you to chain multiple mappers together and execute sequentially.
