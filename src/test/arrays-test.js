@@ -1,6 +1,7 @@
 import * as Lab from "lab";
 import notationSuite from "./suites/notation-suite";
 import manyMappings from "./suites/many-mappings-suite";
+import mappingSuite from "./suites/mapping-suite";
 
 const lab = exports.lab = Lab.script();
 
@@ -68,3 +69,61 @@ manyMappings.run(lab, {
   EXPECTED: expected,
   EXPERIMENTAL: false
 });
+
+mappingSuite.run(lab, {
+  LABELS: ["arrays", "all items in an array are undefined"],
+  GET_ITEM: "unit.levels[].useType",
+  SET_ITEM: "[].useType",
+  SOURCE: {
+    "unit": {
+      "levels": [{
+        "name": "notEmpty",
+        "number": 10,
+        "size": {
+          "measurement": "SqM",
+          "value": 122
+        }
+      },
+      {
+        "name": "notEmpty2",
+        "number": 12,
+        "size": {
+          "measurement": "SqM",
+          "value": 142
+        }
+      }]
+    }
+  },
+  EXPECTED: [],
+  EXPERIMENTAL: false
+});
+
+mappingSuite.run(lab, {
+  LABELS: ["arrays", "only some item in an array are undefined"],
+  GET_ITEM: "unit.levels[].useType",
+  SET_ITEM: "[].useType",
+  SOURCE: {
+    "unit": {
+      "levels": [{
+        "name": "notEmpty",
+        "number": 10,
+        "size": {
+          "measurement": "SqM",
+          "value": 122
+        }
+      },
+      {
+        "name": "notEmpty",
+        "number": 10,
+        "size": {
+          "measurement": "SqM",
+          "value": 122
+        },
+        "useType": "notEmpty"
+      }]
+    }
+  },
+  EXPECTED: [null, { useType: "notEmpty" }],
+  EXPERIMENTAL: false
+});
+

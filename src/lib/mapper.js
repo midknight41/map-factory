@@ -267,6 +267,21 @@ export default class Mapper {
       Object.keys(object).length === 0;
   }
 
+  handleArrayOfUndefined_(value) {
+
+    if (Array.isArray(value) === false) {
+      return value;
+    }
+
+    for (const item of value) {
+      if (item !== undefined && item !== null) {
+        return value;
+      }
+    }
+
+    return undefined;
+
+  }
 
   exists_(value) {
     return (value !== null && value !== undefined);

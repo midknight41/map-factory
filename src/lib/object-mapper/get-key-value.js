@@ -39,9 +39,25 @@ function getValue(fromObject, fromKey) {
     }
   }
 
-  return result;
+  return handleArrayOfUndefined_(result);
 }
 module.exports = getValue;
+
+function handleArrayOfUndefined_(value) {
+
+  if (Array.isArray(value) === false) {
+    return value;
+  }
+
+  for (const item of value) {
+    if (item !== undefined && item !== null) {
+      return value;
+    }
+  }
+
+  return undefined;
+
+}
 
 /**
  * Get the value of key within passed object, considering if there is a array or object
