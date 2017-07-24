@@ -9,7 +9,7 @@ let expected;
 let mapper;
 let actual;
 
-describe("Default transformations functionality of the mapper", () => {
+describe("Pipeline transformations functionality of the mapper", () => {
 
   describe("removing", () => {
 

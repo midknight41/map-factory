@@ -1,4 +1,5 @@
-import {cloneDeep, unset} from "lodash";
+import cloneDeep from "lodash.clonedeep";
+import unset from "lodash.unset";
 
 export default class Mapping {
 
@@ -13,7 +14,7 @@ export default class Mapping {
     this.orMode = false;
     this.alwaysSet = options.alwaysSet;
     this.alwaysTransform = options.alwaysTransform;
-    this.defaultTransformations = [];
+    this.pipelineTransformations = [];
 
   }
 
@@ -102,27 +103,7 @@ export default class Mapping {
   }
 
   removing(keys) {
-    this.defaultTransformations.push(value => {
-      const process = val => {
-        if (Array.isArray(keys) && keys.length > 0) {
-          keys.map(key => {
-            if (typeof key !== "string") {
-              throw new Error("The type of items in an array should be string");
-            }
-
-            unset(val, key);
-          });
-
-          return val;
-        }
-
-        if (typeof keys === "string") {
-          unset(val, keys);
-          return val;
-        }
-
-        throw new Error("The keys should be either of type string or Array of string");
-      };
+    this.pipelineTransformations.push(value => {
 
       let valueToUse = cloneDeep(value);
 
@@ -137,15 +118,37 @@ export default class Mapping {
           if (typeof val !== "object" && !Array.isArray(val)) {
             return val;
           }
-          return process(val);
+          return this._processRemoving(keys, val);
         });
       } else {
-        valueToUse = process(valueToUse);
+        valueToUse = this._processRemoving(keys, valueToUse);
       }
       return valueToUse;
     });
 
     return this;
   }
+
+  _processRemoving(keys, val) {
+    if (Array.isArray(keys) && keys.length > 0) {
+      keys.map(key => {
+        if (typeof key !== "string") {
+          throw new Error("The type of items in an array should be string");
+        }
+
+        unset(val, key);
+      });
+
+      return val;
+    }
+
+    if (typeof keys === "string") {
+      unset(val, keys);
+      return val;
+    }
+
+    throw new Error("The keys should be either of type string or Array of string");
+  }
+
 
 }

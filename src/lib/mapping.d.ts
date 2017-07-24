@@ -16,4 +16,5 @@ export default class Mapping implements IMapping {
   always: IMapping;
   existing: IMapping;
   removing(keys: string | string[]): IMapping
+  _processRemoving( keys:string | string[], val: Object): Object
 }

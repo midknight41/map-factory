@@ -134,7 +134,7 @@ export default class Mapper {
     /* eslint-disable prefer-const */
     const sourcePath = item.source;
     let targetPath = item.target;
-    let { transform, alwaysSet, alwaysTransform, defaultTransformations } = item;
+    let { transform, alwaysSet, alwaysTransform, pipelineTransformations } = item;
     let isCustomTransform = true;
     /* eslint-enable prefer-const */
 
@@ -150,7 +150,7 @@ export default class Mapper {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, isCustomTransform, options: { alwaysSet, alwaysTransform, defaultTransformations } };
+    return { mode, targetPath, sourcePath, transform, isCustomTransform, options: { alwaysSet, alwaysTransform, pipelineTransformations } };
 
   }
 
@@ -176,8 +176,8 @@ export default class Mapper {
     let value = this.om.getValue(sourceObject, sourcePath);
 
     // default transformations
-    if (this.exists_(value) && options.defaultTransformations.length > 0) {
-      options.defaultTransformations.map(item => {
+    if (this.exists_(value) && options.pipelineTransformations.length > 0) {
+      options.pipelineTransformations.map(item => {
         value = item(value);
       });
     }
@@ -216,8 +216,8 @@ export default class Mapper {
     let value;
 
     // default transformations
-    if (anyValues && options.defaultTransformations.length > 0) {
-      options.defaultTransformations.map(item => {
+    if (anyValues && options.pipelineTransformations.length > 0) {
+      options.pipelineTransformations.map(item => {
         values = item(values);
       });
     }
@@ -247,8 +247,8 @@ export default class Mapper {
     }
 
     // default transformations
-    if (this.exists_(orValue) && options.defaultTransformations.length > 0) {
-      options.defaultTransformations.map(item => {
+    if (this.exists_(orValue) && options.pipelineTransformations.length > 0) {
+      options.pipelineTransformations.map(item => {
         orValue = item(orValue);
       });
     }
