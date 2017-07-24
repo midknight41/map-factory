@@ -118,10 +118,10 @@ export default class Mapping {
           if (typeof val !== "object" && !Array.isArray(val)) {
             return val;
           }
-          return this._processRemoving(keys, val);
+          return this.processRemoving_(keys, val);
         });
       } else {
-        valueToUse = this._processRemoving(keys, valueToUse);
+        valueToUse = this.processRemoving_(keys, valueToUse);
       }
       return valueToUse;
     });
@@ -129,7 +129,7 @@ export default class Mapping {
     return this;
   }
 
-  _processRemoving(keys, val) {
+  processRemoving_(keys, val) {
     if (Array.isArray(keys) && keys.length > 0) {
       keys.map(key => {
         if (typeof key !== "string") {
