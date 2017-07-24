@@ -1,3 +1,5 @@
+import cloneDeep from "lodash.clonedeep";
+import unset from "lodash.unset";
 
 export default class Mapping {
 
@@ -12,6 +14,7 @@ export default class Mapping {
     this.orMode = false;
     this.alwaysSet = options.alwaysSet;
     this.alwaysTransform = options.alwaysTransform;
+    this.pipelineTransformations = [];
 
   }
 
@@ -98,5 +101,54 @@ export default class Mapping {
     return this.mapper;
 
   }
+
+  removing(keys) {
+    this.pipelineTransformations.push(value => {
+
+      let valueToUse = cloneDeep(value);
+
+      if (typeof valueToUse !== "object" && !Array.isArray(valueToUse)) {
+        return valueToUse;
+      }
+
+      const isArray = Array.isArray(valueToUse) && valueToUse.length > 0;
+
+      if (isArray) {
+        valueToUse = valueToUse.map(val => {
+          if (typeof val !== "object" && !Array.isArray(val)) {
+            return val;
+          }
+          return this.processRemoving_(keys, val);
+        });
+      } else {
+        valueToUse = this.processRemoving_(keys, valueToUse);
+      }
+      return valueToUse;
+    });
+
+    return this;
+  }
+
+  processRemoving_(keys, val) {
+    if (Array.isArray(keys) && keys.length > 0) {
+      keys.map(key => {
+        if (typeof key !== "string") {
+          throw new Error("The type of items in an array should be string");
+        }
+
+        unset(val, key);
+      });
+
+      return val;
+    }
+
+    if (typeof keys === "string") {
+      unset(val, keys);
+      return val;
+    }
+
+    throw new Error("The keys should be either of type string or Array of string");
+  }
+
 
 }

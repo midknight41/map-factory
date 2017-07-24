@@ -67,5 +67,9 @@
   "typings": "./dist/lib/map-factory.d.ts",
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.unset": "^4.5.2"
+  }
 }
