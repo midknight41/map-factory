@@ -303,6 +303,37 @@ assert.deepEqual(result, {
   "fieldId": "123"
 });
 ```
+
+Implicit mapping behaviour can be achieved using the ```removing()``` method. Removing can take either a single field name or an array of field names.
+
+```js
+const mapper = createMapper();
+
+const src = {
+  user: {
+    name: "Tim",
+    occupation: "Enchanter",
+    password: "scary bunny"
+  }
+};
+
+mapper
+  .map("user").removing("password").to("user");
+  .execute(src);
+
+/*
+The expected result is:
+
+{
+  user: {
+    name: "Tim",
+    occupation: "Enchanter"
+  }
+}
+
+*/
+```
+
 ### Working with arrays
 You can use ```[]``` to traverse the entries in an array. For example, here you can transform an array of objects to an array of strings.
 

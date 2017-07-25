@@ -1,3 +1,37 @@
+### 2.4.0
+
+Added the ```removing()``` method that allows you to specify which fields you don't want instead of explicitly stating the fields you do want.
+
+```js
+
+const mapper = createMapper();
+
+const src = {
+  user: {
+    name: "Tim",
+    occupation: "Enchanter",
+    password: "scary bunny"
+  }
+};
+
+mapper
+  .map("user").removing("password").to("user");
+  .execute(src);
+
+/*
+The expected result is:
+
+{
+  user: {
+    name: "Tim",
+    occupation: "Enchanter"
+  }
+}
+
+*/
+
+```
+
 ### 2.3.1
 
 Fixed a bug where an array of undefined values was calling the transform and set when it shouldn't have.
