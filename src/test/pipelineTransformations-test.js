@@ -2,7 +2,7 @@ import * as Lab from "lab";
 import { expect } from "code";
 import createMapper from "../lib";
 
-const { describe, it, before } = exports.lab = Lab.script();
+const { describe, it, before, beforeEach } = exports.lab = Lab.script();
 
 let source;
 let expected;
@@ -88,57 +88,34 @@ describe("Pipeline transformations functionality of the mapper", () => {
       });
     });
 
-    describe("when keys are null", () => {
+    describe("parameter validation", () => {
 
-      before(done => {
+      beforeEach(done => {
         mapper = createMapper();
         done();
       });
 
-      it("should throw an error", done => {
+      it("should throw an error on null", done => {
         expect(() => mapper("foo").removing(null).to("bar")).to.throw("The removing method requires a string value or an array of strings");
         done();
       });
-    });
 
-    describe("when keys are undefined", () => {
-
-      before(done => {
-        mapper = createMapper();
-        done();
-      });
-
-      it("should throw an error", done => {
+      it("should throw an error on undefined", done => {
         expect(() => mapper("foo").removing(undefined).to("bar")).to.throw("The removing method requires a string value or an array of strings");
         done();
       });
-    });
 
-
-    describe("when keys are not passed in as valid string", () => {
-
-      before(done => {
-        mapper = createMapper();
-        done();
-      });
-
-      it("should throw an error", done => {
+      it("should throw an error when keys are not passed in as valid string", done => {
         expect(() => mapper("foo").removing({}).to("bar")).to.throw("The removing method requires a string value or an array of strings");
         done();
       });
-    });
 
-    describe("when keys are not passed in as valid array of strings", () => {
-
-      before(done => {
-        mapper = createMapper();
-        done();
-      });
-
-      it("should throw an error", done => {
+      it("should throw an error when keys are not passed in as valid array of strings", done => {
         expect(() => mapper("foo").removing([{}]).to("bar")).to.throw("The removing method requires a string value or an array of strings");
         done();
       });
+
     });
+
   });
 });
