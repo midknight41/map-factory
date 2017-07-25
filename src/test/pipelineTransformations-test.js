@@ -19,7 +19,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
       mapper
         .map("foo").removing(["id", "foo1"]).to("bar")
         .map(["foo", "h"]).removing(["id", "foo1"])
-        .to("barMulti", (foo, h) => {
+        .to("barMulti", foo => {
           return foo;
         })
         .map("fooArray").removing(["id"]).to("barArray")
@@ -88,15 +88,42 @@ describe("Pipeline transformations functionality of the mapper", () => {
       });
     });
 
+    describe("when keys are null", () => {
+
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper("foo").removing(null).to("bar")).to.throw("The removing method requires a string value or an array of strings");
+        done();
+      });
+    });
+
+    describe("when keys are undefined", () => {
+
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper("foo").removing(undefined).to("bar")).to.throw("The removing method requires a string value or an array of strings");
+        done();
+      });
+    });
+
+
     describe("when keys are not passed in as valid string", () => {
 
       before(done => {
         mapper = createMapper();
-        mapper("foo").removing({}).to("bar");
         done();
       });
+
       it("should throw an error", done => {
-        expect(() => mapper.execute(source)).to.throw("The keys should be either of type string or Array of string");
+        expect(() => mapper("foo").removing({}).to("bar")).to.throw("The removing method requires a string value or an array of strings");
         done();
       });
     });
@@ -105,11 +132,11 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
       before(done => {
         mapper = createMapper();
-        mapper("foo").removing([{}]).to("bar");
         done();
       });
+
       it("should throw an error", done => {
-        expect(() => mapper.execute(source)).to.throw("The type of items in an array should be string");
+        expect(() => mapper("foo").removing([{}]).to("bar")).to.throw("The removing method requires a string value or an array of strings");
         done();
       });
     });

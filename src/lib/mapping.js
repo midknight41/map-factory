@@ -103,6 +103,20 @@ export default class Mapping {
   }
 
   removing(keys) {
+
+    if (Array.isArray(keys) && keys.length > 0) {
+      keys.map(key => {
+        if (typeof key !== "string") {
+          throw new Error("The removing method requires a string value or an array of strings");
+        }
+
+      });
+    }
+
+    if (Array.isArray(keys) === false && typeof keys !== "string") {
+      throw new Error("The removing method requires a string value or an array of strings");
+    }
+
     this.pipelineTransformations.push(value => {
 
       let valueToUse = cloneDeep(value);
@@ -130,12 +144,9 @@ export default class Mapping {
   }
 
   processRemoving_(keys, val) {
+
     if (Array.isArray(keys) && keys.length > 0) {
       keys.map(key => {
-        if (typeof key !== "string") {
-          throw new Error("The type of items in an array should be string");
-        }
-
         unset(val, key);
       });
 
@@ -147,7 +158,6 @@ export default class Mapping {
       return val;
     }
 
-    throw new Error("The keys should be either of type string or Array of string");
   }
 
 
