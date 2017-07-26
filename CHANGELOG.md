@@ -1,3 +1,7 @@
+### 2.4.1
+
+Fixed bug where ```each()``` returned a null when supplied with an empty array instead of returing an empty array.
+
 ### 2.4.0
 
 Added the ```removing()``` method that allows you to specify which fields you don't want instead of explicitly stating the fields you do want.
