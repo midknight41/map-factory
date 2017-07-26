@@ -53,18 +53,10 @@ export default class Mapper {
       throw new Error("The sourceArray parameter must be an array");
     }
 
+    // iterate over an array of values and map each one
     return sourceArray.map(item => {
       return this.execute(item, null);
     });
-    // // iterate over an array of values and map each one
-    // if (sourceArray.length > 0) {
-    //   return sourceArray.map(item => {
-    //     return this.execute(item, null);
-    //   });
-    // }
-    //
-    // // TODO: This should probably return undefined
-    // return null;
   }
 
   execute(source, destination) {
