@@ -54,14 +54,9 @@ export default class Mapper {
     }
 
     // iterate over an array of values and map each one
-    if (sourceArray.length > 0) {
-      return sourceArray.map(item => {
-        return this.execute(item, null);
-      });
-    }
-
-    // TODO: This should probably return undefined
-    return null;
+    return sourceArray.map(item => {
+      return this.execute(item, null);
+    });
   }
 
   execute(source, destination) {

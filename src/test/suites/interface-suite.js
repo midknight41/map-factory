@@ -471,7 +471,7 @@ suite.declare((lab, variables) => {
     lab.test("An empty array does not cause an error", done => {
       const source = [];
 
-      const expected = null;
+      const expected = [];
 
       const map = createSut();
 
