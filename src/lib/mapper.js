@@ -170,6 +170,8 @@ export default class Mapper {
     // Get source
     let value = this.om.getValue(sourceObject, sourcePath);
 
+    // console.log("get", value);
+
     // default transformations
     if (this.exists_(value) && options.pipelineTransformations.length > 0) {
       options.pipelineTransformations.map(item => {
