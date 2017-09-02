@@ -127,28 +127,56 @@ mappingSuite.run(lab, {
   EXPERIMENTAL: false
 });
 
-// manyMappings.run(lab, {
-//   LABELS: ["arrays", "arrays of arrays"],
-//   MAPPINGS: [
-//     { from: "foo[].name", to: "bar[].label" },
-//     { from: "foo[].things[]", to: "bar[].values[]" }
-//   ],
-//   SOURCE: {
-//     foo: [
-//       { "name": "a", "things": ["a1", "a2"] },
-//       { "name": "b", "things": ["b1", "b2"] }
-//     ]
-//   },
-//   EXPECTED: {
-//     bar: [{
-//       label: "a",
-//       values: ["a1", "a2"]
-//     },
-//     {
-//       label: "b",
-//       values: ["b1", "b2"]
-//     }
-//     ]
-//   },
-//   EXPERIMENTAL: false
-// });
+manyMappings.run(lab, {
+  LABELS: ["arrays", "arrays of arrays"],
+  MAPPINGS: [
+    { from: "foo[].name", to: "bar[].label" },
+    { from: "foo[].things[]", to: "bar[].values[]" }
+  ],
+  SOURCE: {
+    foo: [
+      { "name": "a", "things": ["a1", "a2"] },
+      { "name": "b", "things": ["b1", "b2"] }
+    ]
+  },
+  EXPECTED: {
+    bar: [{
+      label: "a",
+      values: ["a1", "a2"]
+    },
+    {
+      label: "b",
+      values: ["b1", "b2"]
+    }
+    ]
+  },
+  EXPERIMENTAL: false
+});
+
+
+manyMappings.run(lab, {
+  LABELS: ["arrays", "arrays of arrays inverted"],
+  MAPPINGS: [
+    { from: "foo[].things[]", to: "bar[].values[]" },
+    { from: "foo[].name", to: "bar[].label" }
+  ],
+  SOURCE: {
+    foo: [
+      { "name": "a", "things": ["a1", "a2"] },
+      { "name": "b", "things": ["b1", "b2"] }
+    ]
+  },
+  EXPECTED: {
+    bar: [{
+      label: "a",
+      values: ["a1", "a2"]
+    },
+    {
+      label: "b",
+      values: ["b1", "b2"]
+    }
+    ]
+  },
+  EXPERIMENTAL: false
+});
+

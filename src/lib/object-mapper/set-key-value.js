@@ -13,7 +13,7 @@ function setValue(baseObject, destinationKey, fromValue) {
   const keys = destinationKey.split(regDot);
   const key = keys.splice(0, 1);
 
-  return _setValue(baseObject, key[0], keys, fromValue);
+  return _setValue(baseObject, key[0], keys, fromValue, -1);
 }
 module.exports = setValue;
 
@@ -27,7 +27,7 @@ module.exports = setValue;
  * @private
  * @recursive
  */
-function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray = false) {
+function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIsArray = false) {
   var regArray = /(\[\]|\[(.*)\])$/g
     , regAppendArray = /(\[\]|\[(.*)\]\+)$/g
     , regCanBeNull = /(\?)$/g
@@ -42,135 +42,240 @@ function _setValue(destinationObject, startKey, keys, fromValue, parentIsArray =
     ;
   let key = startKey;
 
-  // console.log("top", destinationObject);
+  depth++;
+
+  const indent = new Array((depth + 1) * 2).join(" ");
+
+  // console.log(indent, "");
+  // console.log(indent, "**************** SET VALUE ********************");
+  // console.log(indent, "destinationObject: ", destinationObject);
+  // console.log(indent, "fromValue: ", fromValue);
+
+  // STEP 1
+  // Identify which features are used in the query syntax
 
   // can be null feature
   canBeNull = regCanBeNull.test(key);
   if (canBeNull) {
-    key = key.replace(regCanBeNull, '');
+    key = key.replace(regCanBeNull, "");
   }
 
   // normal array feature
   match = regArray.exec(key);
   if (match) {
-    // console.log("normal array feature");
+    // console.log(indent, "feature type: normal array");
     isPropertyArray = true;
-    key = key.replace(regArray, '');
-    isValueArray = (key !== '');
+    key = key.replace(regArray, "");
+    isValueArray = (key !== "");
   }
 
   // append to array feature
   appendToArray = regAppendArray.exec(key);
   if (appendToArray) {
+    // console.log(indent, "feature type: append array");
     match = appendToArray;
     isPropertyArray = true;
-    isValueArray = (key !== '');
-    key = key.replace(regAppendArray, '');
+    isValueArray = (key !== "");
+    key = key.replace(regAppendArray, "");
   }
 
   if (startKey === key) {
-    // console.log("regular property feature");
+    // console.log(indent, "feature type: regular property");
   }
-
-  // console.log("key changes", startKey !== key);
 
   const destinationStartedEmpty = _isEmpty(destinationObject);
 
+  // console.log(indent, "destinationStartedEmpty: ", destinationStartedEmpty);
+  // console.log(indent, "key:", key);
+  // console.log(indent, "next key:", keys[0]);
+  // console.log(indent, "remaining key:", JSON.stringify(keys));
+  // console.log(indent, "original key:", startKey);
+  // console.log(indent, "*********************************************");
+
+  // STEP 2
+  // This block decides on the shape of this segment of the return object
   if (destinationStartedEmpty) {
-    // console.log("destination is empty");
+
+    // console.log(indent, "Destination is empty");
     if (isPropertyArray) {
 
       arrayIndex = match[2] || 0;
+
       if (isValueArray) {
-        // console.log("type: property array and a value array. get:", fromValue, `key: "${startKey}"`);
         destinationObject = {};
         destinationObject[key] = [];
       } else {
-        // console.log("type: property array but not value array. get:", fromValue, `key: "${startKey}"`);
         destinationObject = [];
       }
+
     } else {
-      // console.log("type: empty object and not an array. get:", fromValue, `key: "${startKey}"`);
       destinationObject = {};
     }
 
   } else {
-    // console.log("destination has a value");
 
+    // console.log(indent, "Destination has a value");
     if (isPropertyArray) {
-      // console.log("type: property array. get:", fromValue, `key: "${startKey}"`);
       arrayIndex = match[2] || 0;
     }
   }
 
+  // This block means we have reached the end of parsing the target keys
   if (keys.length === 0) {
-    // console.log("final pass", `key: "${startKey}"`);
+    // console.log(indent, "last segment, resolve value");
 
     if (!canBeNull && (fromValue === null || fromValue === undefined)) {
 
-      // console.log("resolve", fromValue, destinationObject, parentIsArray);
+      // console.log(indent, "resolve", fromValue, destinationObject, parentIsArray);
       if (parentIsArray === true && destinationStartedEmpty) return null;
 
       return destinationObject;
     }
+
     if (isValueArray) {
+
       if (Array.isArray(destinationObject[key]) === false) {
-        // console.log("first one");
+        // console.log(indent, "first one");
+
+        if (Array.isArray(fromValue)) {
+          destinationObject[key] = fromValue;
+          return destinationObject;
+        }
+
         destinationObject[key] = [];
+
       }
+
       if (appendToArray) {
         destinationObject[key].push(fromValue);
-      } else {
-        destinationObject[key][arrayIndex] = fromValue;
-      }
-    } else if (Array.isArray(destinationObject)) {
-      // console.log("Array.isArray if", fromValue, `key: "${startKey}"`);
-      destinationObject[arrayIndex] = fromValue;
-    } else {
-      // console.log("Array.isArray if", fromValue, `key: "${startKey}"`);
-      destinationObject[key] = fromValue;
-    }
-  } else {
-    if (isValueArray) {
+        return destinationObject;
 
-      // console.log("isValueArray", fromValue);
-
-      if (Array.isArray(destinationObject[key]) === false) {
-        // console.log("second one");
-        destinationObject[key] = [];
       }
-      if (Array.isArray(fromValue) && _isNextArrayProperty(keys) === false) {
-        for (valueIndex = 0; valueIndex < fromValue.length; valueIndex++) {
-          value = fromValue[valueIndex];
-          destinationObject[key][arrayIndex + valueIndex] = _setValue(destinationObject[key][arrayIndex + valueIndex], keys[0], keys.slice(1), value);
-        }
-      } else {
-        destinationObject[key][arrayIndex] = _setValue(destinationObject[key][arrayIndex], keys[0], keys.slice(1), fromValue);
-      }
-    } else if (Array.isArray(destinationObject)) {
-      // Arrays are processed here
-      // console.log("Processing array", destinationObject, fromValue);
 
-      // Source arrays need all there sub items extracted
+      // console.log(indent, "here?");
+
+      // Check if we are trying to set an array value
+      // to a target array. Avoid nesting that array in another array. 
       if (Array.isArray(fromValue)) {
-        for (valueIndex = 0; valueIndex < fromValue.length; valueIndex++) {
-          value = fromValue[valueIndex];
-          destinationObject[arrayIndex + valueIndex] = _setValue(destinationObject[arrayIndex + valueIndex], keys[0], keys.slice(1), value, true);
-        }
-      } else {
-        // It's a single value we want to process
-        // console.log("final _setValue call", keys[0], fromValue);
-        const retval = _setValue(destinationObject[arrayIndex], keys[0], keys.slice(1), fromValue, true);
-
-        // console.log("retval", retval)
-        if (retval !== null) destinationObject[arrayIndex] = retval;
+        destinationObject[key] = fromValue;
+        return destinationObject;
       }
-    } else {
-      destinationObject[key] = _setValue(destinationObject[key], keys[0], keys.slice(1), fromValue);
+
+      destinationObject[key][arrayIndex] = fromValue;
+      return destinationObject;
+
     }
+
+    if (Array.isArray(destinationObject)) {
+      // console.log(indent, "Array.isArray if", fromValue, `key: "${startKey}"`);
+      destinationObject[arrayIndex] = fromValue;
+      return destinationObject;
+
+    }
+
+    // console.log(indent, "Array.isArray else", fromValue, `key: "${startKey}"`);
+    destinationObject[key] = fromValue;
+    return destinationObject;
+
   }
 
+  if (isValueArray) {
+
+    // Here we process arrays
+
+    // Set target field as a new array if it doesn't exist yet
+    if (Array.isArray(destinationObject[key]) === false) {
+      destinationObject[key] = [];
+    }
+
+    // Here we are processing a normal array
+    if (Array.isArray(fromValue) && _isNextArrayProperty(keys) === false) {
+
+      // iterate through the source values and call 
+      for (valueIndex = 0; valueIndex < fromValue.length; valueIndex++) {
+
+        // console.log(indent, `processing a normal array - arrayIndex:${arrayIndex}`);
+
+        const itemKey = keys[0];
+        const sliced = keys.slice(1);
+
+        // console.log(indent, "sub item", `keys: ${keys}`, `sliced: ${sliced}`, fromValue[valueIndex]);
+
+        value = fromValue[valueIndex];
+        destinationObject[key][arrayIndex + valueIndex] = _setValue(destinationObject[key][arrayIndex + valueIndex], itemKey, sliced, value, depth);
+      }
+
+      return destinationObject;
+
+    }
+
+    if (Array.isArray(fromValue) && fromValue.length > 0) {
+
+      // console.log(indent, `process an array of arrays - arrayIndex:${arrayIndex}`);
+
+      const itemKey = keys[0];
+      const sliced = keys.slice(1);
+
+      // console.log(indent, "new code", itemKey, sliced, destinationObject, destinationObject[key].length, fromValue);
+
+      // Check that sub items are arrays
+      if (Array.isArray(fromValue[0]) === false) {
+        destinationObject[key][arrayIndex] = _setValue(destinationObject[key][arrayIndex], keys[0], keys.slice(1), fromValue, depth);
+        return destinationObject;
+      }
+
+      for (let i = 0; i < fromValue.length; i++) {
+        let parentItem = destinationObject[key][i];
+
+        if (parentItem === undefined) parentItem = {};
+
+        // console.log(indent, "sub item", `keys: ${keys}`, `sliced: ${sliced}`, parentItem, fromValue[i]);
+        destinationObject[key][i] = _setValue(parentItem, itemKey, sliced, fromValue[i], depth, true);
+      }
+
+      return destinationObject;
+    }
+
+    // console.log(indent, "old code");
+    destinationObject[key][arrayIndex] = _setValue(destinationObject[key][arrayIndex], keys[0], keys.slice(1), fromValue, depth);
+
+    return destinationObject;
+
+  }
+
+  if (Array.isArray(destinationObject)) {
+
+    // Arrays are processed here
+    // console.log(indent, "Processing array", destinationObject, fromValue);
+
+    // Source arrays need all there sub items extracted
+    if (Array.isArray(fromValue)) {
+      for (valueIndex = 0; valueIndex < fromValue.length; valueIndex++) {
+        value = fromValue[valueIndex];
+        destinationObject[arrayIndex + valueIndex] = _setValue(destinationObject[arrayIndex + valueIndex], keys[0], keys.slice(1), value, depth, true);
+      }
+
+      return destinationObject;
+
+    }
+
+    // It's a single value we want to process
+    // console.log(indent, "final _setValue call", keys[0], fromValue);
+    const retval = _setValue(destinationObject[arrayIndex], keys[0], keys.slice(1), fromValue, depth, true);
+
+    // console.log(indent, "retval", retval)
+    if (retval !== null) {
+      destinationObject[arrayIndex] = retval;
+    }
+
+    return destinationObject;
+
+  }
+
+  destinationObject[key] = _setValue(destinationObject[key], keys[0], keys.slice(1), fromValue, depth);
   return destinationObject;
+
+  // return destinationObject;
 }
 
 /**
@@ -230,6 +335,6 @@ function _isEmptyObject(object) {
 function _isEmptyArray(object) {
   return Array.isArray(object)
     && (object.length === 0
-      || object.join('').length === 0)
+      || object.join("").length === 0)
     ;
 }
