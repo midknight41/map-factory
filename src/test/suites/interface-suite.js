@@ -18,11 +18,10 @@ suite.declare((lab, variables) => {
     return createMapper({ experimental: EXPERIMENTAL });
   }
 
-  const experimentalLabel = EXPERIMENTAL === true ? "in experimental mode" : "in normal mode";
+  // const experimentalLabel = EXPERIMENTAL === true ? "in experimental mode" : "in normal mode";
 
   const testing = getHelper(lab);
-  const group = testing.createExperiment("interfaces", experimentalLabel);
-
+  const group = testing.createExperiment("interfaces");
 
   group("basic functionality", () => {
 

@@ -218,7 +218,8 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
 
       // console.log(indent, "new code", itemKey, sliced, destinationObject, destinationObject[key].length, fromValue);
 
-      // Check that sub items are arrays
+      // We only want to look through arrays of arrays
+      // peak at the first item to make that distinction
       if (Array.isArray(fromValue[0]) === false) {
         destinationObject[key][arrayIndex] = _setValue(destinationObject[key][arrayIndex], keys[0], keys.slice(1), fromValue, depth);
         return destinationObject;

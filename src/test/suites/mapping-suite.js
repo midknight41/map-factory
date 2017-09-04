@@ -31,57 +31,57 @@ suite.declare((lab, variables) => {
     return createMapper({ experimental: EXPERIMENTAL });
   }
 
-  const experimentalLabel = EXPERIMENTAL === true ? "in experimental mode" : "in normal mode";
+  // const experimentalLabel = EXPERIMENTAL === true ? "in experimental mode" : "in normal mode";
 
   group("when the source exists", () => {
 
-    lab.experiment(experimentalLabel, () => {
+    // lab.experiment(experimentalLabel, () => {
 
-      lab.test("a string source can be selected and mapped to the target without a transform", done => {
+    lab.test("a string source can be selected and mapped to the target without a transform", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map(GET_ITEM).to(SET_ITEM)
-          .execute(SOURCE);
+      const actual = mapper
+        .map(GET_ITEM).to(SET_ITEM)
+        .execute(SOURCE);
 
-        expect(actual).to.equal(EXPECTED);
+      expect(actual).to.equal(EXPECTED);
 
-        return done();
+      return done();
 
-      });
+    });
 
-      lab.test("a string source can be selected and mapped to the target with a transform", done => {
+    lab.test("a string source can be selected and mapped to the target with a transform", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map(GET_ITEM).to(SET_ITEM, value => value)
-          .execute(SOURCE);
+      const actual = mapper
+        .map(GET_ITEM).to(SET_ITEM, value => value)
+        .execute(SOURCE);
 
-        expect(actual).to.equal(EXPECTED);
+      expect(actual).to.equal(EXPECTED);
 
-        return done();
+      return done();
 
-      });
+    });
 
-      lab.test("an array source can be selected and mapped to the target", done => {
+    lab.test("an array source can be selected and mapped to the target", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map([GET_ITEM]).to(SET_ITEM, value => value)
-          .execute(SOURCE);
+      const actual = mapper
+        .map([GET_ITEM]).to(SET_ITEM, value => value)
+        .execute(SOURCE);
 
-        expect(actual).to.equal(EXPECTED);
+      expect(actual).to.equal(EXPECTED);
 
-        return done();
-
-      });
+      return done();
 
     });
 
   });
+
+  // });
 
 });
 
