@@ -1,4 +1,6 @@
 import Mapping from "./mapping";
+import flattenDeep from "lodash.flattendeep";
+
 // import getValue from "./object-mapper/get-key-value";
 // import setValue from "./object-mapper/set-key-value";
 
@@ -134,6 +136,7 @@ export default class Mapper {
     /* eslint-enable prefer-const */
 
     const mode = this.decideMode_(item);
+    const flattening = this.decideArrayFlattening_(sourcePath, targetPath);
 
     // TODO: offload to Mapping declaration
     if (!transform) {
@@ -145,7 +148,40 @@ export default class Mapper {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, isCustomTransform, options: { alwaysSet, alwaysTransform, pipelineTransformations } };
+    return { mode, targetPath, sourcePath, transform, isCustomTransform, flattening, options: { alwaysSet, alwaysTransform, pipelineTransformations } };
+
+  }
+
+  decideArrayFlattening_(sourcePathOrArray, targetPath) {
+
+    // some scenarios will supply an array not a string. Normalise it here. Might not work for OR more!
+    const sourcePath = Array.isArray(sourcePathOrArray) ? sourcePathOrArray[0] : sourcePathOrArray;
+
+    if (sourcePath === null || sourcePath === undefined) {
+      return { sourceCount: 0, targetCount: 0, flatten: false };
+    }
+
+    if (targetPath === null || targetPath === undefined) {
+      return { sourceCount: 0, targetCount: 0, flatten: false };
+    }
+
+    // const regArray = /\[\]|\[([\w\.'=]*)\]/g; use for support of jsonata-like query
+    const regArray = /\[\]|\[([\w]*)\]/g;
+
+    // Figure out source has move levels that target
+    let sourceCount = sourcePath.match(regArray);
+    let targetCount = targetPath.match(regArray);
+
+    sourceCount = sourceCount === null ? sourceCount = 0 : sourceCount.length;
+    targetCount = targetCount === null ? targetCount = 0 : targetCount.length;
+
+    if (sourceCount > targetCount && sourceCount > 0) {
+      // we need to flatten this array to match the target structure
+      return { sourceCount, targetCount, flatten: true };
+
+    }
+
+    return { sourceCount, targetCount, flatten: false };
 
   }
 
@@ -165,12 +201,10 @@ export default class Mapper {
 
   }
 
-  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, options }) {
+  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, flattening, options }) {
 
     // Get source
     let value = this.om.getValue(sourceObject, sourcePath);
-
-    // console.log("get", value);
 
     // default transformations
     if (this.exists_(value) && options.pipelineTransformations.length > 0) {
@@ -179,17 +213,17 @@ export default class Mapper {
       });
     }
 
-    // Apply transform - will become optional
+    // Apply transform if required
     if (this.exists_(value) || options.alwaysTransform === true) {
       value = transform(value);
     }
 
     // Set value on destination object
-    return this.setIfRequired_(destinationObject, targetPath, value, options);
+    return this.setIfRequired_(destinationObject, targetPath, value, flattening, options);
 
   }
 
-  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
+  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattening, options }) {
 
     if (isCustomTransform === false) {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
@@ -225,11 +259,11 @@ export default class Mapper {
     }
 
     // Set value on destination object
-    return this.setIfRequired_(destinationObject, targetPath, value, options);
+    return this.setIfRequired_(destinationObject, targetPath, value, flattening, options);
 
   }
 
-  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
+  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattening, options }) {
 
     let orValue;
     const sourceArray = sourcePath;
@@ -253,7 +287,7 @@ export default class Mapper {
     // no transform
     if (isCustomTransform === false) {
 
-      return this.setIfRequired_(destinationObject, targetPath, orValue, options);
+      return this.setIfRequired_(destinationObject, targetPath, orValue, flattening, options);
     }
 
     // has a transform
@@ -261,11 +295,18 @@ export default class Mapper {
       orValue = transform(orValue);
     }
 
-    return this.setIfRequired_(destinationObject, targetPath, orValue, options);
+    return this.setIfRequired_(destinationObject, targetPath, orValue, flattening, options);
 
   }
 
-  setIfRequired_(destinationObject, targetPath, value, options) {
+  setIfRequired_(destinationObject, targetPath, value, flattening, options) {
+
+    // console.log("flattening:", flattening);
+
+    if (flattening.flatten === true) {
+      const seekDepth = flattening.targetCount - 1;
+      value = this.flattenArray_(value, seekDepth);
+    }
 
     if (this.exists_(value) || options.alwaysSet === true) {
       return this.om.setValue(destinationObject, targetPath, value);
@@ -277,6 +318,29 @@ export default class Mapper {
 
     return destinationObject;
 
+  }
+
+  flattenArray_(valueArray, seekDepth, currentDepth = 0) {
+
+    // console.log("params", valueArray, seekDepth, currentDepth);
+
+    if (Array.isArray(valueArray) === false) return valueArray;
+    if (valueArray.length === 0) return valueArray;
+
+    if (seekDepth === currentDepth) {
+      valueArray = flattenDeep(valueArray);
+      // console.log("valueArray final:", valueArray);
+      return valueArray;
+    }
+
+    // value is always an array
+    for (let i = 0; i < valueArray.length; i++) {
+      const newDepth = currentDepth + 1;
+      valueArray[i] = this.flattenArray_(valueArray[i], seekDepth, newDepth);
+    }
+
+    // console.log("valueArray:", valueArray);
+    return valueArray;
   }
 
   isEmptyObject_(object) {

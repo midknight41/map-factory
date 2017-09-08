@@ -39,7 +39,7 @@ function getValueOld(fromObject, fromKey) {
     }
   }
 
-  // console.log("get-side", JSON.stringify(result));
+  // // console.log("get-side", JSON.stringify(result));
 
   return handleArrayOfUndefined_(result);
 }
@@ -64,25 +64,29 @@ function getValueNew(fromObject, fromKey) {
     lastValue = null;
   }
 
+  // console.log("lastValue:", lastValue);
+
   result = _getValue(fromObject, key[0], keys);
 
-  if (Array.isArray(result) && !lastValue) {
-    if (result.length) {
-      result = result.reduce(function (a, b) {
-        if (Array.isArray(a) && Array.isArray(b)) {
-          return a.concat(b);
-        } else if (Array.isArray(a)) {
-          a.push(b);
-          return a;
-        } else {
-          return [a, b];
-        }
-      });
-    }
-    if (!Array.isArray(result)) {
-      result = [result];
-    }
-  }
+  // console.log("result:", JSON.stringify(result));
+  
+  // if (Array.isArray(result) && !lastValue) {
+  //   if (result.length) {
+  //     result = result.reduce(function (a, b) {
+  //       if (Array.isArray(a) && Array.isArray(b)) {
+  //         return a.concat(b);
+  //       } else if (Array.isArray(a)) {
+  //         a.push(b);
+  //         return a;
+  //       } else {
+  //         return [a, b];
+  //       }
+  //     });
+  //   }
+  //   if (!Array.isArray(result)) {
+  //     result = [result];
+  //   }
+  // }
 
   // console.log("get-side", JSON.stringify(result));
 
