@@ -9,43 +9,7 @@
  * @constructor
  * @returns {*}
  */
-function getValueOld(fromObject, fromKey) {
-  var regDot = /\./g
-    , keys
-    , key
-    , result
-    ;
-
-  keys = fromKey.split(regDot);
-  key = keys.splice(0, 1);
-
-  result = _getValue(fromObject, key[0], keys);
-
-  if (Array.isArray(result)) {
-    if (result.length) {
-      result = result.reduce(function (a, b) {
-        if (Array.isArray(a) && Array.isArray(b)) {
-          return a.concat(b);
-        } else if (Array.isArray(a)) {
-          a.push(b);
-          return a;
-        } else {
-          return [a, b];
-        }
-      });
-    }
-    if (!Array.isArray(result)) {
-      result = [result];
-    }
-  }
-
-  // // console.log("get-side", JSON.stringify(result));
-
-  return handleArrayOfUndefined_(result);
-}
-
-
-function getValueNew(fromObject, fromKey) {
+function getValue(fromObject, fromKey) {
   var regDot = /\./g
     , regFinishArray = /.+(\[\])/g
     , keys
@@ -57,42 +21,12 @@ function getValueNew(fromObject, fromKey) {
   keys = fromKey.split(regDot);
   key = keys.splice(0, 1);
 
-  lastValue = fromKey.match(regFinishArray);
-  if (lastValue != null && lastValue[0] === fromKey) {
-    fromKey = fromKey.slice(0, -2);
-  } else {
-    lastValue = null;
-  }
-
-  // console.log("lastValue:", lastValue);
-
   result = _getValue(fromObject, key[0], keys);
-
-  // console.log("result:", JSON.stringify(result));
-  
-  // if (Array.isArray(result) && !lastValue) {
-  //   if (result.length) {
-  //     result = result.reduce(function (a, b) {
-  //       if (Array.isArray(a) && Array.isArray(b)) {
-  //         return a.concat(b);
-  //       } else if (Array.isArray(a)) {
-  //         a.push(b);
-  //         return a;
-  //       } else {
-  //         return [a, b];
-  //       }
-  //     });
-  //   }
-  //   if (!Array.isArray(result)) {
-  //     result = [result];
-  //   }
-  // }
-
-  // console.log("get-side", JSON.stringify(result));
 
   return handleArrayOfUndefined_(result);
 }
-module.exports = getValueNew;
+
+module.exports = getValue;
 
 function handleArrayOfUndefined_(value) {
 
