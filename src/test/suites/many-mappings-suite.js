@@ -10,7 +10,7 @@ suite.expect("LABELS").to.be.an.array();
 suite.expect("MAPPINGS").to.be.an.array();
 suite.expect("SOURCE").to.be.an.object();
 suite.expect("EXPECTED").to.be.an.object();
-suite.expect("EXPERIMENTAL").to.be.a.boolean();
+// suite.expect("EXPERIMENTAL").to.be.a.boolean();
 
 suite.declare((lab, variables) => {
 
@@ -35,7 +35,7 @@ suite.declare((lab, variables) => {
 
     // lab.experiment(experimentalLabel, () => {
 
-    lab.test("a string source can be selected and mapped to the target without a transform", done => {
+    lab.test("source values can be mapped to the target without a transform", done => {
 
       const map = createSut();
 
@@ -51,7 +51,7 @@ suite.declare((lab, variables) => {
 
     });
 
-    lab.test("a string source can be selected and mapped to the target with a transform", done => {
+    lab.test("source values can be mapped to the target with a transform", done => {
 
       const map = createSut();
 
@@ -66,7 +66,7 @@ suite.declare((lab, variables) => {
 
     });
 
-    lab.test("an array source can be selected and mapped to the target", done => {
+    lab.test("array source values can be mapped to the target", done => {
 
       const map = createSut();
 

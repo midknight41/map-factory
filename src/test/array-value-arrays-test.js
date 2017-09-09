@@ -5,7 +5,7 @@ import manyMappings from "./suites/many-mappings-suite";
 const lab = exports.lab = Lab.script();
 
 notationSuite.run(lab, {
-  LABELS: ["value arrays", "single mapping array specifying index"],
+  LABELS: ["arrays", "value arrays", "single mapping array specifying index"],
   GET_ITEM: "item",
   SET_ITEM: "[0]",
   SOURCE: {
@@ -18,7 +18,7 @@ notationSuite.run(lab, {
 });
 
 notationSuite.run(lab, {
-  LABELS: ["value arrays", "single mapping array"],
+  LABELS: ["arrays", "value arrays", "single mapping array"],
   GET_ITEM: "item",
   SET_ITEM: "[]",
   SOURCE: {
@@ -32,7 +32,7 @@ notationSuite.run(lab, {
 
 
 // size is missing from source
-const labels = ["value arrays", "mix of available and missing data"];
+const labels = ["arrays", "value arrays", "mix of available and missing data"];
 const mappings = [
   { from: "group.colours.[]", to: "item.signals" },
   { from: "group.name", to: "item.name" }

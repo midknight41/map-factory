@@ -4,7 +4,7 @@ import getHelper from "lab-testing";
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
-const group = testing.createExperiment("map-factory", "object-mapper");
+const group = testing.createExperiment("object-mapper");
 
 import getValue from "../../lib/object-mapper/get-key-value";
 
@@ -196,7 +196,7 @@ group("The getValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
-  lab.test.skip("get value - two level deep array", done => {
+  lab.test("get value - two level deep array", done => {
     const key = "foo[].baz[].fog.baz";
 
     const obj = {

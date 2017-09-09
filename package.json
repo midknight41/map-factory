@@ -70,9 +70,7 @@
   ],
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
-    "lodash.flatten": "^4.4.0",
     "lodash.flattendeep": "^4.4.0",
-    "lodash.flattendepth": "^4.7.0",
     "lodash.unset": "^4.5.2"
   }
 }

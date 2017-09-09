@@ -157,10 +157,6 @@ export default class Mapper {
     // some scenarios will supply an array not a string. Normalise it here. Might not work for OR more!
     const sourcePath = Array.isArray(sourcePathOrArray) ? sourcePathOrArray[0] : sourcePathOrArray;
 
-    if (sourcePath === null || sourcePath === undefined) {
-      return { sourceCount: 0, targetCount: 0, flatten: false };
-    }
-
     if (targetPath === null || targetPath === undefined) {
       return { sourceCount: 0, targetCount: 0, flatten: false };
     }
@@ -175,7 +171,7 @@ export default class Mapper {
     sourceCount = sourceCount === null ? sourceCount = 0 : sourceCount.length;
     targetCount = targetCount === null ? targetCount = 0 : targetCount.length;
 
-    if (sourceCount > targetCount && sourceCount > 0) {
+    if (sourceCount > targetCount) {
       // we need to flatten this array to match the target structure
       return { sourceCount, targetCount, flatten: true };
 

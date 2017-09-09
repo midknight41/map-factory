@@ -1,8 +1,13 @@
 import * as Lab from "lab";
 import { expect, fail } from "code";
 import createMapper from "../lib";
+import getHelper from "lab-testing";
 
-const { describe, it, beforeEach } = exports.lab = Lab.script();
+const lab = exports.lab = Lab.script();
+
+const testing = getHelper(lab);
+const group = testing.createExperiment("interfaces");
+
 const source = {
   "foo": "bar",
   "bar": "foo"
@@ -12,16 +17,16 @@ const expected = {
 };
 let mapper;
 
-describe("Execute Async functionality of the mapper", () => {
+group("The executeAsync() method", () => {
 
-  beforeEach(done => {
+  lab.beforeEach(done => {
     mapper = createMapper();
     done();
   });
 
-  describe("when execute async is called from the mapper instance", () => {
+  lab.experiment("when execute async is called from the mapper instance", () => {
 
-    it("should return a resolved promise with the desired result", done => {
+    lab.test("should return a resolved promise with the desired result", done => {
       mapper.map("foo");
       mapper.executeAsync(source)
         .then(actual => {
@@ -30,7 +35,7 @@ describe("Execute Async functionality of the mapper", () => {
         });
     });
 
-    it("should reject when an error is thrown", done => {
+    lab.test("should reject when an error is thrown", done => {
       mapper.map("foo");
       mapper.executeAsync(null)
         .then(() => {
@@ -46,9 +51,9 @@ describe("Execute Async functionality of the mapper", () => {
 
   });
 
-  describe("when execute async is called from the default function", () => {
+  lab.experiment("when execute async is called from the default function", () => {
 
-    it("should return a resolved promise with the desired result", done => {
+    lab.test("should return a resolved promise with the desired result", done => {
       mapper
         .map("foo").to("bar")
         .executeAsync(source)
@@ -59,9 +64,9 @@ describe("Execute Async functionality of the mapper", () => {
     });
   });
 
-  describe("when execute async is called from the chain", () => {
+  lab.experiment("when execute async is called from the chain", () => {
 
-    it("should return a resolved promise with the desired result", done => {
+    lab.test("should return a resolved promise with the desired result", done => {
       mapper("foo").executeAsync(source)
         .then(actual => {
           expect(actual).to.equal(expected);
