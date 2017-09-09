@@ -151,7 +151,7 @@ const valueToValueTests = [
 
 valueToValueTests.map(({ NAME, SOURCE, EXPECTED, MAPPINGS }) => {
 
-  const labels = flattenDeep([groups, ["with value source and object target", NAME]]);
+  const labels = flattenDeep([groups, ["with value source and value target", NAME]]);
 
   manyMappings.run(lab, {
     LABELS: labels, SOURCE, EXPECTED, MAPPINGS
@@ -433,7 +433,7 @@ const arrayToValueTests = [
 
 arrayToValueTests.map(({ NAME, SOURCE, EXPECTED, MAPPINGS }) => {
 
-  const labels = flattenDeep([groups, ["with array source and object target", NAME]]);
+  const labels = flattenDeep([groups, ["with array source and value target", NAME]]);
 
   manyMappings.run(lab, {
     LABELS: labels, SOURCE, EXPECTED, MAPPINGS

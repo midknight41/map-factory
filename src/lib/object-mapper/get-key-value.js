@@ -26,7 +26,41 @@ function getValue(fromObject, fromKey) {
   return handleArrayOfUndefined_(result);
 }
 
-module.exports = getValue;
+function getValueOld(fromObject, fromKey) {
+  var regDot = /\./g
+    , keys
+    , key
+    , result
+    ;
+
+  keys = fromKey.split(regDot);
+  key = keys.splice(0, 1);
+
+  result = _getValue(fromObject, key[0], keys);
+
+  if (Array.isArray(result)) {
+    if (result.length) {
+      result = result.reduce(function (a, b) {
+        if (Array.isArray(a) && Array.isArray(b)) {
+          return a.concat(b);
+        } else if (Array.isArray(a)) {
+          a.push(b);
+          return a;
+        } else {
+          return [a, b];
+        }
+      });
+    }
+    if (!Array.isArray(result)) {
+      result = [result];
+    }
+  }
+
+  return handleArrayOfUndefined_(result);
+}
+
+module.exports.getValue = getValue;
+module.exports.getValueOld = getValueOld;
 
 function handleArrayOfUndefined_(value) {
 

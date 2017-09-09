@@ -4,7 +4,7 @@ import getHelper from "lab-testing";
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
-const group = testing.createExperiment("object-mapper");
+const group = testing.createExperiment("raw methods");
 
 import setValue from "../../lib/object-mapper/set-key-value";
 
