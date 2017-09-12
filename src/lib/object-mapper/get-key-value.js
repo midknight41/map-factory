@@ -1,4 +1,5 @@
 /* eslint-disable */
+const flattenDeep = require("lodash.flattendeep");
 
 'use strict';
 
@@ -68,9 +69,27 @@ function handleArrayOfUndefined_(value) {
     return value;
   }
 
-  for (const item of value) {
+  // Arrays of empty array aren't interesting. flatten them and see if we've got any data
+  // There are probably more performant ways of doing this with getValue()
+  if (Array.isArray(value) === true) {
+
+    const emptyTest = flattenDeep(value);
+
+    if (emptyTest.length === 0) {
+      return undefined;
+    }
+
+    return scanArrayForValue_(emptyTest, value);
+  }
+
+  return scanArrayForValue_(value, value);
+}
+
+function scanArrayForValue_(arrayToScan, defaultValue) {
+
+  for (const item of arrayToScan) {
     if (item !== undefined && item !== null) {
-      return value;
+      return defaultValue;
     }
   }
 

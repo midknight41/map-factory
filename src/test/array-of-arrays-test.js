@@ -1,4 +1,4 @@
-import { expect } from "code";
+import { expect, fail } from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
 import manyMappings from "./suites/many-mappings-suite";
@@ -10,6 +10,76 @@ const testing = getHelper(lab);
 const group = testing.createExperiment("arrays", "array of arrays");
 
 const groups = ["arrays", "array of arrays"];
+
+
+group("when mapping from a larger to a small array", () => {
+
+  const src = {
+    one: [{
+      two: [
+        { three: [{ value: "A" }, { value: "B" }] },
+        { three: [{ value: "C" }, { value: "D" }] }
+      ]
+    },
+    {
+      two: [
+        { three: [{ value: "A1" }, { value: "B1" }] },
+        { three: [{ value: "C1" }, { value: "D1" }] }
+      ]
+    }]
+  };
+
+  const expected = {
+    one: [
+      { two: [{ value: "A" }, { value: "B" }, { value: "C" }, { value: "D" }] },
+      { two: [{ value: "A1" }, { value: "B1" }, { value: "C1" }, { value: "D1" }] }
+    ]
+  };
+
+  lab.test("or() mode works when the first get fails", done => {
+
+    const mapper = createMapper();
+
+    const actual = mapper
+      .map("fish").or("one[].two[].three[].value").to("one[].two[].value")
+      .execute(src);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test("or() mode works when the second get succeeds", done => {
+
+    const mapper = createMapper();
+
+    const actual = mapper
+      .map("one[].two[].three[].value").or("fish").to("one[].two[].value")
+      .execute(src);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test("missing data works as expected", done => {
+
+    const emptySource = {
+      one: [{ two: [{ three: [] }, { three: [] }, { three: null }, undefined, null] }]
+    };
+
+    const mapper = createMapper();
+
+    const actual = mapper
+      .map("one[].two[].three[]").to("one[].two[]")
+      .execute(emptySource);
+
+    expect(actual).to.equal({});
+
+    return done();
+  });
+});
+
 
 const valueToValueTests = [
   {
@@ -279,13 +349,35 @@ const valueToArrayTests = [
         from: "one[].two[].three[].value",
         to: "one[]"
       }]
+  },
+  {
+    NAME: "3 level to 0 level",
+    SOURCE: {
+      one: [{
+        two: [
+          { three: [{ value: "A" }, { value: "B" }] },
+          { three: [{ value: "C" }, { value: "D" }] }
+        ]
+      },
+      {
+        two: [
+          { three: [{ value: "A1" }, { value: "B1" }] },
+          { three: [{ value: "C1" }, { value: "D1" }] }
+        ]
+      }]
+    },
+    EXPECTED: ["A", "B", "C", "D", "A1", "B1", "C1", "D1"],
+    MAPPINGS: [
+      {
+        from: "one[].two[].three[].value",
+        to: "[]"
+      }]
   }
-];
 
+];
 valueToArrayTests.map(({ NAME, SOURCE, EXPECTED, MAPPINGS }) => {
 
   const labels = flattenDeep([groups, ["with value source and with array target", NAME]]);
-
   manyMappings.run(lab, {
     LABELS: labels, SOURCE, EXPECTED, MAPPINGS
   });

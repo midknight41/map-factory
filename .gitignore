@@ -72,7 +72,7 @@ lib/*.js
 test/*.js.map
 test/*.js
 .idea
-
+.vscode/
 
 #ncrunch
 *ncrunch*

@@ -69,6 +69,7 @@
     "dist"
   ],
   "dependencies": {
+    "lab-suite": "^1.4.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.flattendeep": "^4.4.0",
     "lodash.unset": "^4.5.2"

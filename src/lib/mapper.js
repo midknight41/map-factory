@@ -1,6 +1,6 @@
 import Mapping from "./mapping";
 import flattenDeep from "lodash.flattendeep";
-
+import { getValueOld } from "./object-mapper/get-key-value";
 // import getValue from "./object-mapper/get-key-value";
 // import setValue from "./object-mapper/set-key-value";
 
@@ -135,10 +135,13 @@ export default class Mapper {
     let isCustomTransform = true;
     /* eslint-enable prefer-const */
 
-    const mode = this.decideMode_(item);
-    const flattening = this.decideArrayFlattening_(sourcePath, targetPath);
-
     // TODO: offload to Mapping declaration
+    const mode = this.decideMode_(item);
+    const flattenings = this.decideArrayFlattening_(sourcePath, targetPath);
+
+    // console.log("flattening", flattenings);
+
+
     if (!transform) {
       isCustomTransform = false;
       transform = value => value;
@@ -148,15 +151,28 @@ export default class Mapper {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, isCustomTransform, flattening, options: { alwaysSet, alwaysTransform, pipelineTransformations } };
+    return { mode, targetPath, sourcePath, transform, isCustomTransform, flattenings, options: { alwaysSet, alwaysTransform, pipelineTransformations } };
 
   }
 
   decideArrayFlattening_(sourcePathOrArray, targetPath) {
 
     // some scenarios will supply an array not a string. Normalise it here. Might not work for OR more!
-    const sourcePath = Array.isArray(sourcePathOrArray) ? sourcePathOrArray[0] : sourcePathOrArray;
+    const sourcePaths = Array.isArray(sourcePathOrArray) ? sourcePathOrArray : [sourcePathOrArray];
+    const flattenings = [];
 
+    for (const sourcePath of sourcePaths) {
+      flattenings.push(this.processSources_(sourcePath, targetPath));
+    }
+
+    return flattenings;
+
+  }
+
+  processSources_(sourcePath, targetPath) {
+
+    // no target means that the source is used as the target (same number of arrays)
+    // so in this scenario we just suppress flattening
     if (targetPath === null || targetPath === undefined) {
       return { sourceCount: 0, targetCount: 0, flatten: false };
     }
@@ -176,7 +192,6 @@ export default class Mapper {
       return { sourceCount, targetCount, flatten: true };
 
     }
-
     return { sourceCount, targetCount, flatten: false };
 
   }
@@ -197,10 +212,11 @@ export default class Mapper {
 
   }
 
-  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, flattening, options }) {
+  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, flattenings, options }) {
 
     // Get source
     let value = this.om.getValue(sourceObject, sourcePath);
+    const flattening = flattenings[0];
 
     // default transformations
     if (this.exists_(value) && options.pipelineTransformations.length > 0) {
@@ -219,7 +235,7 @@ export default class Mapper {
 
   }
 
-  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattening, options }) {
+  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattenings, options }) {
 
     if (isCustomTransform === false) {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
@@ -227,10 +243,20 @@ export default class Mapper {
 
     let values = [];
     let anyValues = false;
+    let flattening;
+
+    // attempting to avoid a breaking change for multi-mode users
+    if (flattenings.length === 1) {
+      flattening = flattenings[0];
+    } else {
+      flattening = { flatten: false };
+    }
 
     // Get source
     for (const fromKey of sourcePath) {
 
+      // hack to avoid a breaking change on multi-mode until the next major version
+      // const value = getValueOld(sourceObject, fromKey);
       const value = this.om.getValue(sourceObject, fromKey);
 
       if (this.exists_(value)) {
@@ -259,10 +285,11 @@ export default class Mapper {
 
   }
 
-  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattening, options }) {
+  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattenings, options }) {
 
     let orValue;
     const sourceArray = sourcePath;
+    let i = 0;
 
     for (const sourceKey of sourceArray) {
 
@@ -271,7 +298,11 @@ export default class Mapper {
       if (orValue !== null && orValue !== undefined) {
         break;
       }
+
+      i++;
     }
+
+    const flattening = flattenings[i];
 
     // default transformations
     if (this.exists_(orValue) && options.pipelineTransformations.length > 0) {
@@ -299,7 +330,7 @@ export default class Mapper {
 
     // console.log("flattening:", flattening);
 
-    if (flattening.flatten === true) {
+    if (flattening !== undefined && flattening.flatten === true) {
       const seekDepth = flattening.targetCount - 1;
       value = this.flattenArray_(value, seekDepth);
     }

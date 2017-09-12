@@ -168,6 +168,14 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
 
     if (Array.isArray(destinationObject)) {
       // console.log(indent, "Array.isArray if", fromValue, `key: "${startKey}"`);
+
+      // Check if we are trying to set an array value
+      // to a target array. Avoid nesting that array in another array. 
+      if (Array.isArray(fromValue)) {
+        destinationObject = fromValue;
+        return destinationObject;
+      }
+
       destinationObject[arrayIndex] = fromValue;
       return destinationObject;
 

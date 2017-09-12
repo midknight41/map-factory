@@ -9,7 +9,7 @@ const suite = labSuite.create();
 suite.expect("LABELS").to.be.an.array();
 suite.expect("MAPPINGS").to.be.an.array();
 suite.expect("SOURCE").to.be.an.object();
-suite.expect("EXPECTED").to.be.an.object();
+suite.expect("EXPECTED").to.be.an.object().or.an.array();
 // suite.expect("EXPERIMENTAL").to.be.a.boolean();
 
 suite.declare((lab, variables) => {
