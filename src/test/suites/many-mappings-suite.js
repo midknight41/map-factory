@@ -8,9 +8,10 @@ const suite = labSuite.create();
 
 suite.expect("LABELS").to.be.an.array();
 suite.expect("MAPPINGS").to.be.an.array();
-suite.expect("SOURCE").to.be.an.object();
+suite.expect("SOURCE").to.be.an.object().or.an.array();
 suite.expect("EXPECTED").to.be.an.object().or.an.array();
 // suite.expect("EXPERIMENTAL").to.be.a.boolean();
+suite.expect("MULTI_MODE").to.be.anything(); // optional boolean
 
 suite.declare((lab, variables) => {
 
@@ -21,6 +22,8 @@ suite.declare((lab, variables) => {
     EXPECTED,
     EXPERIMENTAL
   } = variables;
+
+  const MULTI_MODE = variables.MULTI_MODE === undefined ? true : variables.MULTI_MODE;
 
   const testing = getHelper(lab);
   const group = testing.createExperiment(...LABELS);
@@ -66,20 +69,26 @@ suite.declare((lab, variables) => {
 
     });
 
-    lab.test("array source values can be mapped to the target", done => {
+    if (MULTI_MODE === true) {
 
-      const map = createSut();
+      lab.test("array source values can be mapped to the target", done => {
 
-      for (const item of MAPPINGS) {
-        map([item.from]).to(item.to, value => value);
-      }
+        const map = createSut();
 
-      const actual = map.execute(SOURCE);
-      expect(actual).to.equal(EXPECTED);
+        for (const item of MAPPINGS) {
+          map([item.from]).to(item.to, value => value);
+        }
 
-      return done();
+        const actual = map.execute(SOURCE);
 
-    });
+        expect(actual).to.equal(EXPECTED);
+
+
+        return done();
+
+      });
+
+    }
 
   });
   // });

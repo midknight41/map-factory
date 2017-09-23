@@ -1,3 +1,104 @@
+### 3.0.0
+
+#### TODO
+
+- decide if flattening should occur with transforms
+- decide where flattening should occur with transforms
+- perspective: this only affects array of arrays which is already quite broken
+- bug with a root
+
+Fixes a bug when dealing with arrays of arrays with mapping fields involved in parent-child relationships. This is a breaking change as the values supplied to transforms must preserve a nested array structure to be properly set on the target object. The 2.x versions did not preserve this structure.
+
+**2.x**
+```js
+
+const createMapper = require("map-factory");
+const flatten = require("lodash.flatten");
+
+mapper
+  map("[]a.b[]").with({flatten:false}).to("[]")
+  map("[]a.b[]").with({"flatten.inverted":true}).to("[]")
+  
+  <!-- map("[]a.b[]").flatten(depth).to("[]")
+  map("[]a.b[]").flatten(depth, inverted).to("[]").to("[]")
+ -->
+
+let mapper = createMapper();
+let src = {
+  one: [
+    { name: "first", two: [{ three: { value1: "A1", value2: "A2" } }, { three: { value1: "B1", value2: "B2" } }] },
+    { name: "second", two: [{ three: { value1: "C1", value2: "C2" } }, { three: { value1: "D1", value2: "D2" } }] }
+  ]
+};
+
+mapper
+  .map("one[].name").to("combined[].name")
+  .map(["one[].two[].three[].value1", "one[].two[].three[].value2"])
+  .to("combined[].values[]", (value1, value2) => {
+
+
+    // [["A1","B1"],["C1","D1"]] [["A2","B2"],["C2","D2"]]
+    // ["A1","B1","C1","D1"] ["A2","B2","C2","D2"]
+
+    for (let i = 0; i < value1.length; i++) {
+
+      const values = flatten([value1[i], value2[i]]);
+      combinedValues.push(values);
+    }
+
+    console.log(combinedValues);
+
+    return combinedValues;
+  });
+
+let actual = mapper.execute(src);
+
+console.log(JSON.stringify(actual));
+
+```
+
+**3.x**
+```js
+
+const createMapper = require("map-factory");
+const {flatten} = require("lodash");
+const createMapper = require("./dist/lib/index");
+const flatten = require("lodash.flatten");
+
+let mapper = createMapper();
+let src = {
+  one: [
+    { name: "first", two: [{ three: { value1: "A1", value2: "A2" } }, { three: { value1: "B1", value2: "B2" } }] },
+    { name: "second", two: [{ three: { value1: "C1", value2: "C2" } }, { three: { value1: "D1", value2: "D2" } }] }
+  ]
+};
+
+mapper
+  .map("one[].name").to("combined[].name")
+  .map(["one[].two[].three[].value1", "one[].two[].three[].value2"])
+  .to("combined[].values[]", (value1, value2) => {
+
+    console.log(JSON.stringify(value1), JSON.stringify(value2));
+
+    const combinedValues = [];
+
+    for (let i = 0; i < value1.length; i++) {
+
+      const values = flatten([value1[i], value2[i]]);
+      combinedValues.push(values);
+    }
+
+    console.log(combinedValues);
+
+    return combinedValues;
+  });
+
+let actual = mapper.execute(src);
+
+console.log(JSON.stringify(actual));
+```
+
+
 ### 2.4.1
 
 Fixed bug where ```each()``` returned a null when supplied with an empty array instead of returing an empty array.

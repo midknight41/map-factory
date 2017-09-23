@@ -1,6 +1,8 @@
 import Mapping from "./mapping";
 import flattenDeep from "lodash.flattendeep";
-import { getValueOld } from "./object-mapper/get-key-value";
+import flattenDepth from "lodash.flattendepth";
+
+// import { getValueOld } from "./object-mapper/get-key-value";
 // import getValue from "./object-mapper/get-key-value";
 // import setValue from "./object-mapper/set-key-value";
 
@@ -104,11 +106,7 @@ export default class Mapper {
 
     }
 
-    if (this.chainArray.length > 0) {
-      this.chainArray.map(item => {
-        destination = item.execute(destination);
-      });
-    }
+    destination = this.handleChain_(destination);
 
     return destination;
   }
@@ -126,21 +124,31 @@ export default class Mapper {
     return this;
   }
 
+  handleChain_(destination) {
+
+    if (this.chainArray.length > 0) {
+      this.chainArray.map(item => {
+        destination = item.execute(destination);
+      });
+    }
+
+    return destination;
+  }
+
   getTransformDescriptor_(item) {
 
     /* eslint-disable prefer-const */
     const sourcePath = item.source;
     let targetPath = item.target;
-    let { transform, alwaysSet, alwaysTransform, pipelineTransformations } = item;
+    let { transform, alwaysSet, alwaysTransform,
+      pipelineTransformations, flatten, flattenInverted } = item;
+
     let isCustomTransform = true;
     /* eslint-enable prefer-const */
 
     // TODO: offload to Mapping declaration
     const mode = this.decideMode_(item);
-    const flattenings = this.decideArrayFlattening_(sourcePath, targetPath);
-
-    // console.log("flattening", flattenings);
-
+    const flattenings = this.decideArrayFlattening_(sourcePath, targetPath, flatten, flattenInverted);
 
     if (!transform) {
       isCustomTransform = false;
@@ -151,30 +159,35 @@ export default class Mapper {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, isCustomTransform, flattenings, options: { alwaysSet, alwaysTransform, pipelineTransformations } };
+    return { mode, targetPath, sourcePath, transform, isCustomTransform, flattenings, options: { alwaysSet, alwaysTransform, pipelineTransformations, flatten, flattenInverted } };
 
   }
 
-  decideArrayFlattening_(sourcePathOrArray, targetPath) {
+  decideArrayFlattening_(sourcePathOrArray, targetPath, flattenFlag, flattenInverted) {
 
     // some scenarios will supply an array not a string. Normalise it here. Might not work for OR more!
     const sourcePaths = Array.isArray(sourcePathOrArray) ? sourcePathOrArray : [sourcePathOrArray];
     const flattenings = [];
 
     for (const sourcePath of sourcePaths) {
-      flattenings.push(this.processSources_(sourcePath, targetPath));
+
+      // Check to see if the user has overriden default flattening behaviour
+      const flattening = this.processSources_(sourcePath, targetPath, flattenInverted);
+      flattening.flatten = flattenFlag !== null ? flattenFlag : flattening.flatten;
+
+      flattenings.push(flattening);
     }
 
     return flattenings;
 
   }
 
-  processSources_(sourcePath, targetPath) {
+  processSources_(sourcePath, targetPath, flattenInverted) {
 
     // no target means that the source is used as the target (same number of arrays)
     // so in this scenario we just suppress flattening
     if (targetPath === null || targetPath === undefined) {
-      return { sourceCount: 0, targetCount: 0, flatten: false };
+      return { sourceCount: 0, targetCount: 0, flatten: false, inverted: flattenInverted };
     }
 
     // const regArray = /\[\]|\[([\w\.'=]*)\]/g; use for support of jsonata-like query
@@ -189,10 +202,11 @@ export default class Mapper {
 
     if (sourceCount > targetCount) {
       // we need to flatten this array to match the target structure
-      return { sourceCount, targetCount, flatten: true };
+      return { sourceCount, targetCount, flatten: true, inverted: flattenInverted };
 
     }
-    return { sourceCount, targetCount, flatten: false };
+
+    return { sourceCount, targetCount, flatten: false, inverted: flattenInverted };
 
   }
 
@@ -235,7 +249,7 @@ export default class Mapper {
 
   }
 
-  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattenings, options }) {
+  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
 
     if (isCustomTransform === false) {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
@@ -243,14 +257,8 @@ export default class Mapper {
 
     let values = [];
     let anyValues = false;
-    let flattening;
 
-    // attempting to avoid a breaking change for multi-mode users
-    if (flattenings.length === 1) {
-      flattening = flattenings[0];
-    } else {
-      flattening = { flatten: false };
-    }
+    const flattening = {flatten: false};
 
     // Get source
     for (const fromKey of sourcePath) {
@@ -328,11 +336,14 @@ export default class Mapper {
 
   setIfRequired_(destinationObject, targetPath, value, flattening, options) {
 
-    // console.log("flattening:", flattening);
-
     if (flattening !== undefined && flattening.flatten === true) {
       const seekDepth = flattening.targetCount - 1;
-      value = this.flattenArray_(value, seekDepth);
+
+      if (flattening.inverted === true) {
+        value = flattenDepth(value, flattening.sourceCount - flattening.targetCount);
+      } else {
+        value = this.flattenArray_(value, seekDepth);
+      }
     }
 
     if (this.exists_(value) || options.alwaysSet === true) {
@@ -348,8 +359,6 @@ export default class Mapper {
   }
 
   flattenArray_(valueArray, seekDepth, currentDepth = 0) {
-
-    // console.log("params", valueArray, seekDepth, currentDepth);
 
     if (Array.isArray(valueArray) === false) return valueArray;
     if (valueArray.length === 0) return valueArray;

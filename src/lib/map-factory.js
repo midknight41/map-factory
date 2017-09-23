@@ -5,9 +5,20 @@ export default function createMapper(options) {
 
   const opts = options || {};
 
-  opts.alwaysSet = typeof opts.alwaysSet === "boolean" ? opts.alwaysSet : false;
-  opts.alwaysTransform = typeof opts.alwaysTransform === "boolean" ? opts.alwaysTransform : false;
-  opts.experimental = typeof opts.experimental === "boolean" ? opts.experimental : false;
+  // flatten defaults to null which means will make the decision to flatten by itself
+  const permittedOptions = ["flatten", "flattenInverted", "alwaysSet", "alwaysTransform"];
+  const defaultValues = [null, false, false, false];
+
+  for (let i = 0; i < permittedOptions.length; i++) {
+    const option = permittedOptions[i];
+    opts[option] = typeof opts[option] === "boolean" ? opts[option] : defaultValues[i];
+  }
+
+  // opts.alwaysSet = typeof opts.alwaysSet === "boolean" ? opts.alwaysSet : false;
+  // opts.alwaysTransform = typeof opts.alwaysTransform === "boolean" ? opts.alwaysTransform : false;
+  // opts.experimental = typeof opts.experimental === "boolean" ? opts.experimental : false;
+  // opts.flatten = typeof opts.flatten === "boolean" ? opts.flatten : false;
+  // opts.flattenInverted = typeof opts.flattenInverted === "boolean" ? opts.flattenInverted : false;
 
   const me = {
     mapper: new Mapper(opts, ported)

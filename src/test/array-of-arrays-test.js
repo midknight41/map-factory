@@ -1,4 +1,4 @@
-import { expect, fail } from "code";
+import { expect } from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
 import manyMappings from "./suites/many-mappings-suite";
@@ -78,8 +78,138 @@ group("when mapping from a larger to a small array", () => {
 
     return done();
   });
+
 });
 
+group("with the flattenInverted option == true", () => {
+
+  const src = [{
+    one: [
+      { name: "first", two: [{ value: "A" }, { value: "B" }] },
+      { name: "second", two: [{ value: "C" }, { value: "D" }] }
+    ]
+  }, {
+    one: [
+      { name: "third", two: [{ value: "E" }, { value: "F" }] },
+      { name: "fourth", two: [{ value: "G" }, { value: "H" }] }
+    ]
+  }];
+
+  lab.test("a single level flatten works correctly", done => {
+
+    const mapper = createMapper();
+
+    const expected = [
+      { name: "first", values: ["A", "B"] },
+      { name: "second", values: ["C", "D"] },
+      { name: "third", values: ["E", "F"] },
+      { name: "fourth", values: ["G", "H"] }
+    ];
+
+    const options = { flattenInverted: true };
+    mapper
+      .map("[].one[].name").to("[].name")
+      .map("[].one[].two[].value").with(options).to("[].values[]");
+
+    const actual = mapper.execute(src);
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+  lab.test("a two level flatting works correctly", done => {
+
+    const mapper = createMapper();
+
+    // The result whether flattened normally or inverted is the same
+    const expected = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+    const options = { flattenInverted: true };
+
+    mapper
+      .map("[].one[].two[].value").with(options).to("[]");
+
+    const actual = mapper.execute(src);
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+});
+
+group("with the flatten option == false", () => {
+
+  lab.test("a two level flatting works correctly", done => {
+
+    const mapper = createMapper();
+    const src = [{
+      one: [
+        { name: "first", two: [{ value: "A" }, { value: "B" }] },
+        { name: "second", two: [{ value: "C" }, { value: "D" }] }
+      ]
+    }, {
+      one: [
+        { name: "third", two: [{ value: "E" }, { value: "F" }] },
+        { name: "fourth", two: [{ value: "G" }, { value: "H" }] }
+      ]
+    }];
+
+    // The result whether flattened normally or inverted is the same
+    const expected = [[["A", "B"], ["C", "D"]], [["E", "F"], ["G", "H"]]];
+
+    const options = { flatten: false };
+
+    mapper
+      .map("[].one[].two[].value").with(options).to("[]");
+
+    const actual = mapper.execute(src);
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+
+});
+
+
+group("in multi-mode with array of arrays", () => {
+
+  lab.test("array flattening is not applied", done => {
+
+    const src = {
+      one: [{
+        two: [
+          { three: [{ value: "A" }, { value: "B" }] },
+          { three: [{ value: "C" }, { value: "D" }] }
+        ]
+      },
+      {
+        two: [
+          { three: [{ value: "A1" }, { value: "B1" }] },
+          { three: [{ value: "C1" }, { value: "D1" }] }
+        ]
+      }]
+    };
+
+    const expected = {
+      result: [
+        [["A", "B"], ["C", "D"]],
+        [["A1", "B1"], ["C1", "D1"]]
+      ]
+    };
+
+    const mapper = createMapper();
+
+    const actual = mapper
+      .map(["one[].two[].three[].value"]).to("result", item => item)
+      .execute(src);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+
+  });
+
+});
 
 const valueToValueTests = [
   {
@@ -224,7 +354,7 @@ valueToValueTests.map(({ NAME, SOURCE, EXPECTED, MAPPINGS }) => {
   const labels = flattenDeep([groups, ["with value source and value target", NAME]]);
 
   manyMappings.run(lab, {
-    LABELS: labels, SOURCE, EXPECTED, MAPPINGS
+    LABELS: labels, SOURCE, EXPECTED, MAPPINGS, MULTI_MODE: false
   });
 
 });
@@ -373,17 +503,16 @@ const valueToArrayTests = [
         to: "[]"
       }]
   }
-
 ];
+
 valueToArrayTests.map(({ NAME, SOURCE, EXPECTED, MAPPINGS }) => {
 
   const labels = flattenDeep([groups, ["with value source and with array target", NAME]]);
   manyMappings.run(lab, {
-    LABELS: labels, SOURCE, EXPECTED, MAPPINGS
+    LABELS: labels, SOURCE, EXPECTED, MAPPINGS, MULTI_MODE: false
   });
 
 });
-
 
 const arrayToValueTests = [
   {
@@ -528,7 +657,7 @@ arrayToValueTests.map(({ NAME, SOURCE, EXPECTED, MAPPINGS }) => {
   const labels = flattenDeep([groups, ["with array source and value target", NAME]]);
 
   manyMappings.run(lab, {
-    LABELS: labels, SOURCE, EXPECTED, MAPPINGS
+    LABELS: labels, SOURCE, EXPECTED, MAPPINGS, MULTI_MODE: false
   });
 
 });
@@ -661,7 +790,7 @@ arrayToArrayTests.map(({ NAME, SOURCE, EXPECTED, MAPPINGS }) => {
   const labels = flattenDeep([groups, ["with array source and with array target", NAME]]);
 
   manyMappings.run(lab, {
-    LABELS: labels, SOURCE, EXPECTED, MAPPINGS
+    LABELS: labels, SOURCE, EXPECTED, MAPPINGS, MULTI_MODE: false
   });
 
 });
