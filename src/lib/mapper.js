@@ -2,10 +2,6 @@ import Mapping from "./mapping";
 import flattenDeep from "lodash.flattendeep";
 import flattenDepth from "lodash.flattendepth";
 
-// import { getValueOld } from "./object-mapper/get-key-value";
-// import getValue from "./object-mapper/get-key-value";
-// import setValue from "./object-mapper/set-key-value";
-
 const SINGLE_MODE = 0;
 const MULTI_MODE = 1;
 const OR_MODE = 2;
@@ -165,7 +161,7 @@ export default class Mapper {
 
   decideArrayFlattening_(sourcePathOrArray, targetPath, flattenFlag, flattenInverted) {
 
-    // some scenarios will supply an array not a string. Normalise it here. Might not work for OR more!
+    // some scenarios will supply an array not a string. Normalise it here.
     const sourcePaths = Array.isArray(sourcePathOrArray) ? sourcePathOrArray : [sourcePathOrArray];
     const flattenings = [];
 

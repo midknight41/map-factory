@@ -14,12 +14,6 @@ export default function createMapper(options) {
     opts[option] = typeof opts[option] === "boolean" ? opts[option] : defaultValues[i];
   }
 
-  // opts.alwaysSet = typeof opts.alwaysSet === "boolean" ? opts.alwaysSet : false;
-  // opts.alwaysTransform = typeof opts.alwaysTransform === "boolean" ? opts.alwaysTransform : false;
-  // opts.experimental = typeof opts.experimental === "boolean" ? opts.experimental : false;
-  // opts.flatten = typeof opts.flatten === "boolean" ? opts.flatten : false;
-  // opts.flattenInverted = typeof opts.flattenInverted === "boolean" ? opts.flattenInverted : false;
-
   const me = {
     mapper: new Mapper(opts, ported)
   };

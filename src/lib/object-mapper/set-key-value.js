@@ -152,9 +152,7 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
 
       }
 
-      // console.log(indent, "here?");
-
-      // Check if we are trying to set an array value
+       // Check if we are trying to set an array value
       // to a target array. Avoid nesting that array in another array. 
       if (Array.isArray(fromValue)) {
         destinationObject[key] = fromValue;
@@ -224,8 +222,6 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
       const itemKey = keys[0];
       const sliced = keys.slice(1);
 
-      // console.log(indent, "new code", itemKey, sliced, destinationObject, destinationObject[key].length, fromValue);
-
       // We only want to look through arrays of arrays
       // peak at the first item to make that distinction
       if (Array.isArray(fromValue[0]) === false) {
@@ -245,7 +241,6 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
       return destinationObject;
     }
 
-    // console.log(indent, "old code");
     destinationObject[key][arrayIndex] = _setValue(destinationObject[key][arrayIndex], keys[0], keys.slice(1), fromValue, depth);
 
     return destinationObject;
@@ -272,7 +267,6 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
     // console.log(indent, "final _setValue call", keys[0], fromValue);
     const retval = _setValue(destinationObject[arrayIndex], keys[0], keys.slice(1), fromValue, depth, true);
 
-    // console.log(indent, "retval", retval)
     if (retval !== null) {
       destinationObject[arrayIndex] = retval;
     }
@@ -284,7 +278,6 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
   destinationObject[key] = _setValue(destinationObject[key], keys[0], keys.slice(1), fromValue, depth);
   return destinationObject;
 
-  // return destinationObject;
 }
 
 /**
