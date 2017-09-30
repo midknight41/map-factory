@@ -1,6 +1,6 @@
 {
   "name": "map-factory",
-  "version": "2.4.1",
+  "version": "3.0.0",
   "description": "A simple object mapping utility that makes it easy to map data from one object to another. Create object mappers using fluent interface that supports deep references (dot notation), custom transformations, and object merging.",
   "main": "./dist/lib/index.js",
   "scripts": {
@@ -73,7 +73,7 @@
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
     "lodash.flattendeep": "^4.4.0",
-    "lodash.flattendepth": "^4.7.0",   
+    "lodash.flattendepth": "^4.7.0",
     "lodash.unset": "^4.5.2"
   }
 }
