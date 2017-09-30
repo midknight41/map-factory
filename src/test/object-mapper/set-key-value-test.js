@@ -4,7 +4,7 @@ import getHelper from "lab-testing";
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
-const group = testing.createExperiment("map-factory", "object-mapper");
+const group = testing.createExperiment("raw methods");
 
 import setValue from "../../lib/object-mapper/set-key-value";
 
@@ -318,15 +318,39 @@ group("The setValue() method", () => {
     return done();
   });
   lab.test("array to object", done => {
-    const key = "foo[].bar[].baz";
-    const value = ["foo", "const"];
+
+    const key = "one[].two[].three";
+    const value = ["A", "B"];
 
     const expected = {
-      foo: [{
-        bar: [{
-          baz: "foo"
+      one: [{
+        two: [{
+          three: "A"
         }, {
-          baz: "const"
+          three: "B"
+        }]
+      }]
+    };
+
+    const result = setValue({}, key, value);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
+  lab.test("array of arrays to object", done => {
+
+    const key = "one[].two[].three";
+    const value = [["A"], ["B"]];
+
+    const expected = {
+      one: [{
+        two: [{
+          three: "A"
+        }]
+      },
+      {
+        two: [{
+          three: "B"
         }]
       }]
     };

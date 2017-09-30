@@ -1,3 +1,39 @@
+### 3.0.0
+
+Fixes a bug when dealing with arrays of arrays with mapping fields involved in parent-child relationships. This is a breaking change as the values supplied to transforms must preserve a nested array structure to be properly set on the target object. The 2.x versions did not preserve this structure.
+
+The ```getValue``` function will also preserve this structure too.
+
+```js
+
+  const createMapper = require("map-factory");
+
+  let mapper = createMapper();
+  let src = {
+    one: [
+      { name: "first", two: [{ three: { value1: "A1", value2: "A2" } }, { three: { value1: "B1", value2: "B2" } }] },
+      { name: "second", two: [{ three: { value1: "C1", value2: "C2" } }, { three: { value1: "D1", value2: "D2" } }] }
+    ]
+  };
+
+  mapper
+    .map("one[].name").to("combined[].name")
+    .map("one[].two[].three[].value1").to("combined[].values[]", value => {
+
+      // A transform in v2 received ["A1","B1","C1","D1"]
+      // The transform in v3 will now receive [["A1","B1"],["C1","D1"]]
+      return value;
+
+    });
+
+  let actual = mapper.execute(src);
+
+  // The broken result in v2 {"combined":[{"name":"first","values":[["A1","B1","C1","D1"]]},{"name":"second"}]}
+  // The correct result in v3 {"combined":[{"name":"first","values":["A1","B1"]},{"name":"second","values":["C1","D1"]}]}
+```
+
+Additionally the ```with()``` modifier has been added that will allow more fine grain control when working with arrays of arrays. More details can be found in the [README](README.md#working-with-arrays-of-arrays).
+
 ### 2.4.1
 
 Fixed bug where ```each()``` returned a null when supplied with an empty array instead of returing an empty array.

@@ -20,6 +20,8 @@ group("when setting options", () => {
     expect(mapping).to.be.an.object();
     expect(mapping.alwaysSet).to.be.false();
     expect(mapping.alwaysTransform).to.be.false();
+    expect(mapping.flatten).to.be.null();
+    expect(mapping.flattenInverted).to.be.false();
 
     return done();
 
@@ -34,6 +36,8 @@ group("when setting options", () => {
     expect(mapping).to.be.an.object();
     expect(mapping.alwaysSet).to.be.false();
     expect(mapping.alwaysTransform).to.be.false();
+    expect(mapping.flatten).to.be.null();
+    expect(mapping.flattenInverted).to.be.false();
 
     return done();
 
@@ -48,6 +52,8 @@ group("when setting options", () => {
     expect(mapping).to.be.an.object();
     expect(mapping.alwaysSet).to.be.false();
     expect(mapping.alwaysTransform).to.be.true();
+    expect(mapping.flatten).to.be.null();
+    expect(mapping.flattenInverted).to.be.false();
 
     return done();
 
@@ -62,10 +68,45 @@ group("when setting options", () => {
     expect(mapping).to.be.an.object();
     expect(mapping.alwaysSet).to.be.true();
     expect(mapping.alwaysTransform).to.be.false();
+    expect(mapping.flatten).to.be.null();
+    expect(mapping.flattenInverted).to.be.false();
 
     return done();
 
   });
+
+  lab.test("sets the flattenInverted option correctly", done => {
+
+    const map = createMapper({ flattenInverted: true });
+
+    const mapping = map("a");
+
+    expect(mapping).to.be.an.object();
+    expect(mapping.alwaysSet).to.be.false();
+    expect(mapping.alwaysTransform).to.be.false();
+    expect(mapping.flatten).to.be.null();
+    expect(mapping.flattenInverted).to.be.true();
+
+    return done();
+
+  });
+
+  lab.test("sets the flatten option correctly", done => {
+
+    const map = createMapper({ flatten: true });
+
+    const mapping = map("a");
+
+    expect(mapping).to.be.an.object();
+    expect(mapping.alwaysSet).to.be.false();
+    expect(mapping.alwaysTransform).to.be.false();
+    expect(mapping.flatten).to.be.true();
+    expect(mapping.flattenInverted).to.be.false();
+
+    return done();
+
+  });
+
 
   lab.test("the existing modifier sets more alwaysSet and alwaysTransform to false", done => {
 

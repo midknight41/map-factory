@@ -14,6 +14,8 @@ export default class Mapping {
     this.orMode = false;
     this.alwaysSet = options.alwaysSet;
     this.alwaysTransform = options.alwaysTransform;
+    this.flatten = options.flatten;
+    this.flattenInverted = options.flattenInverted;
     this.pipelineTransformations = [];
 
   }
@@ -27,6 +29,18 @@ export default class Mapping {
   get existing() {
     this.alwaysSet = false;
     this.alwaysTransform = false;
+    return this;
+  }
+
+  with(optionOverrides) {
+
+    const permittedOptions = ["flatten", "flattenInverted", "alwaysSet", "alwaysTransform"];
+
+    for (const option of permittedOptions) {
+      this[option] = optionOverrides[option] === undefined ? this[option] : optionOverrides[option];
+
+    }
+
     return this;
   }
 
@@ -55,7 +69,6 @@ export default class Mapping {
       const sourceArray = this.source;
 
       sourceArray.push(source);
-
 
       return this;
     }

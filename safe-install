@@ -1,0 +1,10 @@
+
+package=$1
+date
+rm ./node_modules -f -r # 7 seconds
+rm /opt/installs/$package -f -r 
+mkdir -p /opt/installs/$package
+cp package.json /opt/installs/$package
+npm install --prefix /opt/installs/$package
+cp /opt/installs/$package/node_modules/ ./node_modules -r # 28 seconds
+date

@@ -126,4 +126,3 @@ mappingSuite.run(lab, {
   EXPECTED: [null, { useType: "notEmpty" }],
   EXPERIMENTAL: false
 });
-

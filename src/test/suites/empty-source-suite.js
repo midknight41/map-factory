@@ -24,7 +24,7 @@ suite.declare((lab, variables) => {
     MODIFY_VALUE,
     MODIFIED_EXPECTED,
     EXPERIMENTAL
-    } = variables;
+  } = variables;
 
   const testing = getHelper(lab);
   const group = testing.createExperiment(...LABELS);
@@ -33,98 +33,98 @@ suite.declare((lab, variables) => {
     return createMapper({ experimental: EXPERIMENTAL });
   }
 
-  const experimentalLabel = EXPERIMENTAL === true ? "in experimental mode" : "in normal mode";
+  // const experimentalLabel = EXPERIMENTAL === true ? "in experimental mode" : "in normal mode";
 
   group("when source does not exist", () => {
 
-    lab.experiment(experimentalLabel, () => {
+    // lab.experiment(experimentalLabel, () => {
 
 
-      lab.test("the target field does not get created for a basic map", done => {
+    lab.test("the target field does not get created for a basic map", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map(GET_ITEM).to(SET_ITEM)
-          .execute({});
+      const actual = mapper
+        .map(GET_ITEM).to(SET_ITEM)
+        .execute({});
 
-        expect(actual).to.equal(NO_SOURCE_EXPECTED);
+      expect(actual).to.equal(NO_SOURCE_EXPECTED);
 
-        return done();
+      return done();
 
-      });
+    });
 
-      lab.test("the target field does not get created with a modifying transform", done => {
+    lab.test("the target field does not get created with a modifying transform", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map(GET_ITEM).to(SET_ITEM, () => MODIFY_VALUE)
-          .execute({});
+      const actual = mapper
+        .map(GET_ITEM).to(SET_ITEM, () => MODIFY_VALUE)
+        .execute({});
 
-        expect(actual).to.equal(NO_SOURCE_EXPECTED);
+      expect(actual).to.equal(NO_SOURCE_EXPECTED);
 
-        return done();
+      return done();
 
-      });
+    });
 
-      lab.test("the target field does get created with a modifying transform with always flag", done => {
+    lab.test("the target field does get created with a modifying transform with always flag", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map(GET_ITEM).always.to(SET_ITEM, () => MODIFY_VALUE)
-          .execute({});
+      const actual = mapper
+        .map(GET_ITEM).always.to(SET_ITEM, () => MODIFY_VALUE)
+        .execute({});
 
-        expect(actual).to.equal(MODIFIED_EXPECTED);
+      expect(actual).to.equal(MODIFIED_EXPECTED);
 
-        return done();
+      return done();
 
-      });
+    });
 
-      lab.test("the target field does not get created for an array source with a pass-through transform", done => {
+    lab.test("the target field does not get created for an array source with a pass-through transform", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map([GET_ITEM]).to(SET_ITEM, value => value)
-          .execute({});
+      const actual = mapper
+        .map([GET_ITEM]).to(SET_ITEM, value => value)
+        .execute({});
 
-        expect(actual).to.equal(NO_SOURCE_EXPECTED);
+      expect(actual).to.equal(NO_SOURCE_EXPECTED);
 
-        return done();
+      return done();
 
-      });
+    });
 
-      lab.test("the target field does get created for an array source with a modifying transform with always flag", done => {
+    lab.test("the target field does get created for an array source with a modifying transform with always flag", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map([GET_ITEM]).always.to(SET_ITEM, () => MODIFY_VALUE)
-          .execute({});
+      const actual = mapper
+        .map([GET_ITEM]).always.to(SET_ITEM, () => MODIFY_VALUE)
+        .execute({});
 
-        expect(actual).to.equal(MODIFIED_EXPECTED);
+      expect(actual).to.equal(MODIFIED_EXPECTED);
 
-        return done();
+      return done();
 
-      });
+    });
 
-      lab.test("the target field does not get created for an array source with a modifying transform", done => {
+    lab.test("the target field does not get created for an array source with a modifying transform", done => {
 
-        const mapper = createSut();
+      const mapper = createSut();
 
-        const actual = mapper
-          .map([GET_ITEM]).to(SET_ITEM, () => MODIFY_VALUE)
-          .execute({});
+      const actual = mapper
+        .map([GET_ITEM]).to(SET_ITEM, () => MODIFY_VALUE)
+        .execute({});
 
-        expect(actual).to.equal(NO_SOURCE_EXPECTED);
+      expect(actual).to.equal(NO_SOURCE_EXPECTED);
 
-        return done();
+      return done();
 
-      });
     });
   });
+  // });
 });
 
 export default suite;

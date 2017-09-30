@@ -1,4 +1,5 @@
 /* eslint-disable */
+const flattenDeep = require("lodash.flattendeep");
 
 'use strict';
 
@@ -11,9 +12,11 @@
  */
 function getValue(fromObject, fromKey) {
   var regDot = /\./g
+    , regFinishArray = /.+(\[\])/g
     , keys
     , key
     , result
+    , lastValue
     ;
 
   keys = fromKey.split(regDot);
@@ -21,27 +24,10 @@ function getValue(fromObject, fromKey) {
 
   result = _getValue(fromObject, key[0], keys);
 
-  if (Array.isArray(result)) {
-    if (result.length) {
-      result = result.reduce(function (a, b) {
-        if (Array.isArray(a) && Array.isArray(b)) {
-          return a.concat(b);
-        } else if (Array.isArray(a)) {
-          a.push(b);
-          return a;
-        } else {
-          return [a, b];
-        }
-      });
-    }
-    if (!Array.isArray(result)) {
-      result = [result];
-    }
-  }
-
   return handleArrayOfUndefined_(result);
 }
-module.exports = getValue;
+
+module.exports.getValue = getValue;
 
 function handleArrayOfUndefined_(value) {
 
@@ -49,9 +35,27 @@ function handleArrayOfUndefined_(value) {
     return value;
   }
 
-  for (const item of value) {
+  // Arrays of empty array aren't interesting. flatten them and see if we've got any data
+  // There are probably more performant ways of doing this with getValue()
+  if (Array.isArray(value) === true) {
+
+    const emptyTest = flattenDeep(value);
+
+    if (emptyTest.length === 0) {
+      return undefined;
+    }
+
+    return scanArrayForValue_(emptyTest, value);
+  }
+
+  return scanArrayForValue_(value, value);
+}
+
+function scanArrayForValue_(arrayToScan, defaultValue) {
+
+  for (const item of arrayToScan) {
     if (item !== undefined && item !== null) {
-      return value;
+      return defaultValue;
     }
   }
 
@@ -89,7 +93,7 @@ function _getValue(fromObject, key, keys) {
 
   if (keys.length === 0) {
     if (isValueArray) {
-      if (typeof arrayIndex === 'undefined') {
+      if (typeof arrayIndex === 'undefined' || fromObject[key] === undefined) {
         result = fromObject[key];
       } else {
         result = fromObject[key][arrayIndex];
