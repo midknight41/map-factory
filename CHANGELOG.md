@@ -32,7 +32,7 @@ The ```getValue``` function will also preserve this structure too.
   // The correct result in v3 {"combined":[{"name":"first","values":["A1","B1"]},{"name":"second","values":["C1","D1"]}]}
 ```
 
-Additionally the ```with()``` modifier has been added that will allow more fine grain control when working with arrays of arrays. More details can be found here: [README](README.md#working-with-arrays-of-arrays)
+Additionally the ```with()``` modifier has been added that will allow more fine grain control when working with arrays of arrays. More details can be found in the [README](README.md#working-with-arrays-of-arrays).
 
 ### 2.4.1
 

@@ -415,11 +415,11 @@ assert.deepEqual(result, {
 ```
 #### Working with arrays of arrays
 
-When working with arrays of arrays, **map-factory** tries figure out what array shape is appropriate and will automatically flatten arrays when appropriate.
+When working with arrays of arrays, **map-factory** tries to figure out what array shape is appropriate and will automatically flatten arrays when appropriate.
 
 When attempting to flatten 3 or more levels of nesting it becomes impossible to predict the desired outcome as more than one outcome can be considered correct.
 
-By default, flattening will be applied at the deepest level. For example:
+By default, flattening will be applied at the deepest level of the arrays structure. For example:
 
 ```js
 const src = {
