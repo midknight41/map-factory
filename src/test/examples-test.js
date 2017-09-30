@@ -161,37 +161,38 @@ group("examples", () => {
     expect(result).to.equal(expected);
 
     return done();
-  },
-    "provides the each() method to help work with arrays and multiple mappers", done => {
-      const source = {
-        one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
-        two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
-        three: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }]
-      };
+  });
 
-      const expected = {
-        one: [{ item: "a" }, { item: "b" }, { item: "c" }],
-        two: [{ item: "a" }, { item: "b" }, { item: "c" }],
-        three: [{ item: "a" }, { item: "b" }, { item: "c" }]
-      };
+  lab.test("provides the each() method to help work with arrays and multiple mappers", done => {
+    const source = {
+      one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+      two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
+      three: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }]
+    };
 
-      const mainMapper = createMapper();
-      const childMapper = createMapper();
+    const expected = {
+      one: [{ item: "a" }, { item: "b" }, { item: "c" }],
+      two: [{ item: "a" }, { item: "b" }, { item: "c" }],
+      three: [{ item: "a" }, { item: "b" }, { item: "c" }]
+    };
 
-      childMapper
-        .map("value").to("item");
+    const mainMapper = createMapper();
+    const childMapper = createMapper();
 
-      mainMapper
-        .map("one").to("one", array => childMapper.each(array))
-        .map("two").to("two", array => childMapper.each(array))
-        .map("three").to("three", array => childMapper.each(array));
+    childMapper
+      .map("value").to("item");
 
-      const actual = mainMapper.execute(source);
+    mainMapper
+      .map("one").to("one", array => childMapper.each(array))
+      .map("two").to("two", array => childMapper.each(array))
+      .map("three").to("three", array => childMapper.each(array));
 
-      expect(actual).to.equal(expected);
+    const actual = mainMapper.execute(source);
 
-      return done();
-    });
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
 
   lab.test("More complicated transformations can be handled by providing a function", done => {
 

@@ -24,7 +24,7 @@ suite.declare((lab, variables) => {
     MODIFY_VALUE,
     MODIFIED_EXPECTED,
     EXPERIMENTAL
-    } = variables;
+  } = variables;
 
   const testing = getHelper(lab);
   const group = testing.createExperiment(...LABELS);

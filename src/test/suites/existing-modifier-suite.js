@@ -11,7 +11,7 @@ suite.declare((lab, variables) => {
 
   const {
     OPTIONS
-    } = variables;
+  } = variables;
 
   lab.test(`overrides the default alwaysTransform behaviour with options ${JSON.stringify(OPTIONS)}`, done => {
 

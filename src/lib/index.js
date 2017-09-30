@@ -1,6 +1,6 @@
 import createMapper from "./map-factory";
-import { getValueOld, setValue } from "./object-mapper/object-mapper";
+import { getValue, setValue } from "./object-mapper/object-mapper";
 
 module.exports = createMapper;
-module.exports.getValue = getValueOld;
+module.exports.getValue = getValue;
 module.exports.setValue = setValue;

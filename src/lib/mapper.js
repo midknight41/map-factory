@@ -239,17 +239,19 @@ export default class Mapper {
       });
     }
 
+    value = this.flattenValue_(flattening, value);
+
     // Apply transform if required
     if (this.exists_(value) || options.alwaysTransform === true) {
       value = transform(value);
     }
 
     // Set value on destination object
-    return this.setIfRequired_(destinationObject, targetPath, value, flattening, options);
+    return this.setIfRequired_(destinationObject, targetPath, value, options);
 
   }
 
-  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, options }) {
+  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattenings, options }) {
 
     if (isCustomTransform === false) {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
@@ -258,13 +260,9 @@ export default class Mapper {
     let values = [];
     let anyValues = false;
 
-    const flattening = {flatten: false};
-
     // Get source
     for (const fromKey of sourcePath) {
 
-      // hack to avoid a breaking change on multi-mode until the next major version
-      // const value = getValueOld(sourceObject, fromKey);
       const value = this.om.getValue(sourceObject, fromKey);
 
       if (this.exists_(value)) {
@@ -283,13 +281,18 @@ export default class Mapper {
       });
     }
 
+    // flatten values if required
+    for (let i = 0; i < values.length; i++) {
+      values[i] = this.flattenValue_(flattenings[i], values[i]);
+    }
+
     // Apply transform if appropriate
     if (anyValues || options.alwaysTransform === true) {
       value = transform(...values);
     }
 
     // Set value on destination object
-    return this.setIfRequired_(destinationObject, targetPath, value, flattening, options);
+    return this.setIfRequired_(destinationObject, targetPath, value, options);
 
   }
 
@@ -319,10 +322,12 @@ export default class Mapper {
       });
     }
 
+    orValue = this.flattenValue_(flattening, orValue);
+
     // no transform
     if (isCustomTransform === false) {
 
-      return this.setIfRequired_(destinationObject, targetPath, orValue, flattening, options);
+      return this.setIfRequired_(destinationObject, targetPath, orValue, options);
     }
 
     // has a transform
@@ -330,21 +335,11 @@ export default class Mapper {
       orValue = transform(orValue);
     }
 
-    return this.setIfRequired_(destinationObject, targetPath, orValue, flattening, options);
+    return this.setIfRequired_(destinationObject, targetPath, orValue, options);
 
   }
 
-  setIfRequired_(destinationObject, targetPath, value, flattening, options) {
-
-    if (flattening !== undefined && flattening.flatten === true) {
-      const seekDepth = flattening.targetCount - 1;
-
-      if (flattening.inverted === true) {
-        value = flattenDepth(value, flattening.sourceCount - flattening.targetCount);
-      } else {
-        value = this.flattenArray_(value, seekDepth);
-      }
-    }
+  setIfRequired_(destinationObject, targetPath, value, options) {
 
     if (this.exists_(value) || options.alwaysSet === true) {
       return this.om.setValue(destinationObject, targetPath, value);
@@ -356,6 +351,22 @@ export default class Mapper {
 
     return destinationObject;
 
+  }
+
+  flattenValue_(flattening, value) {
+
+    if (flattening !== undefined && flattening.flatten === true) {
+      const seekDepth = flattening.targetCount - 1;
+
+      if (flattening.inverted === true) {
+        return flattenDepth(value, flattening.sourceCount - flattening.targetCount);
+      }
+
+      return this.flattenArray_(value, seekDepth);
+
+    }
+
+    return value;
   }
 
   flattenArray_(valueArray, seekDepth, currentDepth = 0) {

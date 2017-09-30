@@ -13,6 +13,7 @@
     "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "pretest": "npm run build",
     "test": "./node_modules/lab/bin/lab ./dist/test/ -v -S --assert code",
+    "lint": "./node_modules/.bin/eslint ./src --fix",
     "preone": "npm run build",
     "one": "./test-one",
     "travis": "npm run test",
@@ -51,11 +52,11 @@
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.0.0",
+    "babel-eslint": "^8.0.1",
     "babel-preset-es2015": "^6.24.1",
     "benchmark": "^2.1.3",
     "code": "^4.1.0",
-    "coveralls": "^2.11.16",
+    "coveralls": "^3.0.0",
     "eslint": "^4.0.0",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
@@ -72,7 +73,6 @@
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
     "lodash.flattendeep": "^4.4.0",
-    "lodash.flatten": "^4.4.0",
     "lodash.flattendepth": "^4.7.0",   
     "lodash.unset": "^4.5.2"
   }

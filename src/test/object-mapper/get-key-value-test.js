@@ -6,7 +6,7 @@ const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);
 const group = testing.createExperiment("raw methods");
 
-import { getValueOld as getValue } from "../../lib/object-mapper/get-key-value";
+import { getValue } from "../../lib/object-mapper/get-key-value";
 
 group("The getValue() method", () => {
 
@@ -213,8 +213,8 @@ group("The getValue() method", () => {
       }]
     };
 
-    // Breaking change for V3
-    const expected = ["bar", "const"];
+    // Breaking change for V3 used to return ["bar", "const"]
+    const expected = [["bar", "const"]];
 
     const result = getValue(obj, key);
 
