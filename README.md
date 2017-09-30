@@ -413,6 +413,96 @@ assert.deepEqual(result, {
   }
 });
 ```
+#### Working with arrays of arrays
+
+When working with arrays of arrays, **map-factory** tries figure out what array shape is appropriate and will automatically flatten arrays when appropriate.
+
+When attempting to flatten 3 or more levels of nesting it becomes impossible to predict the desired outcome as more than one outcome can be considered correct.
+
+By default, flattening will be applied at the deepest level. For example:
+
+```js
+const src = {
+      one: [{
+        two: [
+          { three: [{ value: "A" }, { value: "B" }] },
+          { three: [{ value: "C" }, { value: "D" }] }
+        ]
+      },
+      {
+        two: [
+          { three: [{ value: "A1" }, { value: "B1" }] },
+          { three: [{ value: "C1" }, { value: "D1" }] }
+        ]
+      }]
+    };
+
+const mapper = createMapper();
+
+mapper
+  .map("one[].two[].three[].value").to("one[].two[]")
+
+const result = mapper.execute(src);
+
+/*
+{
+  one: [
+    { two: ["A", "B", "C", "D"] }, 
+    { two: ["A1", "B1", "C1", "D1"] }
+  ]
+}
+*/
+```
+
+In some cases this default behaviour may not be the desired result. You can change the behaviour to flatten the array from the most shallow level by using the ```flattenInverted``` option. This can be supplied the ```createMapper``` function (which affects all mappings) or using the ```with``` method as below.
+
+```js
+const mapper = createMapper();
+
+const options = { flattenInverted: true };
+
+mapper
+  .map("one[].two[].three[].value").with(options).to("one[].two[]")
+
+const result = mapper.execute(src);
+
+/*
+{
+  "one": [
+    { "two": ["A", "B"] },
+    { "two": ["C", "D"] },
+    { "two": ["A1", "B1"] },
+    { "two": ["C1", "D1"] }
+  ]
+}
+*/
+```
+The flattening behaviour can also be turned off if desired.
+
+```js
+const mapper = createMapper();
+
+const options = { flatten: false };
+
+mapper
+  .map("one[].two[].three[].value").with(options).to("one[].two[]", values => {
+
+    // manipulate the result if necessary.
+    return values;
+
+  });
+
+const result = mapper.execute(src);
+
+/*
+{
+  "one":[
+    {"two":[["A","B"],["C","D"]]},
+    {"two":[["A1","B1"],["C1","D1"]]}
+   ]
+}
+*/
+```
 
 **map-factory** also provides the ```each()``` method to help work with arrays and multiple mappers. This is useful when child objects within your main object have the same structure.
 

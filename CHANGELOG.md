@@ -17,7 +17,8 @@ The getValue function will also preserve this structure too.
   };
 
   mapper
-    .map("one[].name").to("combined[].name").map("one[].two[].three[].value1").to("combined[].values[]", value => {
+    .map("one[].name").to("combined[].name")
+    .map("one[].two[].three[].value1").to("combined[].values[]", value => {
 
       // A transform in v2 received ["A1","B1","C1","D1"]
       // The transform in v3 will now receive [["A1","B1"],["C1","D1"]]
