@@ -2,7 +2,7 @@
 
 Fixes a bug when dealing with arrays of arrays with mapping fields involved in parent-child relationships. This is a breaking change as the values supplied to transforms must preserve a nested array structure to be properly set on the target object. The 2.x versions did not preserve this structure.
 
-The getValue function will also preserve this structure too.
+The ```getValue``` function will also preserve this structure too.
 
 ```js
 
@@ -31,6 +31,8 @@ The getValue function will also preserve this structure too.
   // The broken result in v2 {"combined":[{"name":"first","values":[["A1","B1","C1","D1"]]},{"name":"second"}]}
   // The correct result in v3 {"combined":[{"name":"first","values":["A1","B1"]},{"name":"second","values":["C1","D1"]}]}
 ```
+
+Additionally the ```with()``` modifier has been added that will allow more fine grain control when working with arrays of arrays. More details can be found here: [README](README.md#working-with-arrays-of-arrays)
 
 ### 2.4.1
 

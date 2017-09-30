@@ -477,7 +477,7 @@ const result = mapper.execute(src);
 }
 */
 ```
-The flattening behaviour can also be turned off if desired.
+The flattening behaviour can also be turned off if desired. A transform can be used to manipulate the values yourself.
 
 ```js
 const mapper = createMapper();
