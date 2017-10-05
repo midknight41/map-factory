@@ -241,7 +241,7 @@ export default class Mapper {
     // default transformations
     if (this.exists_(value) && options.pipelineTransformations.length > 0) {
       options.pipelineTransformations.map(item => {
-        value = item(value);
+        value = item(sourceObject, value);
       });
     }
 
@@ -283,7 +283,7 @@ export default class Mapper {
     // default transformations
     if (anyValues && options.pipelineTransformations.length > 0) {
       options.pipelineTransformations.map(item => {
-        values = item(values);
+        values = item(sourceObject, values);
       });
     }
 
@@ -324,7 +324,7 @@ export default class Mapper {
     // default transformations
     if (this.exists_(orValue) && options.pipelineTransformations.length > 0) {
       options.pipelineTransformations.map(item => {
-        orValue = item(orValue);
+        orValue = item(sourceObject, orValue);
       });
     }
 

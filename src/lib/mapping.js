@@ -115,6 +115,56 @@ export default class Mapping {
 
   }
 
+  acceptIf(key, val) {
+    if (typeof key !== "string") {
+      throw new Error("the key must be a string");
+    }
+
+    this.pipelineTransformations.push((source, value) => {
+      const path = key;
+      const condition = val;
+
+      const valueToUse = this.mapper.om.getValue(source, path);
+
+      let isAccepted = false;
+
+      if (typeof condition === "function") {
+        isAccepted = condition(valueToUse);
+      } else {
+        isAccepted = (valueToUse === condition);
+      }
+
+      return isAccepted ? value : null;
+    });
+
+    return this;
+  }
+
+  rejectIf(key, val) {
+    if (typeof key !== "string") {
+      throw new Error("the key must be a string");
+    }
+
+    this.pipelineTransformations.push((source, value) => {
+      const path = key;
+      const condition = val;
+
+      const valueToUse = this.mapper.om.getValue(source, path);
+
+      let isRejected = true;
+
+      if (typeof condition === "function") {
+        isRejected = condition(valueToUse);
+      } else {
+        isRejected = (valueToUse === condition);
+      }
+
+      return isRejected === false ? value : null;
+    });
+
+    return this;
+  }
+
   removing(keys) {
 
     if (Array.isArray(keys) && keys.length > 0) {
@@ -130,7 +180,7 @@ export default class Mapping {
       throw new Error("The removing method requires a string value or an array of strings");
     }
 
-    this.pipelineTransformations.push(value => {
+    this.pipelineTransformations.push((source, value) => {
 
       let valueToUse = cloneDeep(value);
 
