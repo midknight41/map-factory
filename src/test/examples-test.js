@@ -12,30 +12,39 @@ const { getValue, setValue } = createMapper;
 
 group("examples", () => {
 
-  lab.test("Set a field in the destination", done => {
+  lab.describe("set method", () => {
+    lab.test("Set a field in the destination", done => {
 
-    const expected = {
-      "foo": "bar",
-      "fooFunc": "bar"
-    };
+      const expected = {
+        "foo": "bar",
+        "fooFunc": "bar"
+      };
 
-    // Start example
+      // Start example
 
-    const source = {};
+      const source = {};
 
-    const mapper = createMapper();
+      const mapper = createMapper();
 
-    mapper.set("foo", "bar")
-      .set("fooFunc", () => "bar");
+      mapper.set("foo", "bar")
+        .set("fooFunc", () => "bar");
 
-    const result = mapper.execute(source);
+      const result = mapper.execute(source);
 
-    // End example
+      // End example
+      expect(result).to.equal(expected);
 
+      return done();
+    });
 
-    expect(result).to.equal(expected);
+    lab.test("Should throw error when set field is called with a key of type other than string", done => {
 
-    return done();
+      const mapper = createMapper();
+
+      expect(() => mapper.set(null, "bar")).to.throw("the key must be a string");
+
+      return done();
+    });
   });
 
   lab.test("Map a source field to the same object structure", done => {
@@ -206,12 +215,12 @@ group("examples", () => {
     const childMapper = createMapper();
 
     childMapper
-      .map("value").to("item");
+    .map("value").to("item");
 
     mainMapper
-      .map("one").to("one", array => childMapper.each(array))
-      .map("two").to("two", array => childMapper.each(array))
-      .map("three").to("three", array => childMapper.each(array));
+    .map("one").to("one", array => childMapper.each(array))
+    .map("two").to("two", array => childMapper.each(array))
+    .map("three").to("three", array => childMapper.each(array));
 
     const actual = mainMapper.execute(source);
 
@@ -407,8 +416,6 @@ group("examples", () => {
   });
 
   lab.test("Or use multiple mappers and chain them together", done => {
-
-
     const expected = {
       "blog": {
         "post": {
