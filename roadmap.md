@@ -8,6 +8,8 @@
 - ~~```map("from").existing.to("to")``` will override the default behaviour (or behaviour set in the options) and supress set and transform being called.~~
 - Allow a mapping to accept a default value. Maybe like: ```map("from").to("to").defaultsTo("item not found")```
 - Option to implicitly map all fields that haven't be explicitly mapped. (```removing``` feature does this for the most part already)
-- ```unwind()``` capability to simplify the flattening of object structures
 - Add aggregate methods like sum() avg() etc.
-- Allow ```map("$")``` to reference the root object.
+- Allow ```map()``` to reference the root object.
+- Map fields conditionally based on the value of another field. ```map("a").acceptIf("c", c => c < 123).to("")``` and ```map("a").rejectIf("c", c => c < 123).to("")```
+- Set a field value that has no source value. ```mapper.set("a", 2)``` or ```mapper.set("a", () => 2)```
+- filter array values for uniqueness. ```map("a[]").uniquely().to("[]")```
