@@ -30,6 +30,10 @@ export default function createMapper(options) {
 
   }.bind(me);
 
+  mapper.set = function (key, value) {
+    return this.mapper.set(key, value);
+  }.bind(me);
+
   mapper.execute = function (source, destination) {
     return this.mapper.execute(source, destination);
   }.bind(me);

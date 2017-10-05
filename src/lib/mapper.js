@@ -41,6 +41,16 @@ export default class Mapper {
 
   }
 
+  set(key, value) {
+    if (typeof key !== "string") {
+      throw new Error("the key must be a string");
+    }
+    if (typeof value === "function") {
+      return this.map(key).always.to(key, value);
+    }
+    return this.map(key).always.to(key, () => value);
+  }
+
   each(sourceArray) {
 
     // validate inputs
