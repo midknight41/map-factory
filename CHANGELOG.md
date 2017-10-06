@@ -1,3 +1,17 @@
+### 3.1.0
+
+New ```set()``` feature to allow you to set a value on the target object without requiring a source field.
+
+```js
+mapper
+  .set("my.target.mappingStatus", "mapped");
+
+// OR
+
+mapper
+  .set("my.target.id", () => createId());
+```
+
 ### 3.0.0
 
 Fixes a bug when dealing with arrays of arrays with mapping fields involved in parent-child relationships. This is a breaking change as the values supplied to transforms must preserve a nested array structure to be properly set on the target object. The 2.x versions did not preserve this structure.

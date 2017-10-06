@@ -250,6 +250,19 @@ const actual = mapper.chain(secondaryMapper).execute(source);
 assert.deepEqual(actual, expected);
 ```
 
+If you want to append additional fields to the target object you can use ```set()```:
+
+```js
+
+// Using a static value
+mapper
+  .set("my.target.mappingStatus", "mapped");
+
+// or using a function
+mapper
+  .set("my.target.id", () => createId());
+```
+
 ## Examples
 
 ### Mapping data to a new structure
