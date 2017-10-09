@@ -56,8 +56,13 @@ describe("Pipeline transformations functionality of the mapper", () => {
         done();
       });
 
-      it("should throw an error on null", done => {
+      it("should throw an error if key is null", done => {
         expect(() => mapper("foo").acceptIf(null).to("bar")).to.throw("the key must be a string");
+        done();
+      });
+
+      it("should throw an error if value is null", done => {
+        expect(() => mapper("foo").acceptIf("foo").to("bar")).to.throw("the value cannot be undefined or null");
         done();
       });
     });
@@ -109,8 +114,13 @@ describe("Pipeline transformations functionality of the mapper", () => {
         done();
       });
 
-      it("should throw an error on null", done => {
+      it("should throw an error if key is null", done => {
         expect(() => mapper("foo").rejectIf(null).to("bar")).to.throw("the key must be a string");
+        done();
+      });
+
+      it("should throw an error if value is null", done => {
+        expect(() => mapper("foo").rejectIf("foo").to("bar")).to.throw("the value cannot be undefined or null");
         done();
       });
     });

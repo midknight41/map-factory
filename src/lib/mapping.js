@@ -32,6 +32,10 @@ export default class Mapping {
     return this;
   }
 
+  pushToPipelineTransformations_(func) {
+    this.pipelineTransformations.push(func);
+  }
+
   with(optionOverrides) {
 
     const permittedOptions = ["flatten", "flattenInverted", "alwaysSet", "alwaysTransform"];
@@ -120,21 +124,21 @@ export default class Mapping {
       throw new Error("the key must be a string");
     }
 
-    this.pipelineTransformations.push((source, value) => {
+    if (val === undefined || val === null) {
+      throw new Error("the value cannot be undefined or null");
+    }
+
+    this.pushToPipelineTransformations_((source, value) => {
       const path = key;
       const condition = val;
 
       const valueToUse = this.mapper.om.getValue(source, path);
 
-      let isAccepted = false;
-
       if (typeof condition === "function") {
-        isAccepted = condition(valueToUse);
-      } else {
-        isAccepted = (valueToUse === condition);
+        return condition(valueToUse) === true ? value : null;
       }
 
-      return isAccepted ? value : null;
+      return (valueToUse === condition) ? value : null;
     });
 
     return this;
@@ -145,21 +149,21 @@ export default class Mapping {
       throw new Error("the key must be a string");
     }
 
-    this.pipelineTransformations.push((source, value) => {
+    if (val === undefined || val === null) {
+      throw new Error("the value cannot be undefined or null");
+    }
+
+    this.pushToPipelineTransformations_((source, value) => {
       const path = key;
       const condition = val;
 
       const valueToUse = this.mapper.om.getValue(source, path);
 
-      let isRejected = true;
-
       if (typeof condition === "function") {
-        isRejected = condition(valueToUse);
-      } else {
-        isRejected = (valueToUse === condition);
+        return condition(valueToUse) === false ? value : null;
       }
 
-      return isRejected === false ? value : null;
+      return (valueToUse === condition) === false ? value : null;
     });
 
     return this;
@@ -180,7 +184,7 @@ export default class Mapping {
       throw new Error("The removing method requires a string value or an array of strings");
     }
 
-    this.pipelineTransformations.push((source, value) => {
+    this.pushToPipelineTransformations_((source, value) => {
 
       let valueToUse = cloneDeep(value);
 
