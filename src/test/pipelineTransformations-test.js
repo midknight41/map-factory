@@ -18,7 +18,8 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
       mapper
         .map("foo").acceptIf("voila", "a").to("bar")
-        .map("foo").acceptIf("check", check => check > 5).to("bar1");
+        .map("foo").acceptIf("check", check => check > 5).to("bar1")
+        .map("foo").acceptIf("check", check => check > 1).to("bar2");
 
       source = {
         "foo": {
@@ -32,6 +33,11 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
       expected = {
         "bar": {
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        },
+        "bar2": {
           "id": "fooID",
           "bar": "tes",
           "foo1": "bar2"
@@ -76,7 +82,8 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
       mapper
         .map("foo").rejectIf("voila", "a").to("bar")
-        .map("foo").rejectIf("check", check => check > 5).to("bar1");
+        .map("foo").rejectIf("check", check => check > 5).to("bar1")
+        .map("foo").rejectIf("check", check => check > 1).to("bar2");
 
       source = {
         "foo": {
