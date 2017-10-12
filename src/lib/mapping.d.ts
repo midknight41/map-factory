@@ -16,4 +16,6 @@ export default class Mapping implements IMapping {
   always: IMapping;
   existing: IMapping;
   removing(keys: string | string[]): IMapping;
+  acceptIf(key: string, val: any): IMapping;
+  rejectIf(key: string, val: any): IMapping;
 }

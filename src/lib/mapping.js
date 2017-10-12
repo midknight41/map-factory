@@ -32,6 +32,10 @@ export default class Mapping {
     return this;
   }
 
+  pushToPipelineTransformations_(func) {
+    this.pipelineTransformations.push(func);
+  }
+
   with(optionOverrides) {
 
     const permittedOptions = ["flatten", "flattenInverted", "alwaysSet", "alwaysTransform"];
@@ -115,6 +119,56 @@ export default class Mapping {
 
   }
 
+  acceptIf(key, val) {
+    if (typeof key !== "string") {
+      throw new Error("the key must be a string");
+    }
+
+    if (val === undefined || val === null) {
+      throw new Error("the value cannot be undefined or null");
+    }
+
+    this.pushToPipelineTransformations_((source, value) => {
+      const path = key;
+      const condition = val;
+
+      const valueToUse = this.mapper.om.getValue(source, path);
+
+      if (typeof condition === "function") {
+        return condition(valueToUse) === true ? value : null;
+      }
+
+      return (valueToUse === condition) ? value : null;
+    });
+
+    return this;
+  }
+
+  rejectIf(key, val) {
+    if (typeof key !== "string") {
+      throw new Error("the key must be a string");
+    }
+
+    if (val === undefined || val === null) {
+      throw new Error("the value cannot be undefined or null");
+    }
+
+    this.pushToPipelineTransformations_((source, value) => {
+      const path = key;
+      const condition = val;
+
+      const valueToUse = this.mapper.om.getValue(source, path);
+
+      if (typeof condition === "function") {
+        return condition(valueToUse) === false ? value : null;
+      }
+
+      return (valueToUse === condition) === false ? value : null;
+    });
+
+    return this;
+  }
+
   removing(keys) {
 
     if (Array.isArray(keys) && keys.length > 0) {
@@ -130,7 +184,7 @@ export default class Mapping {
       throw new Error("The removing method requires a string value or an array of strings");
     }
 
-    this.pipelineTransformations.push(value => {
+    this.pushToPipelineTransformations_((source, value) => {
 
       let valueToUse = cloneDeep(value);
 

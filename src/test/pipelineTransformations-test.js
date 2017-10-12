@@ -11,6 +11,130 @@ let actual;
 
 describe("Pipeline transformations functionality of the mapper", () => {
 
+  describe("accceptIf", () => {
+
+    before(done => {
+      mapper = createMapper();
+
+      mapper
+        .map("foo").acceptIf("voila", "a").to("bar")
+        .map("foo").acceptIf("check", check => check > 5).to("bar1")
+        .map("foo").acceptIf("check", check => check > 1).to("bar2");
+
+      source = {
+        "foo": {
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        },
+        "voila": "a",
+        "check": 2
+      };
+
+      expected = {
+        "bar": {
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        },
+        "bar2": {
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        }
+      };
+      done();
+    });
+
+    describe("when its used", () => {
+
+      it("should return the desired result", done => {
+        actual = mapper.execute(source);
+        expect(actual).to.equal(expected);
+        done();
+      });
+    });
+
+    describe("parameter validation", () => {
+
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error if key is null", done => {
+        expect(() => mapper("foo").acceptIf(null).to("bar")).to.throw("the key must be a string");
+        done();
+      });
+
+      it("should throw an error if value is null", done => {
+        expect(() => mapper("foo").acceptIf("foo").to("bar")).to.throw("the value cannot be undefined or null");
+        done();
+      });
+    });
+
+  });
+
+  describe("rejectIf", () => {
+
+    before(done => {
+      mapper = createMapper();
+
+      mapper
+        .map("foo").rejectIf("voila", "a").to("bar")
+        .map("foo").rejectIf("check", check => check > 5).to("bar1")
+        .map("foo").rejectIf("check", check => check > 1).to("bar2");
+
+      source = {
+        "foo": {
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        },
+        "voila": "a",
+        "check": 2
+      };
+
+      expected = {
+        "bar1": {
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        }
+      };
+      done();
+    });
+
+    describe("when its used", () => {
+
+      it("should return the desired result", done => {
+        actual = mapper.execute(source);
+        expect(actual).to.equal(expected);
+        done();
+      });
+    });
+
+    describe("parameter validation", () => {
+
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error if key is null", done => {
+        expect(() => mapper("foo").rejectIf(null).to("bar")).to.throw("the key must be a string");
+        done();
+      });
+
+      it("should throw an error if value is null", done => {
+        expect(() => mapper("foo").rejectIf("foo").to("bar")).to.throw("the value cannot be undefined or null");
+        done();
+      });
+    });
+
+  });
+
+
   describe("removing", () => {
 
     before(done => {
