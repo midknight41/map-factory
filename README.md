@@ -17,6 +17,7 @@ A simple object mapping utility that makes it easy to map data from one object t
 - [Mapping data to a new structure](#mapping-data-to-a-new-structure)
 - [Working with arrays](#working-with-arrays)
 - [Transformations](#transformations)
+- [Pipeline Transformations](#pipeline-transformations)
 - [Working with multiple source objects](#dealing-with-multiple-sources-of-data)
 
 See [Change Log](./CHANGELOG.md) for changes from previous versions.
@@ -263,6 +264,8 @@ mapper
   .set("my.target.id", () => createId());
 ```
 
+
+
 ## Examples
 
 ### Mapping data to a new structure
@@ -315,36 +318,6 @@ assert.deepEqual(result, {
   "fieldName": "name1",
   "fieldId": "123"
 });
-```
-
-Implicit mapping behaviour can be achieved using the ```removing()``` method. Removing can take either a single field name or an array of field names.
-
-```js
-const mapper = createMapper();
-
-const src = {
-  user: {
-    name: "Tim",
-    occupation: "Enchanter",
-    password: "scary bunny"
-  }
-};
-
-mapper
-  .map("user").removing("password").to("user");
-  .execute(src);
-
-/*
-The expected result is:
-
-{
-  user: {
-    name: "Tim",
-    occupation: "Enchanter"
-  }
-}
-
-*/
 ```
 
 ### Working with arrays
@@ -679,8 +652,132 @@ assert.deepEqual(result, {
 });
 ```
 
-## Common patterns
-### Dealing with multiple sources of data
+## Pipeline Transformations
+A pipeline transformation is applied after a source field is selected and modifies the data or behaviour in some way.
+
+**```map(field).removing(fieldsToRemoves: string[])```**
+
+Implicit mapping behaviour can be achieved using the ```removing()``` method. Removing can take either a single field name or an array of field names.
+
+```js
+const mapper = createMapper();
+
+const src = {
+  user: {
+    name: "Tim",
+    occupation: "Enchanter",
+    password: "scary bunny"
+  }
+};
+
+mapper
+  .map("user").removing(["password"]).to("user");
+  .execute(src);
+
+/*
+{
+  user: {
+    name: "Tim",
+    occupation: "Enchanter"
+  }
+}
+*/
+```
+
+**```map(field).acceptIf(comparingKey: string, comparision: function|any)```**
+
+This method allows you to filter the mapped source data based on another field value on the source object.
+
+- ```comparingKey```: The source field for the conditional logic. Please note the ```comparingKey``` cannot include an array at present.
+- ```comparision```: A function that will be passed the value of ```comparingKey``` that should return ```true``` for the mapping to proceed. A non-function value can be supplied instead which will do a simple equal comparision (===) if that's all you need to do.
+```js
+const mapper = createMapper();
+
+const src = [{
+  ownershipType: "leasehold",
+  amount: 235240,
+  leaseLength: "99 Years"
+},{
+  ownershipType: "freehold",
+  amount: 275240,
+  leaseLength: "N/A"
+}];
+
+mapper
+  .map("amount").to("sale.amount")
+  .map("ownershipType").to("ownership.type")
+  .map("leaseLength").acceptIf("ownershipType", "leasehold").to("lease.length");
+
+const result = mapper.each(src);
+/*
+[ { sale: { amount: 235240 },
+    ownership: { type: 'leasehold' },
+    lease: { length: '99 Years' } 
+  },
+  { 
+    sale: { amount: 275240 },
+    ownership: { type: 'freehold' } 
+  } 
+]
+*/
+```
+
+Here's the same example but using a function for comparision:
+```js
+mapper
+  .map("amount").to("sale.amount")
+  .map("ownershipType").to("ownership.type")
+  .map("leaseLength").acceptIf("ownershipType", type => type === "leasehold").to("lease.length");
+```
+
+**```map(field).rejectIf(comparingKey: string, comparision: function|any)```**
+
+This method allows you to filter the mapped source data based on another field value on the source object. This method has the opposite behaviour of ```acceptIf()```.
+
+- ```comparingKey```: The source field for the conditional logic. Please note the ```comparingKey``` cannot include an array at present.
+- ```comparision```: A function that will be passed the value of ```comparingKey``` that should return ```true``` to cancel the mapping. A non-function value can be supplied instead which will do a simple equal comparision (===) if that's all you need to do.
+
+```js
+const mapper = createMapper();
+
+const src = [{
+  ownershipType: "leasehold",
+  amount: 235240,
+  leaseLength: "99 Years"
+},{
+  ownershipType: "freehold",
+  amount: 275240,
+  leaseLength: "N/A"
+}];
+
+mapper
+  .map("amount").to("sale.amount")
+  .map("ownershipType").to("ownership.type")
+  .map("leaseLength").rejectIf("ownershipType", "freehold").to("lease.length");
+
+const result = mapper.each(src);
+/*
+[ { sale: { amount: 235240 },
+    ownership: { type: 'leasehold' },
+    lease: { length: '99 Years' } 
+  },
+  { 
+    sale: { amount: 275240 },
+    ownership: { type: 'freehold' } 
+  } 
+]
+*/
+```
+
+Here's the same example but using a function for comparision:
+```js
+mapper
+  .map("amount").to("sale.amount")
+  .map("ownershipType").to("ownership.type")
+  .map("leaseLength").rejectIf("ownershipType", type => type === "freehold").to("lease.length");
+```
+
+## Dealing with multiple sources of data
 There are two ways to deal with multiple sources of data.
 - Combine your data in to a single object before mapping
 - Use multiple mappers and combine the objects as you go

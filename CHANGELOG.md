@@ -1,3 +1,9 @@
+### 3.2.0
+
+Mapping can now be conditionally based on other values in the source document using ```acceptIf()``` and ```rejectIf()```.
+
+More details can found in the [Pipeline Transformations](README.md#pipeline-transformations) section of the README.
+
 ### 3.1.0
 
 New ```set()``` feature to allow you to set a value on the target object without requiring a source field.
