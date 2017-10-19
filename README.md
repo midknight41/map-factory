@@ -655,7 +655,9 @@ assert.deepEqual(result, {
 ## Pipeline Transformations
 A pipeline transformation is applied after a source field is selected and modifies the data or behaviour in some way.
 
-**```map(field).removing(fieldsToRemoves: string[])```**
+### removing(fieldsToRemove: string[])
+
+- ```fieldsToRemove```: An array of field names.
 
 Implicit mapping behaviour can be achieved using the ```removing()``` method. Removing can take either a single field name or an array of field names.
 
@@ -684,7 +686,7 @@ mapper
 */
 ```
 
-**```map(field).acceptIf(comparingKey: string, comparision: function|any)```**
+### acceptIf(comparingKey: string, comparision: function|any)
 
 This method allows you to filter the mapped source data based on another field value on the source object.
 
@@ -730,7 +732,7 @@ mapper
   .map("leaseLength").acceptIf("ownershipType", type => type === "leasehold").to("lease.length");
 ```
 
-**```map(field).rejectIf(comparingKey: string, comparision: function|any)```**
+### rejectIf(comparingKey: string, comparision: function|any)
 
 This method allows you to filter the mapped source data based on another field value on the source object. This method has the opposite behaviour of ```acceptIf()```.
 
