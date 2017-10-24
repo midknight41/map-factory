@@ -1,5 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import unset from "lodash.unset";
+import compact from "lodash.compact";
 
 export default class Mapping {
 
@@ -167,6 +168,52 @@ export default class Mapping {
     });
 
     return this;
+  }
+
+  compact() {
+
+    this.pushToPipelineTransformations_((source, value) => {
+
+      if (!Array.isArray(value)) {
+        return value;
+      }
+
+      return compact(value);
+
+    });
+    return this;
+  }
+
+  first() {
+
+    this.pushToPipelineTransformations_((source, value) => {
+
+      if (!Array.isArray(value)) {
+        return value;
+      }
+
+      return value[0];
+
+    });
+
+    return this;
+
+  }
+
+  last() {
+
+    this.pushToPipelineTransformations_((source, value) => {
+
+      if (!Array.isArray(value)) {
+        return value;
+      }
+
+      return value[value.length - 1];
+
+    });
+
+    return this;
+
   }
 
   removing(keys) {
