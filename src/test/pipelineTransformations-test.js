@@ -1,8 +1,8 @@
 import * as Lab from "lab";
-import { expect } from "code";
+import {expect} from "code";
 import createMapper from "../lib";
 
-const { describe, it, before, beforeEach } = exports.lab = Lab.script();
+const {describe, it, before, beforeEach} = exports.lab = Lab.script();
 
 let source;
 let expected;
@@ -134,7 +134,6 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
   });
 
-
   describe("removing", () => {
 
     before(done => {
@@ -242,4 +241,144 @@ describe("Pipeline transformations functionality of the mapper", () => {
     });
 
   });
+
+  describe("compact", () => {
+
+    it("should compact and array with falsy values", done => {
+
+      const input = [null, "a", false, "b", undefined, "c"];
+
+      expected = ["a", "b", "c"];
+
+      mapper = createMapper();
+
+      actual = mapper
+        .map("[]").compact()
+        .execute(input);
+
+      expect(actual).to.equal(expected);
+      done();
+
+    });
+
+    it("should return an unmodified value if the source value is not an array", done => {
+      const input = {data: {"first": "value", "second": null}};
+      mapper = createMapper();
+
+      actual = mapper
+        .map("data").compact()
+        .execute(input);
+
+      expect(actual).to.equal(input);
+      done();
+
+    });
+
+    it("should not error if the source value isn't found", done => {
+      const input = {};
+      mapper = createMapper();
+
+      actual = mapper
+        .map("data").compact()
+        .execute(input);
+
+      expect(actual).to.equal(input);
+      done();
+
+    });
+
+  });
+
+  describe("first", () => {
+
+    it("should select the first item in an array", done => {
+
+      const input = ["a", "b", "c"];
+
+      expected = {data: "a"};
+
+      mapper = createMapper();
+
+      actual = mapper
+        .map("[]").first().to("data")
+        .execute(input);
+
+      expect(actual).to.equal(expected);
+      done();
+
+    });
+
+    it("should return an unmodified value if the source value is not an array", done => {
+      const input = {data: {"first": "value", "second": null}};
+      mapper = createMapper();
+
+      actual = mapper
+        .map("data").first()
+        .execute(input);
+
+      expect(actual).to.equal(input);
+      done();
+
+    });
+
+    it("should not error if the source value isn't found", done => {
+      const input = {};
+      mapper = createMapper();
+
+      actual = mapper
+        .map("data").first()
+        .execute(input);
+
+      expect(actual).to.equal(input);
+      done();
+
+    });
+  });
+
+  describe("last", () => {
+
+    it("should select the first item in an array", done => {
+
+      const input = ["a", "b", "c"];
+
+      expected = {data: "c"};
+
+      mapper = createMapper();
+
+      actual = mapper
+        .map("[]").last().to("data")
+        .execute(input);
+
+      expect(actual).to.equal(expected);
+      done();
+
+    });
+
+    it("should return an unmodified value if the source value is not an array", done => {
+      const input = {data: {"first": "value", "second": null}};
+      mapper = createMapper();
+
+      actual = mapper
+        .map("data").last()
+        .execute(input);
+
+      expect(actual).to.equal(input);
+      done();
+
+    });
+
+    it("should not error if the source value isn't found", done => {
+      const input = {};
+      mapper = createMapper();
+
+      actual = mapper
+        .map("data").last()
+        .execute(input);
+
+      expect(actual).to.equal(input);
+      done();
+
+    });
+  });
+
 });

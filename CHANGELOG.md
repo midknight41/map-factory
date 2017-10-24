@@ -1,3 +1,9 @@
+### 3.3.0
+
+Added ```compact()```, ```first()```, and ```last()``` Pipeline Transformations for more detailed control over arrays.
+
+More details can found in the [Pipeline Transformations](README.md#pipeline-transformations) section of the README.
+
 ### 3.2.0
 
 Mapping can now be conditionally based on other values in the source document using ```acceptIf()``` and ```rejectIf()```.

@@ -779,6 +779,60 @@ mapper
   .map("leaseLength").rejectIf("ownershipType", type => type === "freehold").to("lease.length");
 ```
 
+### first()
+
+Selects the first item from an array.
+
+```js
+const input = ["a", "b", "c"];
+
+mapper = createMapper();
+
+mapper
+  .map("[]").first().to("data")
+  .execute(input);
+
+/*
+  {data: "a"}
+*/
+```
+
+### last()
+
+Selects the last item from an array.
+
+```js
+const input = ["a", "b", "c"];
+
+mapper = createMapper();
+
+mapper
+  .map("[]").last().to("data")
+  .execute(input);
+
+/*
+  {data: "c"}
+*/
+```
+
+### compact()
+
+Removes all *falsy* items from an array.
+
+```js
+const input = [null, "a", false, "b", undefined, "c"];
+
+mapper = createMapper();
+
+mapper
+  .map("[]").compact()
+  .execute(input);
+
+/*
+  ["a", "b", "c"]
+*/
+```
+
 ## Dealing with multiple sources of data
 There are two ways to deal with multiple sources of data.
 - Combine your data in to a single object before mapping
