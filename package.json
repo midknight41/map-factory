@@ -75,6 +75,7 @@
     "lodash.compact": "^3.0.1",
     "lodash.flattendeep": "^4.4.0",
     "lodash.flattendepth": "^4.7.0",
+    "lodash.set": "^4.3.2",
     "lodash.unset": "^4.5.2"
   }
 }
