@@ -1,5 +1,6 @@
 import cloneDeep from "lodash.clonedeep";
 import unset from "lodash.unset";
+import set from "lodash.set";
 import compact from "lodash.compact";
 
 export default class Mapping {
@@ -216,6 +217,66 @@ export default class Mapping {
 
   }
 
+  keep(keys) {
+
+    if (Array.isArray(keys) && keys.length > 0) {
+      keys.map(key => {
+        if (typeof key !== "string") {
+          throw new Error("The keep method requires a string value or an array of strings");
+        }
+
+      });
+    }
+
+    if (Array.isArray(keys) === false && typeof keys !== "string") {
+      throw new Error("The keep method requires a string value or an array of strings");
+    }
+
+    this.pushToPipelineTransformations_((source, value) => {
+
+      let valueToUse = cloneDeep(value);
+
+      if (typeof valueToUse !== "object" && !Array.isArray(valueToUse)) {
+        return valueToUse;
+      }
+
+      const isArray = Array.isArray(valueToUse) && valueToUse.length > 0;
+
+      if (isArray) {
+        valueToUse = valueToUse.map(val => {
+          if (typeof val !== "object" && !Array.isArray(val)) {
+            return val;
+          }
+          return this.processKeep_(keys, val);
+        });
+      } else {
+        valueToUse = this.processKeep_(keys, valueToUse);
+      }
+      return valueToUse;
+    });
+
+    return this;
+  }
+
+  processKeep_(keys, val) {
+
+    const obj = {};
+
+    if (Array.isArray(keys) && keys.length > 0) {
+      keys.map(key => {
+        set(obj, key, val[key]);
+      });
+
+      return obj;
+    }
+
+    if (typeof keys === "string") {
+      set(obj, keys, val[keys]);
+      return obj;
+    }
+
+  }
+
   removing(keys) {
 
     if (Array.isArray(keys) && keys.length > 0) {
@@ -273,6 +334,4 @@ export default class Mapping {
     }
 
   }
-
-
 }

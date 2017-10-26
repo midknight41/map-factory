@@ -381,4 +381,112 @@ describe("Pipeline transformations functionality of the mapper", () => {
     });
   });
 
+  describe("keep", () => {
+
+    before(done => {
+      mapper = createMapper();
+
+      mapper
+        .map("foo").keep(["foo1"]).to("bar")
+        .map(["foo", "h"]).keep(["bar"])
+        .to("barMulti", foo => {
+          return foo;
+        })
+        .map("fooArray").keep(["bar", "foo1"]).to("barArray")
+        .map("h").or("howdy").keep(["id"]).to("orTest")
+        .map("howdy")
+        .map("voila").to("voila", () => "hello");
+
+      source = {
+        "foo": {
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        },
+        "fooArray": [{
+          "id": "fooID",
+          "bar": "tes",
+          "foo1": "bar2"
+        }],
+        "howdy": {
+          "id": "allow",
+          "id2": "allow2"
+        },
+        "voila": "a"
+      };
+
+      expected = {
+        "bar": {
+          "foo1": "bar2"
+        },
+        "barArray": [
+          {
+            "bar": "tes",
+            "foo1": "bar2"
+          }
+        ],
+        "barMulti": {
+          "bar": "tes"
+        },
+        "howdy": {
+          "id": "allow",
+          "id2": "allow2"
+        },
+        "orTest": {
+          "id": "allow"
+        },
+        "voila": "hello"
+      };
+      done();
+    });
+
+    describe("when an object is passed", () => {
+
+      it("should return the desired result", done => {
+        actual = mapper.execute(source);
+        expect(actual).to.equal(expected);
+        done();
+      });
+    });
+
+    describe("when an array of object is passed", () => {
+
+      it("should return the desired result", done => {
+        actual = mapper.each([source]);
+        expect(actual).to.equal([expected]);
+        done();
+      });
+    });
+
+    describe("parameter validation", () => {
+
+      beforeEach(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error on null", done => {
+        expect(() => mapper("foo").keep(null).to("bar")).to.throw("The keep method requires a string value or an array of strings");
+        done();
+      });
+
+      it("should throw an error on undefined", done => {
+        expect(() => mapper("foo").keep(undefined).to("bar")).to.throw("The keep method requires a string value or an array of strings");
+        done();
+      });
+
+      it("should throw an error when keys are not passed in as valid string", done => {
+        expect(() => mapper("foo").keep({}).to("bar")).to.throw("The keep method requires a string value or an array of strings");
+        done();
+      });
+
+      it("should throw an error when keys are not passed in as valid array of strings", done => {
+        expect(() => mapper("foo").keep([{}]).to("bar")).to.throw("The keep method requires a string value or an array of strings");
+        done();
+      });
+
+    });
+
+  });
+
 });
