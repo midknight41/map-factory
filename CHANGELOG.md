@@ -1,3 +1,9 @@
+### 3.4.0
+
+Added the ```keep()``` pipeline transformation.
+
+More details can found in the [Pipeline Transformations](README.md#pipeline-transformations) section of the README.
+
 ### 3.3.0
 
 Added ```compact()```, ```first()```, and ```last()``` Pipeline Transformations for more detailed control over arrays.

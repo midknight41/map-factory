@@ -686,6 +686,37 @@ mapper
 */
 ```
 
+### keep(fieldsToKeep: string[])
+
+- ```fieldsToKeep```: An array of field names.
+
+The inverse of the ```removing()``` method. ```keep()``` can take either a single field name or an array of field names.
+
+```js
+const mapper = createMapper();
+
+const src = {
+  user: {
+    name: "Tim",
+    occupation: "Enchanter",
+    password: "scary bunny"
+  }
+};
+
+mapper
+  .map("user").keep(["name", "occupation"]).to("user");
+  .execute(src);
+
+/*
+{
+  user: {
+    name: "Tim",
+    occupation: "Enchanter"
+  }
+}
+*/
+```
+
 ### acceptIf(comparingKey: string, comparision: function|any)
 
 This method allows you to filter the mapped source data based on another field value on the source object.
