@@ -6,11 +6,6 @@ import compact from "lodash.compact";
 export default class Mapping {
 
   constructor(source, mapper, options) {
-
-    if (!source) {
-      throw new Error("the source field name cannot be null");
-    }
-
     this.mapper = mapper;
     this.source = source;
     this.orMode = false;

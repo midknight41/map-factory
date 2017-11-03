@@ -1,6 +1,7 @@
 import Mapping from "./mapping";
 import flattenDeep from "lodash.flattendeep";
 import flattenDepth from "lodash.flattendepth";
+import cloneDeep from "lodash.clonedeep";
 
 const SINGLE_MODE = 0;
 const MULTI_MODE = 1;
@@ -235,7 +236,13 @@ export default class Mapper {
   processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, flattenings, options }) {
 
     // Get source
-    let value = this.om.getValue(sourceObject, sourcePath);
+    let value;
+
+    if (!sourcePath) {
+      value = cloneDeep(sourceObject);
+    } else {
+      value = this.om.getValue(sourceObject, sourcePath);
+    }
     const flattening = flattenings[0];
 
     // default transformations
@@ -253,6 +260,9 @@ export default class Mapper {
     }
 
     // Set value on destination object
+    if (!targetPath) {
+      return value;
+    }
     return this.setIfRequired_(destinationObject, targetPath, value, options);
 
   }
