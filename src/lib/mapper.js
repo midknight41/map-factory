@@ -193,7 +193,8 @@ export default class Mapper {
 
     // no target means that the source is used as the target (same number of arrays)
     // so in this scenario we just suppress flattening
-    if (targetPath === null || targetPath === undefined) {
+    // no source means copy the root object so we dont need this
+    if (targetPath === null || targetPath === undefined || sourcePath === null || sourcePath === undefined) {
       return { sourceCount: 0, targetCount: 0, flatten: false, inverted: flattenInverted };
     }
 
@@ -261,7 +262,8 @@ export default class Mapper {
 
     // Set value on destination object
     if (!targetPath) {
-      return value;
+      destinationObject = value;
+      return destinationObject;
     }
     return this.setIfRequired_(destinationObject, targetPath, value, options);
 

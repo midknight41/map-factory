@@ -186,17 +186,33 @@ suite.declare((lab, variables) => {
       return done();
     });
 
-    lab.test("A null source field throws an error", done => {
+    lab.test("A null source field should map the source to destination", done => {
 
       const map = createSut();
 
-      const throws = function () {
+      const result = map(null).execute({});
 
-        map(null).to("field.name");
+      expect(result).to.equal({});
 
-      };
+      return done();
 
-      expect(throws).to.throw();
+    });
+
+    lab.test("A null source field should map the source to destination provided", done => {
+
+      const mapper = createSut();
+
+      mapper.map(null).to("test")
+        .map("foo").to("test.foo1");
+
+      const result = mapper.execute({"foo": "bar"});
+
+      expect(result).to.equal({
+        "test": {
+          "foo": "bar",
+          "foo1": "bar"
+        }
+      });
 
       return done();
 
