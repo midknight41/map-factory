@@ -6,7 +6,7 @@ export default class Mapping implements IMapping {
   mapper: any;
   orMode: boolean;
   constructor(source: string | string[], mapper: any);
-  map(stringOrArray: string | string[]): any;
+  map(stringOrArray?: string | string[]): any;
   or(source: string): this;
   execute(source?: any, destination?: any): any;
   executeAsync(source?: any, destination?: any): Promise<any>;
