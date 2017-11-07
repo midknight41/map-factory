@@ -95,7 +95,6 @@ my.deep.array[0] | Select an item in an array by index | ```{ value: 1 }```
 
 ### Basic Example
 ```js
-
 const createMapper = require("map-factory");
 const assert = require("assert");
 
@@ -149,6 +148,44 @@ const expected = {
 
 assert.deepEqual(actual, expected);
 ```
+
+Sometimes you may want to reference the entire root object as opposed to individual fields. This can be achieved by omitting the source field on the ```map()``` method:
+
+```js
+const createMapper = require("map-factory");
+const assert = require("assert");
+
+const source = {
+  "name": "Tim",
+  "job": "Enchanter",
+  "account": {
+    "userId": "tim1987",
+    "email": "tim@enchanter.com"
+  }
+};
+
+const mapper = createMapper();
+
+mapper
+  .map().to("raw") // <= omitting the source field will copy the source object
+  .map("user.email").to("email")
+
+const actual = mapper.execute(source);
+
+const expected = {
+  "raw": {
+    "name": "Tim",
+    "job": "Enchanter",
+    "account": {
+      "userId": "tim1987",
+      "email": "tim@enchanter.com"
+    }
+  },
+  "email": "tim@enchanter.com"
+};
+
+assert.deepEqual(actual, expected);
+``` 
 
 ## Behaviour
 

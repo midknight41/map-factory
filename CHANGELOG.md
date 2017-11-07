@@ -1,3 +1,21 @@
+### 3.5.0
+
+The source field for the ```map()``` method is now optional. If omitted, the method will get the entire source object. This is quite useful when combined with pipeline transformations.
+
+```js
+const mapper = createMapper();
+
+mapper
+  .map().to("data");
+  .execute({"a": "b"})
+
+/*
+  {
+    data: {"a": "b"}
+  }
+*/
+```
+
 ### 3.4.0
 
 Added the ```keep()``` pipeline transformation.
