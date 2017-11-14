@@ -327,7 +327,7 @@ export default class Mapper {
 
   }
 
-  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, failureTransform, isCustomTransform, flattenings, options }) {
+  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, failureTransform, flattenings, options }) {
 
     let orValue;
     const sourceArray = sourcePath;
@@ -354,12 +354,6 @@ export default class Mapper {
     }
 
     orValue = this.flattenValue_(flattening, orValue);
-
-    // no transform
-    if (isCustomTransform === false) {
-
-      return this.setIfRequired_(destinationObject, targetPath, orValue, options);
-    }
 
     // has a transform
     if (this.exists_(orValue) || options.alwaysTransform === true) {
