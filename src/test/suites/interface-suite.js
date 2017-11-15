@@ -689,7 +689,9 @@ suite.declare((lab, variables) => {
         .map("foo2").to("foo2", null, () => "bar")
         .map(["foo1", "foo2"]).to("foo3", () => "check", "bar")
         .map("foo1").or("foo2").to("fooOr", null, "barOr")
-        .map("foo4").always.to("foo4", () => "foo4", () => "bar");
+        .map("foo4").always.to("foo4", () => "foo4", () => "bar")
+        .map("foo5").to("foo5", null, () => null)
+        .map("foo6").to("foo6", null, null);
 
       const actual = mapper.execute(source);
 

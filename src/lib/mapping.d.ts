@@ -12,7 +12,7 @@ export default class Mapping implements IMapping {
   executeAsync(source?: any, destination?: any): Promise<any>;
   chain(mapper: IMapFactory):IMapFactory;
   each(sourceArray: any): any;
-  to(target: string, fnc?: Function): any;
+  to(target: string, successFunc?: Function, failureFunc? : any): any;
   always: IMapping;
   existing: IMapping;
   removing(keys: string | string[]): IMapping;
