@@ -666,6 +666,39 @@ suite.declare((lab, variables) => {
 
       return done();
     });
+
+    lab.test("Calls a default function and alters the resulting object", done => {
+
+      const source = {
+        "foo": "name1",
+        "bar": "name2"
+      };
+
+      const expected = {
+        "foo1": "bar",
+        "foo2": "bar",
+        "foo3": "bar",
+        "fooOr": "barOr",
+        "foo4": "foo4"
+      };
+
+      const mapper = createSut();
+
+      mapper
+        .map("foo1").to("foo1", null, "bar")
+        .map("foo2").to("foo2", null, () => "bar")
+        .map(["foo1", "foo2"]).to("foo3", () => "check", "bar")
+        .map("foo1").or("foo2").to("fooOr", null, "barOr")
+        .map("foo4").always.to("foo4", () => "foo4", () => "bar")
+        .map("foo5").to("foo5", null, () => null)
+        .map("foo6").to("foo6", null, null);
+
+      const actual = mapper.execute(source);
+
+      expect(actual).to.equal(expected);
+
+      return done();
+    });
   });
 
   group("multiple selections", () => {

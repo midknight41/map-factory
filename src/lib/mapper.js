@@ -148,7 +148,7 @@ export default class Mapper {
     const sourcePath = item.source;
     let targetPath = item.target;
     let { transform, alwaysSet, alwaysTransform,
-      pipelineTransformations, flatten, flattenInverted } = item;
+      pipelineTransformations, flatten, flattenInverted, failureTransform } = item;
 
     let isCustomTransform = true;
     /* eslint-enable prefer-const */
@@ -162,11 +162,16 @@ export default class Mapper {
       transform = value => value;
     }
 
+    if (failureTransform && typeof failureTransform !== "function") {
+      const valueToReturn = failureTransform;
+      failureTransform = () => valueToReturn;
+    }
+
     if (!targetPath) {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, isCustomTransform, flattenings, options: { alwaysSet, alwaysTransform, pipelineTransformations, flatten, flattenInverted } };
+    return { mode, targetPath, sourcePath, transform, failureTransform, isCustomTransform, flattenings, options: { alwaysSet, alwaysTransform, pipelineTransformations, flatten, flattenInverted } };
 
   }
 
@@ -234,7 +239,7 @@ export default class Mapper {
 
   }
 
-  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, flattenings, options }) {
+  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, failureTransform, flattenings, options }) {
 
     // Get source
     let value;
@@ -260,6 +265,10 @@ export default class Mapper {
       value = transform(value);
     }
 
+    if (!this.exists_(value) && failureTransform) {
+      value = failureTransform();
+    }
+
     // Set value on destination object
     if (!targetPath) {
       destinationObject = value;
@@ -269,7 +278,7 @@ export default class Mapper {
 
   }
 
-  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattenings, options }) {
+  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, failureTransform, isCustomTransform, flattenings, options }) {
 
     if (isCustomTransform === false) {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
@@ -309,12 +318,16 @@ export default class Mapper {
       value = transform(...values);
     }
 
+    if (!anyValues && failureTransform) {
+      value = failureTransform();
+    }
+
     // Set value on destination object
     return this.setIfRequired_(destinationObject, targetPath, value, options);
 
   }
 
-  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, isCustomTransform, flattenings, options }) {
+  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, failureTransform, flattenings, options }) {
 
     let orValue;
     const sourceArray = sourcePath;
@@ -342,15 +355,13 @@ export default class Mapper {
 
     orValue = this.flattenValue_(flattening, orValue);
 
-    // no transform
-    if (isCustomTransform === false) {
-
-      return this.setIfRequired_(destinationObject, targetPath, orValue, options);
-    }
-
     // has a transform
     if (this.exists_(orValue) || options.alwaysTransform === true) {
       orValue = transform(orValue);
+    }
+
+    if (!this.exists_(orValue) && failureTransform) {
+      orValue = failureTransform();
     }
 
     return this.setIfRequired_(destinationObject, targetPath, orValue, options);
