@@ -100,7 +100,7 @@ export default class Mapping {
     return this.mapper.chain(mapper);
   }
 
-  to(target, successFunc, failureFunc) {
+  to(target, successFunc, notFoundFunc) {
 
     if (!target || typeof target !== "string") {
       throw new Error("the target field name must be a string");
@@ -112,8 +112,8 @@ export default class Mapping {
       this.transform = successFunc;
     }
 
-    if (failureFunc) {
-      this.failureTransform = failureFunc;
+    if (notFoundFunc) {
+      this.failureTransform = notFoundFunc;
     }
 
     return this.mapper;

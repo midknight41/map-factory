@@ -636,6 +636,19 @@ assert.deepEqual(result, {
 });
 ```
 
+The ```to()``` method also takes a optional ```notFound``` transform that allows for basic conditional logic to be applied. For convenience, you can also supply a basic value.
+
+```js
+
+const mapper = createMapper();
+
+// These two mappings are logically equivalent
+mapper
+  .map("amount").to("data", amount => `£${amount}`, () => "£0");
+  .map("amount").to("data", amount => `£${amount}`, "£0");
+
+```
+
 You can also provide an array of source fields and they can be extracted together if you provide a transform for the target field.
 
 ```js

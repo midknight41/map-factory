@@ -1,3 +1,18 @@
+### 3.6.0
+
+The ```to()``` method now takes a optional ```notFound``` transform that allows for basic conditional logic to be applied. For convenience, you can also supply a basic value.
+
+```js
+
+const mapper = createMapper();
+
+// These two mappings are logically equivalent
+mapper
+  .map("amount").to("data", amount => `£${amount}`, () => "£0");
+  .map("amount").to("data", amount => `£${amount}`, "£0");
+
+```
+
 ### 3.5.0
 
 The source field for the ```map()``` method is now optional. If omitted, the method will get the entire source object. This is quite useful when combined with pipeline transformations.
