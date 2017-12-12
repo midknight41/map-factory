@@ -1,3 +1,26 @@
+### 3.6.1
+
+Fixed a bug with the keep method.
+
+```js
+const source = {
+  "foo": {
+      "foo1": "bar",
+       "bar": "bar"
+  }
+}
+mapper.map("foo").keep(["foo1", "foo2"]);
+
+// foo2 should not exist here
+
+ {
+  "foo": {
+      "foo1": "bar",
+       "foo2": undefined
+  }
+}
+```
+
 ### 3.6.0
 
 The ```to()``` method now takes a optional ```notFound``` transform that allows for basic conditional logic to be applied. For convenience, you can also supply a basic value.
