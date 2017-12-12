@@ -263,7 +263,9 @@ export default class Mapping {
 
     if (Array.isArray(keys) && keys.length > 0) {
       keys.map(key => {
-        set(obj, key, val[key]);
+        if (val[key]) {
+          set(obj, key, val[key]);
+        }
       });
 
       return obj;

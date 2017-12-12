@@ -387,7 +387,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
       mapper = createMapper();
 
       mapper
-        .map("foo").keep(["foo1"]).to("bar")
+        .map("foo").keep(["foo1", "foo2"]).to("bar")
         .map(["foo", "h"]).keep(["bar"])
         .to("barMulti", foo => {
           return foo;
