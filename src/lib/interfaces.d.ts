@@ -31,4 +31,5 @@ export interface IOptions {
   experimental?: boolean;
   alwaysTransform?: boolean;
   alwaysSet?: boolean;
+  failureTransform?: Function
 }
