@@ -617,3 +617,38 @@ group("the existing modifier", () => {
   existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
 
 });
+
+group("the failureTransform as a option for default use", () => {
+  lab.test("should use the global failure transformed if its defined and failure transform is not provided as part of the mapping", done => {
+    const source = {
+      "foo": "name1",
+      "bar": "name2",
+      "fooNull": null
+    };
+
+    const expected = {
+      "foo1": "bar",
+      "foo2": "bar",
+      "foo3": "from global",
+      "fooOr": "from global",
+      "foo4": "from global",
+      "foo5": "from global"
+    };
+
+    const mapper = createMapper({ failureTransform: () => "from global"});
+
+    mapper
+      .map("foo1").to("foo1", null, "bar")
+      .map("foo2").to("foo2", null, () => "bar")
+      .map("foo2").to("foo5")
+      .map(["foo1", "foo2"]).to("foo3", () => "check")
+      .map("foo1").or("foo2").to("fooOr")
+      .map("foo4").always.to("foo4");
+
+    const actual = mapper.execute(source);
+
+    expect(actual).to.equal(expected);
+
+    return done();
+  });
+});
