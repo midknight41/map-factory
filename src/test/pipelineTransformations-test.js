@@ -9,9 +9,9 @@ let expected;
 let mapper;
 let actual;
 
-describe("Pipeline transformations functionality of the mapper", () => {
+describe("Pipeline Transformations", () => {
 
-  describe("accceptIf", () => {
+  describe("The accceptIf() method", () => {
 
     before(done => {
       mapper = createMapper();
@@ -75,7 +75,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
   });
 
-  describe("rejectIf", () => {
+  describe("The rejectIf() method", () => {
 
     before(done => {
       mapper = createMapper();
@@ -134,7 +134,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
   });
 
-  describe("removing", () => {
+  describe("The removing() method", () => {
 
     before(done => {
       mapper = createMapper();
@@ -242,7 +242,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
   });
 
-  describe("compact", () => {
+  describe("The compact() method", () => {
 
     it("should compact and array with falsy values", done => {
 
@@ -289,7 +289,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
 
   });
 
-  describe("first", () => {
+  describe("The first() method", () => {
 
     it("should select the first item in an array", done => {
 
@@ -335,7 +335,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
     });
   });
 
-  describe("last", () => {
+  describe("The last() method", () => {
 
     it("should select the first item in an array", done => {
 
@@ -381,7 +381,7 @@ describe("Pipeline transformations functionality of the mapper", () => {
     });
   });
 
-  describe("keep", () => {
+  describe("The keep() method", () => {
 
     before(done => {
       mapper = createMapper();

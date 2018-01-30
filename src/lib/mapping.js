@@ -100,6 +100,10 @@ export default class Mapping {
     return this.mapper.chain(mapper);
   }
 
+  set(key, value) {
+    return this.mapper.set(key, value);
+  }
+
   to(target, successFunc, notFoundFunc) {
 
     if (!target || typeof target !== "string") {
