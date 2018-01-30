@@ -162,6 +162,10 @@ export default class Mapper {
       transform = value => value;
     }
 
+    if (!failureTransform && this.options.failureTransform) {
+      failureTransform = this.options.failureTransform;
+    }
+
     if (failureTransform && typeof failureTransform !== "function") {
       const valueToReturn = failureTransform;
       failureTransform = () => valueToReturn;
@@ -266,7 +270,7 @@ export default class Mapper {
     }
 
     if (!this.exists_(value) && failureTransform) {
-      value = failureTransform();
+      value = failureTransform(value);
     }
 
     // Set value on destination object
@@ -319,7 +323,7 @@ export default class Mapper {
     }
 
     if (!anyValues && failureTransform) {
-      value = failureTransform();
+      value = failureTransform(value);
     }
 
     // Set value on destination object
@@ -361,7 +365,7 @@ export default class Mapper {
     }
 
     if (!this.exists_(orValue) && failureTransform) {
-      orValue = failureTransform();
+      orValue = failureTransform(orValue);
     }
 
     return this.setIfRequired_(destinationObject, targetPath, orValue, options);

@@ -671,7 +671,8 @@ suite.declare((lab, variables) => {
 
       const source = {
         "foo": "name1",
-        "bar": "name2"
+        "bar": "name2",
+        "fooNull": null
       };
 
       const expected = {
@@ -679,7 +680,8 @@ suite.declare((lab, variables) => {
         "foo2": "bar",
         "foo3": "bar",
         "fooOr": "barOr",
-        "foo4": "foo4"
+        "foo4": "foo4",
+        "fooNull": "true"
       };
 
       const mapper = createSut();
@@ -691,7 +693,8 @@ suite.declare((lab, variables) => {
         .map("foo1").or("foo2").to("fooOr", null, "barOr")
         .map("foo4").always.to("foo4", () => "foo4", () => "bar")
         .map("foo5").to("foo5", null, () => null)
-        .map("foo6").to("foo6", null, null);
+        .map("foo6").to("foo6", null, null)
+        .map("fooNull").to("fooNull", null, val => val === null ? "true" : "false");
 
       const actual = mapper.execute(source);
 
