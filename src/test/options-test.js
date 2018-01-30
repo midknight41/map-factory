@@ -632,10 +632,11 @@ group("the failureTransform as a option for default use", () => {
       "foo3": "from global",
       "fooOr": "from global",
       "foo4": "from global",
-      "foo5": "from global"
+      "foo5": "from global",
+      "fooNull": "foo"
     };
 
-    const mapper = createMapper({ failureTransform: () => "from global"});
+    const mapper = createMapper({ failureTransform: val => val === null ? "foo" : "from global"});
 
     mapper
       .map("foo1").to("foo1", null, "bar")
@@ -643,7 +644,8 @@ group("the failureTransform as a option for default use", () => {
       .map("foo2").to("foo5")
       .map(["foo1", "foo2"]).to("foo3", () => "check")
       .map("foo1").or("foo2").to("fooOr")
-      .map("foo4").always.to("foo4");
+      .map("foo4").always.to("foo4")
+      .map("fooNull").to("fooNull");
 
     const actual = mapper.execute(source);
 
