@@ -12,41 +12,6 @@ const { getValue, setValue } = createMapper;
 
 group("examples", () => {
 
-  lab.describe("set method", () => {
-    lab.test("Set a field in the destination", done => {
-
-      const expected = {
-        "foo": "bar",
-        "fooFunc": "bar"
-      };
-
-      // Start example
-
-      const source = {};
-
-      const mapper = createMapper();
-
-      mapper.set("foo", "bar")
-        .set("fooFunc", () => "bar");
-
-      const result = mapper.execute(source);
-
-      // End example
-      expect(result).to.equal(expected);
-
-      return done();
-    });
-
-    lab.test("Should throw error when set field is called with a key of type other than string", done => {
-
-      const mapper = createMapper();
-
-      expect(() => mapper.set(null, "bar")).to.throw("the key must be a string");
-
-      return done();
-    });
-  });
-
   lab.test("Map a source field to the same object structure", done => {
 
     const expected = {

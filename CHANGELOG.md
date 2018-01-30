@@ -1,3 +1,9 @@
+### 3.7.0
+
+The ```notFound``` transform function for the ```to()``` method will now supply the the type of non-value they discovered (```null``` or ```undefined```).
+
+Fixed a bug where the ```set``` method could not be used after the ```map``` method.
+
 ### 3.6.1
 
 Fixed a bug with the keep method.
