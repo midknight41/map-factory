@@ -1,3 +1,7 @@
+### 3.7.1
+
+Fixed a bug when traversing an array of a non-existing object.
+
 ### 3.7.0
 
 The ```notFound``` transform function for the ```to()``` method will now supply the the type of non-value they discovered (```null``` or ```undefined```).
