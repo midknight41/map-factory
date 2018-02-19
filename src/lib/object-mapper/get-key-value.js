@@ -127,6 +127,9 @@ function _getValue(fromObject, key, keys) {
         if (typeof arrayIndex === 'undefined') {
           result = _getValue(fromObject[key], keys[0], keys.slice(1));
         } else {
+          if (fromObject[key] === undefined) {
+            return;
+          }
           result = _getValue(fromObject[key][arrayIndex], keys[0], keys.slice(1));
         }
       }

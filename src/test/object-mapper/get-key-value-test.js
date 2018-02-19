@@ -241,5 +241,24 @@ group("The getValue() method", () => {
     expect(result).to.equal(expected);
     return done();
   });
+  lab.test("getting an array item from a non-existent object", done => {
+    const key = "fish[0].b";
 
+    const obj = {
+      "foo": {
+        "baz": [{
+          "fog": [, {
+            "baz": "bar"
+          }]
+        }]
+      }
+    };
+
+    let expected;
+
+    const result = getValue(obj, key);
+
+    expect(result).to.equal(expected);
+    return done();
+  });
 });
