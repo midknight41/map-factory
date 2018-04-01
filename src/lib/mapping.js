@@ -29,6 +29,12 @@ export default class Mapping {
     return this;
   }
 
+  validateSourceForOps() {
+    if (Array.isArray(this.source) && this.orMode === false) {
+      throw new Error("Multiple selections does not support pipeline transformations");
+    }
+  }
+
   pushToPipelineTransformations_(func) {
     this.pipelineTransformations.push(func);
   }
@@ -125,6 +131,8 @@ export default class Mapping {
   }
 
   acceptIf(key, val) {
+    this.validateSourceForOps();
+
     if (typeof key !== "string") {
       throw new Error("the key must be a string");
     }
@@ -150,6 +158,8 @@ export default class Mapping {
   }
 
   rejectIf(key, val) {
+    this.validateSourceForOps();
+
     if (typeof key !== "string") {
       throw new Error("the key must be a string");
     }
@@ -175,6 +185,7 @@ export default class Mapping {
   }
 
   compact() {
+    this.validateSourceForOps();
 
     this.pushToPipelineTransformations_((source, value) => {
 
@@ -189,6 +200,7 @@ export default class Mapping {
   }
 
   first() {
+    this.validateSourceForOps();
 
     this.pushToPipelineTransformations_((source, value) => {
 
@@ -205,6 +217,7 @@ export default class Mapping {
   }
 
   last() {
+    this.validateSourceForOps();
 
     this.pushToPipelineTransformations_((source, value) => {
 
@@ -221,6 +234,7 @@ export default class Mapping {
   }
 
   keep(keys) {
+    this.validateSourceForOps();
 
     if (Array.isArray(keys) && keys.length > 0) {
       keys.map(key => {
@@ -283,6 +297,7 @@ export default class Mapping {
   }
 
   removing(keys) {
+    this.validateSourceForOps();
 
     if (Array.isArray(keys) && keys.length > 0) {
       keys.map(key => {
