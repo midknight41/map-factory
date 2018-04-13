@@ -73,6 +73,18 @@ describe("Pipeline Transformations", () => {
       });
     });
 
+    describe("when multiple sources are provided", () => {
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper.map(["foo", "bar"]).acceptIf("foo", 2)).to.throw("Multiple selections does not support pipeline transformations");
+        done();
+      });
+    });
+
   });
 
   describe("The rejectIf() method", () => {
@@ -132,6 +144,18 @@ describe("Pipeline Transformations", () => {
       });
     });
 
+    describe("when multiple sources are provided", () => {
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper.map(["foo", "bar"]).rejectIf("foo", 2)).to.throw("Multiple selections does not support pipeline transformations");
+        done();
+      });
+    });
+
   });
 
   describe("The removing() method", () => {
@@ -141,10 +165,6 @@ describe("Pipeline Transformations", () => {
 
       mapper
         .map("foo").removing(["id", "foo1"]).to("bar")
-        .map(["foo", "h"]).removing(["id", "foo1"])
-        .to("barMulti", foo => {
-          return foo;
-        })
         .map("fooArray").removing(["id"]).to("barArray")
         .map("h").or("howdy").removing(["id2"]).to("orTest")
         .map("howdy")
@@ -178,9 +198,6 @@ describe("Pipeline Transformations", () => {
             "foo1": "bar2"
           }
         ],
-        "barMulti": {
-          "bar": "tes"
-        },
         "howdy": {
           "id": "allow",
           "id2": "allow2"
@@ -240,6 +257,18 @@ describe("Pipeline Transformations", () => {
 
     });
 
+    describe("when multiple sources are provided", () => {
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper.map(["foo", "bar"]).removing("foo")).to.throw("Multiple selections does not support pipeline transformations");
+        done();
+      });
+    });
+
   });
 
   describe("The compact() method", () => {
@@ -285,6 +314,18 @@ describe("Pipeline Transformations", () => {
       expect(actual).to.equal(input);
       done();
 
+    });
+
+    describe("when multiple sources are provided", () => {
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper.map(["foo", "bar"]).compact()).to.throw("Multiple selections does not support pipeline transformations");
+        done();
+      });
     });
 
   });
@@ -333,6 +374,18 @@ describe("Pipeline Transformations", () => {
       done();
 
     });
+
+    describe("when multiple sources are provided", () => {
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper.map(["foo", "bar"]).first()).to.throw("Multiple selections does not support pipeline transformations");
+        done();
+      });
+    });
   });
 
   describe("The last() method", () => {
@@ -379,6 +432,18 @@ describe("Pipeline Transformations", () => {
       done();
 
     });
+
+    describe("when multiple sources are provided", () => {
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper.map(["foo", "bar"]).last()).to.throw("Multiple selections does not support pipeline transformations");
+        done();
+      });
+    });
   });
 
   describe("The keep() method", () => {
@@ -388,10 +453,6 @@ describe("Pipeline Transformations", () => {
 
       mapper
         .map("foo").keep(["foo1", "foo2"]).to("bar")
-        .map(["foo", "h"]).keep(["bar"])
-        .to("barMulti", foo => {
-          return foo;
-        })
         .map("fooArray").keep(["bar", "foo1"]).to("barArray")
         .map("h").or("howdy").keep(["id"]).to("orTest")
         .map("howdy")
@@ -425,9 +486,6 @@ describe("Pipeline Transformations", () => {
             "foo1": "bar2"
           }
         ],
-        "barMulti": {
-          "bar": "tes"
-        },
         "howdy": {
           "id": "allow",
           "id2": "allow2"
@@ -485,6 +543,18 @@ describe("Pipeline Transformations", () => {
         done();
       });
 
+    });
+
+    describe("when multiple sources are provided", () => {
+      before(done => {
+        mapper = createMapper();
+        done();
+      });
+
+      it("should throw an error", done => {
+        expect(() => mapper.map(["foo", "bar"]).keep("foo")).to.throw("Multiple selections does not support pipeline transformations");
+        done();
+      });
     });
 
   });
