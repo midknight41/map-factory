@@ -60,7 +60,7 @@
     "eslint": "^4.0.0",
     "istanbul": "^0.4.4",
     "jscoverage": "^0.6.0",
-    "lab": "^14.3.3",
+    "lab": "^15.4.2",
     "lab-suite": "^1.4.0",
     "lab-testing": "^2.2.0",
     "rimraf": "^2.6.0"
