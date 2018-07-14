@@ -266,7 +266,7 @@ assert.deepEqual(actual, expected);
 
 ```
 
-If working with multiple mappers you can chain them together in a pipe-like manner.
+If working with multiple mappers you can chain them together in a pipe-like manner. Be aware that the `chain()` method mutates the original mapper and establishes a permanent connection between the two mappers.
 
 ```js
 const source = {
@@ -300,8 +300,6 @@ mapper
 mapper
   .set("my.target.id", () => createId());
 ```
-
-
 
 ## Examples
 
