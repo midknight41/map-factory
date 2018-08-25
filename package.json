@@ -62,7 +62,7 @@
     "jscoverage": "^0.6.0",
     "lab": "^14.3.3",
     "lab-suite": "^1.4.0",
-    "lab-testing": "^2.2.0",
+    "lab-testing": "^3.0.0",
     "rimraf": "^2.6.0"
   },
   "types": "./dist/lib/map-factory.d.ts",
