@@ -52,7 +52,7 @@
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.0.1",
+    "babel-eslint": "^9.0.0",
     "babel-preset-es2015": "^6.24.1",
     "benchmark": "^2.1.3",
     "code": "^4.1.0",
