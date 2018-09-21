@@ -12,7 +12,7 @@ const { getValue, setValue } = createMapper;
 
 group("examples", () => {
 
-  lab.test("Map a source field to the same object structure", done => {
+  lab.test("Map a source field to the same object structure", () => {
 
     const expected = {
       "fieldName": "name1",
@@ -36,13 +36,11 @@ group("examples", () => {
 
     // End example
 
-
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("Map a source field to a different object structure", done => {
+  lab.test("Map a source field to a different object structure", () => {
 
     const expected = {
       "field": {
@@ -70,10 +68,9 @@ group("examples", () => {
 
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("Supports deep references for source and target objects", done => {
+  lab.test("Supports deep references for source and target objects", () => {
 
     const expected = {
       user:
@@ -117,10 +114,9 @@ group("examples", () => {
 
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("You can also reference specific items in an array", done => {
+  lab.test("You can also reference specific items in an array", () => {
 
     const expected = {
       "topStory": {
@@ -160,10 +156,9 @@ group("examples", () => {
 
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("provides the each() method to help work with arrays and multiple mappers", done => {
+  lab.test("provides the each() method to help work with arrays and multiple mappers", () => {
     const source = {
       one: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
       two: [{ value: "a", drop: "me" }, { value: "b", drop: "me" }, { value: "c", drop: "me" }],
@@ -180,21 +175,20 @@ group("examples", () => {
     const childMapper = createMapper();
 
     childMapper
-    .map("value").to("item");
+      .map("value").to("item");
 
     mainMapper
-    .map("one").to("one", array => childMapper.each(array))
-    .map("two").to("two", array => childMapper.each(array))
-    .map("three").to("three", array => childMapper.each(array));
+      .map("one").to("one", array => childMapper.each(array))
+      .map("two").to("two", array => childMapper.each(array))
+      .map("three").to("three", array => childMapper.each(array));
 
     const actual = mainMapper.execute(source);
 
     expect(actual).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("More complicated transformations can be handled by providing a function", done => {
+  lab.test("More complicated transformations can be handled by providing a function", () => {
 
     const expected = {
       "topStory": {
@@ -250,10 +244,9 @@ group("examples", () => {
 
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("An existing object can be provided as the target object", done => {
+  lab.test("An existing object can be provided as the target object", () => {
 
     const expected = {
       "field": {
@@ -286,10 +279,9 @@ group("examples", () => {
 
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("Select from multiple sources at once", done => {
+  lab.test("Select from multiple sources at once", () => {
 
     const expected = {
       "fruit": {
@@ -322,10 +314,9 @@ group("examples", () => {
 
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("Create a single transform mapping object which is used to map all of your data together", done => {
+  lab.test("Create a single transform mapping object which is used to map all of your data together", () => {
 
     const expected = {
       "blog": {
@@ -376,11 +367,10 @@ group("examples", () => {
     // End example
 
     expect(final).to.equal(expected);
-    return done();
 
   });
 
-  lab.test("Or use multiple mappers and chain them together", done => {
+  lab.test("Or use multiple mappers and chain them together", () => {
     const expected = {
       "blog": {
         "post": {
@@ -436,10 +426,9 @@ group("examples", () => {
     // End example
 
     expect(result).to.equal(expected);
-    return done();
   });
 
-  lab.test("The or() method example", done => {
+  lab.test("The or() method example", () => {
 
     const source = {
       "leasee": "Mr. Man"
@@ -457,10 +446,9 @@ group("examples", () => {
 
     expect(result).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("getValue example", done => {
+  lab.test("getValue example", () => {
 
     //    const { getValue, setValue } = require("map-factory");
 
@@ -474,13 +462,9 @@ group("examples", () => {
 
     const value = getValue(obj, "my.deep.value");
     expect(value).to.equal("here");
-
-
-    return done();
-
   });
 
-  lab.test("setValue example", done => {
+  lab.test("setValue example", () => {
 
     const expected = {
       my: {
@@ -492,16 +476,13 @@ group("examples", () => {
 
     const actual = setValue({}, "my.example.set", "done");
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
 });
 
 group("example - cheatsheet", () => {
 
-  lab.test("cheatsheet", done => {
+  lab.test("cheatsheet", () => {
 
     const source = {
       my: {
@@ -552,9 +533,6 @@ group("example - cheatsheet", () => {
     };
 
     assert.deepEqual(actual, expected);
-
-    return done();
-
   });
 
 });

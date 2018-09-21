@@ -13,7 +13,7 @@ suite.declare((lab, variables) => {
     OPTIONS
   } = variables;
 
-  lab.test(`overrides the default alwaysTransform behaviour with options ${JSON.stringify(OPTIONS)}`, done => {
+  lab.test(`overrides the default alwaysTransform behaviour with options ${JSON.stringify(OPTIONS)}`, () => {
 
     const source = {
       "my": {
@@ -35,8 +35,6 @@ suite.declare((lab, variables) => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
 
   });
 

@@ -13,7 +13,7 @@ describe("Pipeline Transformations", () => {
 
   describe("The accceptIf() method", () => {
 
-    before(done => {
+    before(() => {
       mapper = createMapper();
 
       mapper
@@ -43,45 +43,44 @@ describe("Pipeline Transformations", () => {
           "foo1": "bar2"
         }
       };
-      done();
     });
 
     describe("when its used", () => {
 
-      it("should return the desired result", done => {
+      it("should return the desired result", () => {
         actual = mapper.execute(source);
         expect(actual).to.equal(expected);
-        done();
+
       });
     });
 
     describe("parameter validation", () => {
 
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error if key is null", done => {
+      it("should throw an error if key is null", () => {
         expect(() => mapper("foo").acceptIf(null).to("bar")).to.throw("the key must be a string");
-        done();
+
       });
 
-      it("should throw an error if value is null", done => {
+      it("should throw an error if value is null", () => {
         expect(() => mapper("foo").acceptIf("foo").to("bar")).to.throw("the value cannot be undefined or null");
-        done();
+
       });
     });
 
     describe("when multiple sources are provided", () => {
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error", done => {
+      it("should throw an error", () => {
         expect(() => mapper.map(["foo", "bar"]).acceptIf("foo", 2)).to.throw("Multiple selections does not support pipeline transformations");
-        done();
+
       });
     });
 
@@ -89,7 +88,7 @@ describe("Pipeline Transformations", () => {
 
   describe("The rejectIf() method", () => {
 
-    before(done => {
+    before(() => {
       mapper = createMapper();
 
       mapper
@@ -114,45 +113,44 @@ describe("Pipeline Transformations", () => {
           "foo1": "bar2"
         }
       };
-      done();
     });
 
     describe("when its used", () => {
 
-      it("should return the desired result", done => {
+      it("should return the desired result", () => {
         actual = mapper.execute(source);
         expect(actual).to.equal(expected);
-        done();
+
       });
     });
 
     describe("parameter validation", () => {
 
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error if key is null", done => {
+      it("should throw an error if key is null", () => {
         expect(() => mapper("foo").rejectIf(null).to("bar")).to.throw("the key must be a string");
-        done();
+
       });
 
-      it("should throw an error if value is null", done => {
+      it("should throw an error if value is null", () => {
         expect(() => mapper("foo").rejectIf("foo").to("bar")).to.throw("the value cannot be undefined or null");
-        done();
+
       });
     });
 
     describe("when multiple sources are provided", () => {
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error", done => {
+      it("should throw an error", () => {
         expect(() => mapper.map(["foo", "bar"]).rejectIf("foo", 2)).to.throw("Multiple selections does not support pipeline transformations");
-        done();
+
       });
     });
 
@@ -160,7 +158,7 @@ describe("Pipeline Transformations", () => {
 
   describe("The removing() method", () => {
 
-    before(done => {
+    before(() => {
       mapper = createMapper();
 
       mapper
@@ -207,65 +205,64 @@ describe("Pipeline Transformations", () => {
         },
         "voila": "hello"
       };
-      done();
     });
 
     describe("when an object is passed", () => {
 
-      it("should return the desired result", done => {
+      it("should return the desired result", () => {
         actual = mapper.execute(source);
         expect(actual).to.equal(expected);
-        done();
+
       });
     });
 
     describe("when an array of object is passed", () => {
 
-      it("should return the desired result", done => {
+      it("should return the desired result", () => {
         actual = mapper.each([source]);
         expect(actual).to.equal([expected]);
-        done();
+
       });
     });
 
     describe("parameter validation", () => {
 
-      beforeEach(done => {
+      beforeEach(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error on null", done => {
+      it("should throw an error on null", () => {
         expect(() => mapper("foo").removing(null).to("bar")).to.throw("The removing method requires a string value or an array of strings");
-        done();
+
       });
 
-      it("should throw an error on undefined", done => {
+      it("should throw an error on undefined", () => {
         expect(() => mapper("foo").removing(undefined).to("bar")).to.throw("The removing method requires a string value or an array of strings");
-        done();
+
       });
 
-      it("should throw an error when keys are not passed in as valid string", done => {
+      it("should throw an error when keys are not passed in as valid string", () => {
         expect(() => mapper("foo").removing({}).to("bar")).to.throw("The removing method requires a string value or an array of strings");
-        done();
+
       });
 
-      it("should throw an error when keys are not passed in as valid array of strings", done => {
+      it("should throw an error when keys are not passed in as valid array of strings", () => {
         expect(() => mapper("foo").removing([{}]).to("bar")).to.throw("The removing method requires a string value or an array of strings");
-        done();
+
       });
 
     });
 
     describe("when multiple sources are provided", () => {
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error", done => {
+      it("should throw an error", () => {
         expect(() => mapper.map(["foo", "bar"]).removing("foo")).to.throw("Multiple selections does not support pipeline transformations");
-        done();
+
       });
     });
 
@@ -273,7 +270,7 @@ describe("Pipeline Transformations", () => {
 
   describe("The compact() method", () => {
 
-    it("should compact and array with falsy values", done => {
+    it("should compact and array with falsy values", () => {
 
       const input = [null, "a", false, "b", undefined, "c"];
 
@@ -286,11 +283,10 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(expected);
-      done();
 
     });
 
-    it("should return an unmodified value if the source value is not an array", done => {
+    it("should return an unmodified value if the source value is not an array", () => {
       const input = {data: {"first": "value", "second": null}};
       mapper = createMapper();
 
@@ -299,11 +295,10 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(input);
-      done();
 
     });
 
-    it("should not error if the source value isn't found", done => {
+    it("should not error if the source value isn't found", () => {
       const input = {};
       mapper = createMapper();
 
@@ -312,19 +307,18 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(input);
-      done();
 
     });
 
     describe("when multiple sources are provided", () => {
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error", done => {
+      it("should throw an error", () => {
         expect(() => mapper.map(["foo", "bar"]).compact()).to.throw("Multiple selections does not support pipeline transformations");
-        done();
+
       });
     });
 
@@ -332,7 +326,7 @@ describe("Pipeline Transformations", () => {
 
   describe("The first() method", () => {
 
-    it("should select the first item in an array", done => {
+    it("should select the first item in an array", () => {
 
       const input = ["a", "b", "c"];
 
@@ -345,11 +339,10 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(expected);
-      done();
 
     });
 
-    it("should return an unmodified value if the source value is not an array", done => {
+    it("should return an unmodified value if the source value is not an array", () => {
       const input = {data: {"first": "value", "second": null}};
       mapper = createMapper();
 
@@ -358,11 +351,10 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(input);
-      done();
 
     });
 
-    it("should not error if the source value isn't found", done => {
+    it("should not error if the source value isn't found", () => {
       const input = {};
       mapper = createMapper();
 
@@ -371,26 +363,25 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(input);
-      done();
 
     });
 
     describe("when multiple sources are provided", () => {
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error", done => {
+      it("should throw an error", () => {
         expect(() => mapper.map(["foo", "bar"]).first()).to.throw("Multiple selections does not support pipeline transformations");
-        done();
+
       });
     });
   });
 
   describe("The last() method", () => {
 
-    it("should select the first item in an array", done => {
+    it("should select the first item in an array", () => {
 
       const input = ["a", "b", "c"];
 
@@ -403,11 +394,10 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(expected);
-      done();
 
     });
 
-    it("should return an unmodified value if the source value is not an array", done => {
+    it("should return an unmodified value if the source value is not an array", () => {
       const input = {data: {"first": "value", "second": null}};
       mapper = createMapper();
 
@@ -416,11 +406,10 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(input);
-      done();
 
     });
 
-    it("should not error if the source value isn't found", done => {
+    it("should not error if the source value isn't found", () => {
       const input = {};
       mapper = createMapper();
 
@@ -429,26 +418,25 @@ describe("Pipeline Transformations", () => {
         .execute(input);
 
       expect(actual).to.equal(input);
-      done();
 
     });
 
     describe("when multiple sources are provided", () => {
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error", done => {
+      it("should throw an error", () => {
         expect(() => mapper.map(["foo", "bar"]).last()).to.throw("Multiple selections does not support pipeline transformations");
-        done();
+
       });
     });
   });
 
   describe("The keep() method", () => {
 
-    before(done => {
+    before(() => {
       mapper = createMapper();
 
       mapper
@@ -495,65 +483,64 @@ describe("Pipeline Transformations", () => {
         },
         "voila": "hello"
       };
-      done();
     });
 
     describe("when an object is passed", () => {
 
-      it("should return the desired result", done => {
+      it("should return the desired result", () => {
         actual = mapper.execute(source);
         expect(actual).to.equal(expected);
-        done();
+
       });
     });
 
     describe("when an array of object is passed", () => {
 
-      it("should return the desired result", done => {
+      it("should return the desired result", () => {
         actual = mapper.each([source]);
         expect(actual).to.equal([expected]);
-        done();
+
       });
     });
 
     describe("parameter validation", () => {
 
-      beforeEach(done => {
+      beforeEach(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error on null", done => {
+      it("should throw an error on null", () => {
         expect(() => mapper("foo").keep(null).to("bar")).to.throw("The keep method requires a string value or an array of strings");
-        done();
+
       });
 
-      it("should throw an error on undefined", done => {
+      it("should throw an error on undefined", () => {
         expect(() => mapper("foo").keep(undefined).to("bar")).to.throw("The keep method requires a string value or an array of strings");
-        done();
+
       });
 
-      it("should throw an error when keys are not passed in as valid string", done => {
+      it("should throw an error when keys are not passed in as valid string", () => {
         expect(() => mapper("foo").keep({}).to("bar")).to.throw("The keep method requires a string value or an array of strings");
-        done();
+
       });
 
-      it("should throw an error when keys are not passed in as valid array of strings", done => {
+      it("should throw an error when keys are not passed in as valid array of strings", () => {
         expect(() => mapper("foo").keep([{}]).to("bar")).to.throw("The keep method requires a string value or an array of strings");
-        done();
+
       });
 
     });
 
     describe("when multiple sources are provided", () => {
-      before(done => {
+      before(() => {
         mapper = createMapper();
-        done();
+
       });
 
-      it("should throw an error", done => {
+      it("should throw an error", () => {
         expect(() => mapper.map(["foo", "bar"]).keep("foo")).to.throw("Multiple selections does not support pipeline transformations");
-        done();
+
       });
     });
 

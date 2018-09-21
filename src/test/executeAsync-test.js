@@ -19,23 +19,21 @@ let mapper;
 
 group("The executeAsync() method", () => {
 
-  lab.beforeEach(done => {
+  lab.beforeEach(() => {
     mapper = createMapper();
-    done();
   });
 
   lab.experiment("when execute async is called from the mapper instance", () => {
 
-    lab.test("should return a resolved promise with the desired result", done => {
+    lab.test("should return a resolved promise with the desired result", () => {
       mapper.map("foo");
       mapper.executeAsync(source)
         .then(actual => {
           expect(actual).to.equal(expected);
-          done();
         });
     });
 
-    lab.test("should reject when an error is thrown", done => {
+    lab.test("should reject when an error is thrown", () => {
       mapper.map("foo");
       mapper.executeAsync(null)
         .then(() => {
@@ -44,33 +42,28 @@ group("The executeAsync() method", () => {
         })
         .catch(error => {
           expect(error).to.be.an.error();
-          return done();
         });
     });
-
-
   });
 
   lab.experiment("when execute async is called from the default function", () => {
 
-    lab.test("should return a resolved promise with the desired result", done => {
+    lab.test("should return a resolved promise with the desired result", () => {
       mapper
         .map("foo").to("bar")
         .executeAsync(source)
         .then(actual => {
           expect(actual).to.equal({ "bar": "bar" });
-          done();
         });
     });
   });
 
   lab.experiment("when execute async is called from the chain", () => {
 
-    lab.test("should return a resolved promise with the desired result", done => {
+    lab.test("should return a resolved promise with the desired result", () => {
       mapper("foo").executeAsync(source)
         .then(actual => {
           expect(actual).to.equal(expected);
-          done();
         });
     });
   });

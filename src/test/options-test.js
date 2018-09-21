@@ -11,7 +11,7 @@ const group = testing.createExperiment("The createMapper() method");
 
 group("when setting options", () => {
 
-  lab.test("sets the defaults correctly when no options are provided", done => {
+  lab.test("sets the defaults correctly when no options are provided", () => {
 
     const map = createMapper();
 
@@ -22,12 +22,9 @@ group("when setting options", () => {
     expect(mapping.alwaysTransform).to.be.false();
     expect(mapping.flatten).to.be.null();
     expect(mapping.flattenInverted).to.be.false();
-
-    return done();
-
   });
 
-  lab.test("sets the defaults correctly when empty options are provided", done => {
+  lab.test("sets the defaults correctly when empty options are provided", () => {
 
     const map = createMapper({});
 
@@ -38,12 +35,9 @@ group("when setting options", () => {
     expect(mapping.alwaysTransform).to.be.false();
     expect(mapping.flatten).to.be.null();
     expect(mapping.flattenInverted).to.be.false();
-
-    return done();
-
   });
 
-  lab.test("sets the alwaysTransform option correctly", done => {
+  lab.test("sets the alwaysTransform option correctly", () => {
 
     const map = createMapper({ alwaysTransform: true });
 
@@ -54,12 +48,9 @@ group("when setting options", () => {
     expect(mapping.alwaysTransform).to.be.true();
     expect(mapping.flatten).to.be.null();
     expect(mapping.flattenInverted).to.be.false();
-
-    return done();
-
   });
 
-  lab.test("sets the alwaysSet option correctly", done => {
+  lab.test("sets the alwaysSet option correctly", () => {
 
     const map = createMapper({ alwaysSet: true });
 
@@ -70,12 +61,9 @@ group("when setting options", () => {
     expect(mapping.alwaysTransform).to.be.false();
     expect(mapping.flatten).to.be.null();
     expect(mapping.flattenInverted).to.be.false();
-
-    return done();
-
   });
 
-  lab.test("sets the flattenInverted option correctly", done => {
+  lab.test("sets the flattenInverted option correctly", () => {
 
     const map = createMapper({ flattenInverted: true });
 
@@ -86,12 +74,9 @@ group("when setting options", () => {
     expect(mapping.alwaysTransform).to.be.false();
     expect(mapping.flatten).to.be.null();
     expect(mapping.flattenInverted).to.be.true();
-
-    return done();
-
   });
 
-  lab.test("sets the flatten option correctly", done => {
+  lab.test("sets the flatten option correctly", () => {
 
     const map = createMapper({ flatten: true });
 
@@ -102,13 +87,10 @@ group("when setting options", () => {
     expect(mapping.alwaysTransform).to.be.false();
     expect(mapping.flatten).to.be.true();
     expect(mapping.flattenInverted).to.be.false();
-
-    return done();
-
   });
 
 
-  lab.test("the existing modifier sets more alwaysSet and alwaysTransform to false", done => {
+  lab.test("the existing modifier sets more alwaysSet and alwaysTransform to false", () => {
 
     const map = createMapper({ alwaysSet: true, alwaysTransform: true });
 
@@ -117,12 +99,9 @@ group("when setting options", () => {
     expect(mapping).to.be.an.object();
     expect(mapping.alwaysSet).to.be.false();
     expect(mapping.alwaysTransform).to.be.false();
-
-    return done();
-
   });
 
-  lab.test("the always modifier sets more alwaysSet and alwaysTransform to true", done => {
+  lab.test("the always modifier sets more alwaysSet and alwaysTransform to true", () => {
 
     const map = createMapper({ alwaysSet: false, alwaysTransform: false });
 
@@ -131,16 +110,13 @@ group("when setting options", () => {
     expect(mapping).to.be.an.object();
     expect(mapping.alwaysSet).to.be.true();
     expect(mapping.alwaysTransform).to.be.true();
-
-    return done();
-
   });
 
 });
 
 group("when executing with options set, the single source mapper", () => {
 
-  lab.test("suppresses a transform when the source value is not present", done => {
+  lab.test("suppresses a transform when the source value is not present", () => {
 
     const source = {
       "my": {
@@ -167,12 +143,9 @@ group("when executing with options set, the single source mapper", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
-  lab.test("suppresses a set when the source value is not present", done => {
+  lab.test("suppresses a set when the source value is not present", () => {
 
     const source = {
       "my": {
@@ -197,12 +170,9 @@ group("when executing with options set, the single source mapper", () => {
 
     expect(actual).to.equal(expected);
     expect(count).to.equal(0);
-
-    return done();
-
   });
 
-  lab.test("a set is not supressed when the source value is not present if a transform returns a value", done => {
+  lab.test("a set is not supressed when the source value is not present if a transform returns a value", () => {
 
     const source = {
       "my": {
@@ -231,12 +201,9 @@ group("when executing with options set, the single source mapper", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
-  lab.test("if a transform returns undefined a set will be called", done => {
+  lab.test("if a transform returns undefined a set will be called", () => {
 
     const source = {
       "my": {
@@ -263,12 +230,9 @@ group("when executing with options set, the single source mapper", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
-  lab.test("if source value is false set will be called", done => {
+  lab.test("if source value is false set will be called", () => {
 
     const source = {
       "my": {
@@ -297,16 +261,13 @@ group("when executing with options set, the single source mapper", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
 });
 
 group("when executing with options set, the multi source mapper", () => {
 
-  lab.test("suppresses a transform when the source values are all not present", done => {
+  lab.test("suppresses a transform when the source values are all not present", () => {
 
     const source = {
       "my": {
@@ -338,12 +299,9 @@ group("when executing with options set, the multi source mapper", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
-  lab.test("suppresses a set if a transform returns null", done => {
+  lab.test("suppresses a set if a transform returns null", () => {
 
     const source = {
       "my": {
@@ -375,12 +333,9 @@ group("when executing with options set, the multi source mapper", () => {
 
     expect(actual).to.equal(expected);
     expect(count).to.equal(1);
-
-    return done();
-
   });
 
-  lab.test("suppresses a set if a transform returns undefined", done => {
+  lab.test("suppresses a set if a transform returns undefined", () => {
 
     const source = {
       "my": {
@@ -413,12 +368,9 @@ group("when executing with options set, the multi source mapper", () => {
 
     expect(actual).to.equal(expected);
     expect(count).to.equal(1);
-
-    return done();
-
   });
 
-  lab.test("a transform executes when one source value is present", done => {
+  lab.test("a transform executes when one source value is present", () => {
 
     const source = {
       "my": {
@@ -454,15 +406,12 @@ group("when executing with options set, the multi source mapper", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 });
 
 group("when executing with options set, the or-mode source map", () => {
 
-  lab.test("a transform executes when no sources are present but alwaysTransform is true", done => {
+  lab.test("a transform executes when no sources are present but alwaysTransform is true", () => {
 
     const source = {
       "my": {
@@ -496,12 +445,9 @@ group("when executing with options set, the or-mode source map", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
-  lab.test("a transform does not execute when no sources are present and alwaysTransform is false", done => {
+  lab.test("a transform does not execute when no sources are present and alwaysTransform is false", () => {
     const source = {
       "my": {
         "source": {
@@ -526,12 +472,9 @@ group("when executing with options set, the or-mode source map", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
-  lab.test("no set is called when no values are present and alwaysSet is false", done => {
+  lab.test("no set is called when no values are present and alwaysSet is false", () => {
 
     const source = {
       "my": {
@@ -555,12 +498,9 @@ group("when executing with options set, the or-mode source map", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
-  lab.test("set is called when no values are present but alwaysSet is true", done => {
+  lab.test("set is called when no values are present but alwaysSet is true", () => {
 
     const source = {
       "my": {
@@ -589,9 +529,6 @@ group("when executing with options set, the or-mode source map", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
-
   });
 
 });
@@ -619,7 +556,7 @@ group("the existing modifier", () => {
 });
 
 group("the failureTransform as a option for default use", () => {
-  lab.test("should use the global failure transformed if its defined and failure transform is not provided as part of the mapping", done => {
+  lab.test("should use the global failure transformed if its defined and failure transform is not provided as part of the mapping", () => {
     const source = {
       "foo": "name1",
       "bar": "name2",
@@ -650,7 +587,5 @@ group("the failureTransform as a option for default use", () => {
     const actual = mapper.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
   });
 });
