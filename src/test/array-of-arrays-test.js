@@ -11,7 +11,6 @@ const group = testing.createExperiment("arrays", "array of arrays");
 
 const groups = ["arrays", "array of arrays"];
 
-
 group("when mapping from a larger to a small array", () => {
 
   const src = {
@@ -36,7 +35,7 @@ group("when mapping from a larger to a small array", () => {
     ]
   };
 
-  lab.test("or() mode works when the first get fails", done => {
+  lab.test("or() mode works when the first get fails", () => {
 
     const mapper = createMapper();
 
@@ -46,10 +45,9 @@ group("when mapping from a larger to a small array", () => {
 
     expect(actual).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("or() mode works when the second get succeeds", done => {
+  lab.test("or() mode works when the second get succeeds", () => {
 
     const mapper = createMapper();
 
@@ -59,10 +57,9 @@ group("when mapping from a larger to a small array", () => {
 
     expect(actual).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("missing data works as expected", done => {
+  lab.test("missing data works as expected", () => {
 
     const emptySource = {
       one: [{ two: [{ three: [] }, { three: [] }, { three: null }, undefined, null] }]
@@ -76,7 +73,6 @@ group("when mapping from a larger to a small array", () => {
 
     expect(actual).to.equal({});
 
-    return done();
   });
 
 });
@@ -95,7 +91,7 @@ group("with the flattenInverted option == true", () => {
     ]
   }];
 
-  lab.test("a single level flatten works correctly", done => {
+  lab.test("a single level flatten works correctly", () => {
 
     const mapper = createMapper();
 
@@ -114,10 +110,9 @@ group("with the flattenInverted option == true", () => {
     const actual = mapper.execute(src);
     expect(actual).to.equal(expected);
 
-    return done();
   });
 
-  lab.test("a two level flatting works correctly", done => {
+  lab.test("a two level flatting works correctly", () => {
 
     const mapper = createMapper();
 
@@ -132,14 +127,13 @@ group("with the flattenInverted option == true", () => {
     const actual = mapper.execute(src);
     expect(actual).to.equal(expected);
 
-    return done();
   });
 
 });
 
 group("with the flatten option == false", () => {
 
-  lab.test("a two level flatting works correctly", done => {
+  lab.test("a two level flatting works correctly", () => {
 
     const mapper = createMapper();
     const src = [{
@@ -165,15 +159,13 @@ group("with the flatten option == false", () => {
     const actual = mapper.execute(src);
     expect(actual).to.equal(expected);
 
-    return done();
   });
 
 });
 
-
 group("in multi-mode with array of arrays", () => {
 
-  lab.test("array flattening is not applied", done => {
+  lab.test("array flattening is not applied", () => {
 
     const src = {
       one: [{
@@ -204,8 +196,6 @@ group("in multi-mode with array of arrays", () => {
       .execute(src);
 
     expect(actual).to.equal(expected);
-
-    return done();
 
   });
 

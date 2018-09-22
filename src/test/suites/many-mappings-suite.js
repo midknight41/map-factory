@@ -35,7 +35,7 @@ suite.declare((lab, variables) => {
 
     // lab.experiment(experimentalLabel, () => {
 
-    lab.test("source values can be mapped to the target without a transform", done => {
+    lab.test("source values can be mapped to the target without a transform", () => {
 
       const map = createSut();
 
@@ -46,12 +46,9 @@ suite.declare((lab, variables) => {
       const actual = map.execute(SOURCE);
 
       expect(actual).to.equal(EXPECTED);
-
-      return done();
-
     });
 
-    lab.test("source values can be mapped to the target with a transform", done => {
+    lab.test("source values can be mapped to the target with a transform", () => {
 
       const map = createSut();
 
@@ -61,12 +58,9 @@ suite.declare((lab, variables) => {
 
       const actual = map.execute(SOURCE);
       expect(actual).to.equal(EXPECTED);
-
-      return done();
-
     });
 
-    lab.test("source values can be mapped to the target in multi-mode", done => {
+    lab.test("source values can be mapped to the target in multi-mode", () => {
 
       const map = createSut();
 
@@ -77,10 +71,6 @@ suite.declare((lab, variables) => {
       const actual = map.execute(SOURCE);
 
       expect(actual).to.equal(EXPECTED);
-
-
-      return done();
-
     });
 
   });

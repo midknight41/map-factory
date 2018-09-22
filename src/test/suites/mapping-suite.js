@@ -37,7 +37,7 @@ suite.declare((lab, variables) => {
 
     // lab.experiment(experimentalLabel, () => {
 
-    lab.test("a string source can be selected and mapped to the target without a transform", done => {
+    lab.test("a string source can be selected and mapped to the target without a transform", () => {
 
       const mapper = createSut();
 
@@ -46,12 +46,9 @@ suite.declare((lab, variables) => {
         .execute(SOURCE);
 
       expect(actual).to.equal(EXPECTED);
-
-      return done();
-
     });
 
-    lab.test("a string source can be selected and mapped to the target with a transform", done => {
+    lab.test("a string source can be selected and mapped to the target with a transform", () => {
 
       const mapper = createSut();
 
@@ -60,12 +57,9 @@ suite.declare((lab, variables) => {
         .execute(SOURCE);
 
       expect(actual).to.equal(EXPECTED);
-
-      return done();
-
     });
 
-    lab.test("an array source can be selected and mapped to the target", done => {
+    lab.test("an array source can be selected and mapped to the target", () => {
 
       const mapper = createSut();
 
@@ -74,9 +68,6 @@ suite.declare((lab, variables) => {
         .execute(SOURCE);
 
       expect(actual).to.equal(EXPECTED);
-
-      return done();
-
     });
 
   });

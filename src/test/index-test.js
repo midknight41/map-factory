@@ -11,7 +11,7 @@ const { getValue, setValue } = require("../lib/index");
 
 group("non-import compatibility", () => {
 
-  lab.test("Can require the module", done => {
+  lab.test("Can require the module", () => {
 
     const source = {
       "fieldName": "name1"
@@ -30,11 +30,9 @@ group("non-import compatibility", () => {
     const actual = map.execute(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
   });
 
-  lab.test("each() method works from the index", done => {
+  lab.test("each() method works from the index", () => {
 
     const source = [{
       "fieldName": "name1"
@@ -49,24 +47,16 @@ group("non-import compatibility", () => {
     const actual = map("fieldName").each(source);
 
     expect(actual).to.equal(expected);
-
-    return done();
   });
 
-  lab.test("getValue is exported", done => {
+  lab.test("getValue is exported", () => {
 
     expect(getValue).to.be.a.function();
-
-    return done();
-
   });
 
-  lab.test("setValue is exported", done => {
+  lab.test("setValue is exported", () => {
 
     expect(setValue).to.be.a.function();
-
-    return done();
-
   });
 
 });
