@@ -1,3 +1,15 @@
+### 3.7.4
+
+Upgraded dependencies and changed the build to only support node 8 and higher.
+
+### 3.7.3
+
+npm audit fixes.
+
+### 3.7.2
+
+fixed a bug with pipeline transformations.
+
 ### 3.7.1
 
 Fixed a bug when traversing an array of a non-existing object.
