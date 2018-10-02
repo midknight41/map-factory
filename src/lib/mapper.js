@@ -147,8 +147,8 @@ export default class Mapper {
     /* eslint-disable prefer-const */
     const sourcePath = item.source;
     let targetPath = item.target;
-    let { transform, alwaysSet, alwaysTransform,
-      pipelineTransformations, flatten, flattenInverted, failureTransform } = item;
+    let {transform, alwaysSet, alwaysTransform,
+      pipelineTransformations, flatten, flattenInverted, failureTransform} = item;
 
     let isCustomTransform = true;
     /* eslint-enable prefer-const */
@@ -175,7 +175,7 @@ export default class Mapper {
       targetPath = sourcePath;
     }
 
-    return { mode, targetPath, sourcePath, transform, failureTransform, isCustomTransform, flattenings, options: { alwaysSet, alwaysTransform, pipelineTransformations, flatten, flattenInverted } };
+    return {mode, targetPath, sourcePath, transform, failureTransform, isCustomTransform, flattenings, options: {alwaysSet, alwaysTransform, pipelineTransformations, flatten, flattenInverted}};
 
   }
 
@@ -204,7 +204,7 @@ export default class Mapper {
     // so in this scenario we just suppress flattening
     // no source means copy the root object so we dont need this
     if (targetPath === null || targetPath === undefined || sourcePath === null || sourcePath === undefined) {
-      return { sourceCount: 0, targetCount: 0, flatten: false, inverted: flattenInverted };
+      return {sourceCount: 0, targetCount: 0, flatten: false, inverted: flattenInverted};
     }
 
     // const regArray = /\[\]|\[([\w\.'=]*)\]/g; use for support of jsonata-like query
@@ -219,11 +219,11 @@ export default class Mapper {
 
     if (sourceCount > targetCount) {
       // we need to flatten this array to match the target structure
-      return { sourceCount, targetCount, flatten: true, inverted: flattenInverted };
+      return {sourceCount, targetCount, flatten: true, inverted: flattenInverted};
 
     }
 
-    return { sourceCount, targetCount, flatten: false, inverted: flattenInverted };
+    return {sourceCount, targetCount, flatten: false, inverted: flattenInverted};
 
   }
 
@@ -243,7 +243,7 @@ export default class Mapper {
 
   }
 
-  processSingleItem_(sourceObject, destinationObject, { targetPath, sourcePath, transform, failureTransform, flattenings, options }) {
+  processSingleItem_(sourceObject, destinationObject, {targetPath, sourcePath, transform, failureTransform, flattenings, options}) {
 
     // Get source
     let value;
@@ -282,7 +282,7 @@ export default class Mapper {
 
   }
 
-  processMultiItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, failureTransform, isCustomTransform, flattenings, options }) {
+  processMultiItem_(sourceObject, destinationObject, {sourcePath, targetPath, transform, failureTransform, isCustomTransform, flattenings, options}) {
 
     if (isCustomTransform === false) {
       throw new Error("Multiple selections must map to a transform. No transform provided.");
@@ -331,7 +331,7 @@ export default class Mapper {
 
   }
 
-  processOrItem_(sourceObject, destinationObject, { sourcePath, targetPath, transform, failureTransform, flattenings, options }) {
+  processOrItem_(sourceObject, destinationObject, {sourcePath, targetPath, transform, failureTransform, flattenings, options}) {
 
     let orValue;
     const sourceArray = sourcePath;
@@ -373,6 +373,7 @@ export default class Mapper {
   }
 
   setIfRequired_(destinationObject, targetPath, value, options) {
+
 
     if (this.exists_(value) || options.alwaysSet === true) {
       return this.om.setValue(destinationObject, targetPath, value);
