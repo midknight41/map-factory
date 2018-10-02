@@ -1,3 +1,7 @@
+### 3.7.5
+
+Fixed a bug where ```{"alwaysSet":true}``` was not setting an empty array in all use cases.
+
 ### 3.7.4
 
 Upgraded dependencies and changed the build to only support node 8 and higher.
