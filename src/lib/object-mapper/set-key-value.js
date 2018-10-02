@@ -114,7 +114,7 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
 
   } else {
 
-    // console.log(indent, "Destination has a value");
+    // console.log(indent, "Destination has a value", key, value, isValueArray);
     if (isPropertyArray) {
       arrayIndex = match[2] || 0;
     }
@@ -126,8 +126,12 @@ function _setValue(destinationObject, startKey, keys, fromValue, depth, parentIs
 
     if (!canBeNull && (fromValue === null || fromValue === undefined)) {
 
-      // console.log(indent, "resolve", fromValue, destinationObject, parentIsArray);
+      // console.log(indent, "resolve", key, fromValue, destinationObject, parentIsArray);
       if (parentIsArray === true && destinationStartedEmpty) return null;
+      
+      if (isValueArray) {
+        destinationObject[key] = [];
+      }
 
       return destinationObject;
     }
