@@ -939,6 +939,56 @@ mapper
 */
 ```
 
+### sort(comparer?: function)
+
+Sorts the array in the *Ascending* order. You can also pass in a comparer for sorting on the basis of comparisons.
+
+```js
+const input = {
+  "foo": [{"x": 4}, {"x": 2}],
+  "bar": [4, 2]
+};
+
+mapper = createMapper();
+
+mapper
+  .map("foo").sort(item => item.x)
+  .map("bar").sort()
+  .execute(input);
+
+/*
+{
+  "foo": [{"x": 2}, {"x": 4}],
+  "bar": [2, 4]
+};
+*/
+```
+
+### reverseSort(comparer?: function)
+
+Sorts the array in the *Descending* order. You can also pass in a comparer for sorting on the basis of comparisons.
+
+```js
+const input = {
+  "foo": [{"x": 2}, {"x": 4}],
+  "bar": [2, 4]
+};
+
+mapper = createMapper();
+
+mapper
+  .map("foo").reverseSort(item => item.x)
+  .map("bar").reverseSort()
+  .execute(input);
+
+/*
+{
+  "foo": [{"x": 4}, {"x": 2}],
+  "bar": [4, 2]
+};
+*/
+```
+
 ## Dealing with multiple sources of data
 There are two ways to deal with multiple sources of data.
 - Combine your data in to a single object before mapping

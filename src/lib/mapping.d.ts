@@ -19,4 +19,6 @@ export default class Mapping implements IMapping {
   keep(keys: string | string[]): IMapping;
   acceptIf(key: string, comparison: any): IMapping;
   rejectIf(key: string, comparison: any): IMapping;
+  sort(comparer?: function): IMapping;
+  reverseSort(comparer?: function): IMapping;
 }
