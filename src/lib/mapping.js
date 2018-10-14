@@ -2,6 +2,7 @@ import cloneDeep from "lodash.clonedeep";
 import unset from "lodash.unset";
 import set from "lodash.set";
 import compact from "lodash.compact";
+import sortBy from "lodash.sortby";
 
 export default class Mapping {
 
@@ -353,5 +354,39 @@ export default class Mapping {
       return val;
     }
 
+  }
+
+  processSort_(value, comparer, isReverse = false) {
+    const valueToUse = cloneDeep(value);
+
+    if (!Array.isArray(valueToUse)) {
+      return valueToUse;
+    }
+
+    if (typeof comparer === "function") {
+      return isReverse ? sortBy(valueToUse, comparer).reverse() : sortBy(valueToUse, comparer);
+    }
+
+    return isReverse ? sortBy(valueToUse).reverse() : sortBy(valueToUse);
+  }
+
+  sort(comparer) {
+    this.validateSourceForOps();
+
+    this.pushToPipelineTransformations_((source, value) => {
+      return this.processSort_(value, comparer);
+    });
+
+    return this;
+  }
+
+  reverseSort(comparer) {
+    this.validateSourceForOps();
+
+    this.pushToPipelineTransformations_((source, value) => {
+      return this.processSort_(value, comparer, true);
+    });
+
+    return this;
   }
 }

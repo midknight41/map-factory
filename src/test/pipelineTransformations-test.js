@@ -546,4 +546,107 @@ describe("Pipeline Transformations", () => {
 
   });
 
+  describe("The sort() method", () => {
+    describe("when the value is not an array", () => {
+      it("should return the value without any change", () => {
+        source = {"foo": "bar"};
+        mapper = createMapper();
+
+        mapper
+          .map("foo").sort();
+
+        expect(mapper.execute(source)).to.equal(source);
+      });
+    });
+
+    describe("when the value is an array but no comparer is provided", () => {
+      it("should return the sorted value", () => {
+        source = {"foo": ["war", "bar"]};
+        expected = {"foo": ["bar", "war"]};
+        mapper = createMapper();
+
+        mapper
+          .map("foo").sort();
+
+        expect(mapper.execute(source)).to.equal(expected);
+      });
+    });
+
+    describe("when the value is an array and a comparer is provided", () => {
+      it("should return the sorted value", () => {
+        source = {
+          "foo": [{
+            "x": 4
+          }, {
+            "x": 2
+          }]
+        };
+        expected = {
+          "foo": [{
+            "x": 2
+          }, {
+            "x": 4
+          }]
+        };
+        mapper = createMapper();
+
+        mapper
+          .map("foo").sort(item => item.x);
+
+        expect(mapper.execute(source)).to.equal(expected);
+      });
+    });
+  });
+
+  describe("The reverseSort() method", () => {
+    describe("when the value is not an array", () => {
+      it("should return the value without any change", () => {
+        source = {"foo": "bar"};
+        mapper = createMapper();
+
+        mapper
+          .map("foo").reverseSort();
+
+        expect(mapper.execute(source)).to.equal(source);
+      });
+    });
+
+    describe("when the value is an array but no comparer is provided", () => {
+      it("should return the sorted value", () => {
+        expected = {"foo": ["war", "bar"]};
+        source = {"foo": ["bar", "war"]};
+        mapper = createMapper();
+
+        mapper
+          .map("foo").reverseSort();
+
+        expect(mapper.execute(source)).to.equal(expected);
+      });
+    });
+
+    describe("when the value is an array and a comparer is provided", () => {
+      it("should return the sorted value", () => {
+        expected = {
+          "foo": [{
+            "x": 4
+          }, {
+            "x": 2
+          }]
+        };
+        source = {
+          "foo": [{
+            "x": 2
+          }, {
+            "x": 4
+          }]
+        };
+        mapper = createMapper();
+
+        mapper
+          .map("foo").reverseSort(item => item.x);
+
+        expect(mapper.execute(source)).to.equal(expected);
+      });
+    });
+  });
 });
