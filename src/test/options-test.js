@@ -1,4 +1,4 @@
-import { expect } from "code";
+import {expect} from "code";
 import * as Lab from "lab";
 import getHelper from "lab-testing";
 import createMapper from "../lib/index";
@@ -39,7 +39,7 @@ group("when setting options", () => {
 
   lab.test("sets the alwaysTransform option correctly", () => {
 
-    const map = createMapper({ alwaysTransform: true });
+    const map = createMapper({alwaysTransform: true});
 
     const mapping = map("a");
 
@@ -52,7 +52,7 @@ group("when setting options", () => {
 
   lab.test("sets the alwaysSet option correctly", () => {
 
-    const map = createMapper({ alwaysSet: true });
+    const map = createMapper({alwaysSet: true});
 
     const mapping = map("a");
 
@@ -65,7 +65,7 @@ group("when setting options", () => {
 
   lab.test("sets the flattenInverted option correctly", () => {
 
-    const map = createMapper({ flattenInverted: true });
+    const map = createMapper({flattenInverted: true});
 
     const mapping = map("a");
 
@@ -78,7 +78,7 @@ group("when setting options", () => {
 
   lab.test("sets the flatten option correctly", () => {
 
-    const map = createMapper({ flatten: true });
+    const map = createMapper({flatten: true});
 
     const mapping = map("a");
 
@@ -92,7 +92,7 @@ group("when setting options", () => {
 
   lab.test("the existing modifier sets more alwaysSet and alwaysTransform to false", () => {
 
-    const map = createMapper({ alwaysSet: true, alwaysTransform: true });
+    const map = createMapper({alwaysSet: true, alwaysTransform: true});
 
     const mapping = map("a").existing;
 
@@ -103,7 +103,7 @@ group("when setting options", () => {
 
   lab.test("the always modifier sets more alwaysSet and alwaysTransform to true", () => {
 
-    const map = createMapper({ alwaysSet: false, alwaysTransform: false });
+    const map = createMapper({alwaysSet: false, alwaysTransform: false});
 
     const mapping = map("a").always;
 
@@ -134,7 +134,7 @@ group("when executing with options set, the single source mapper", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: true });
+    const map = createMapper({alwaysTransform: false, alwaysSet: true});
 
     map("my.source.is.missing").to("your.source.is.missing", () => {
       return "found";
@@ -158,7 +158,7 @@ group("when executing with options set, the single source mapper", () => {
     const expected = {
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+    const map = createMapper({alwaysTransform: false, alwaysSet: false});
     let count = 0;
 
     map("my.source.is.missing").to("your.source.is.missing", () => {
@@ -192,7 +192,7 @@ group("when executing with options set, the single source mapper", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: true, alwaysSet: false });
+    const map = createMapper({alwaysTransform: true, alwaysSet: false});
 
     map("my.source.is.missing").to("your.source.is.missing", () => {
       return "found";
@@ -221,7 +221,7 @@ group("when executing with options set, the single source mapper", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: true, alwaysSet: true });
+    const map = createMapper({alwaysTransform: true, alwaysSet: true});
 
     map("my.source.is.missing").to("your.source.is.missing", () => {
       return undefined;
@@ -254,7 +254,7 @@ group("when executing with options set, the single source mapper", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+    const map = createMapper({alwaysTransform: false, alwaysSet: false});
 
     map("my.source.is.missing").to("your.source.is.missing");
 
@@ -262,6 +262,52 @@ group("when executing with options set, the single source mapper", () => {
 
     expect(actual).to.equal(expected);
   });
+
+  group("multiple mappings and arrays", () => {
+    lab.test("when two mappings have an array as the first mapping", () => {
+
+      const mapper = createMapper({alwaysSet: true});
+
+      const source = {
+        foo: 0,
+        bar: []
+      };
+
+      const expected = {bar: [], foo: 0};
+
+      mapper
+        .map("bar").to("bar[]")
+        .map("foo");
+
+      const actual = mapper.execute(source);
+
+      expect(actual).to.equal(expected);
+
+    });
+
+    lab.test("when two mappings have an array as the second mapping", () => {
+
+      const mapper = createMapper({alwaysSet: true});
+
+      const source = {
+        foo: 0,
+        bar: []
+      };
+
+      const expected = {bar: [], foo: 0};
+
+      mapper
+        .map("foo")
+        .map("bar").to("bar[]");
+
+      const actual = mapper.execute(source);
+
+      expect(actual).to.equal(expected);
+
+    });
+
+  });
+
 
 });
 
@@ -290,7 +336,7 @@ group("when executing with options set, the multi source mapper", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: true });
+    const map = createMapper({alwaysTransform: false, alwaysSet: true});
 
     map(["my.source.is.missing", "my.other.source.is.missing"]).to("your.source.is.missing", () => {
       return "found";
@@ -321,7 +367,7 @@ group("when executing with options set, the multi source mapper", () => {
     const expected = {
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+    const map = createMapper({alwaysTransform: false, alwaysSet: false});
     let count = 0;
 
     map(["my.source.is.missing", "my.other.source.is.here"]).to("your.source.is.missing", () => {
@@ -355,7 +401,7 @@ group("when executing with options set, the multi source mapper", () => {
     const expected = {
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+    const map = createMapper({alwaysTransform: false, alwaysSet: false});
 
     let count = 0;
 
@@ -397,7 +443,7 @@ group("when executing with options set, the multi source mapper", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: true });
+    const map = createMapper({alwaysTransform: false, alwaysSet: true});
 
     map(["my.source.is.here", "my.other.source.is.missing"]).to("your.source.is.here", () => {
       return "found";
@@ -436,7 +482,7 @@ group("when executing with options set, the or-mode source map", () => {
       }
     };
 
-    const map = createMapper({ alwaysTransform: true, alwaysSet: false });
+    const map = createMapper({alwaysTransform: true, alwaysSet: false});
 
     map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here", () => {
       return "found";
@@ -463,7 +509,7 @@ group("when executing with options set, the or-mode source map", () => {
 
     const expected = {};
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+    const map = createMapper({alwaysTransform: false, alwaysSet: false});
 
     map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here", () => {
       return "whoops";
@@ -491,7 +537,7 @@ group("when executing with options set, the or-mode source map", () => {
 
     const expected = {};
 
-    const map = createMapper({ alwaysTransform: false, alwaysSet: false });
+    const map = createMapper({alwaysTransform: false, alwaysSet: false});
 
     map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here");
 
@@ -522,7 +568,7 @@ group("when executing with options set, the or-mode source map", () => {
         }
       }
     };
-    const map = createMapper({ alwaysTransform: false, alwaysSet: true });
+    const map = createMapper({alwaysTransform: false, alwaysSet: true});
 
     map("my.source.is.here").or("my.other.source.is.missing").to("your.source.is.here");
 
@@ -535,23 +581,23 @@ group("when executing with options set, the or-mode source map", () => {
 
 group("the always modifier", () => {
 
-  alwaysSuite.run(lab, { OPTIONS: null });
+  alwaysSuite.run(lab, {OPTIONS: null});
   alwaysSuite.run(lab, {});
-  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: false } });
-  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
-  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: true, alwaysSet: false } });
-  alwaysSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
+  alwaysSuite.run(lab, {OPTIONS: {alwaysTransform: false, alwaysSet: false}});
+  alwaysSuite.run(lab, {OPTIONS: {alwaysTransform: false, alwaysSet: true}});
+  alwaysSuite.run(lab, {OPTIONS: {alwaysTransform: true, alwaysSet: false}});
+  alwaysSuite.run(lab, {OPTIONS: {alwaysTransform: false, alwaysSet: true}});
 
 });
 
 group("the existing modifier", () => {
 
-  existingSuite.run(lab, { OPTIONS: null });
+  existingSuite.run(lab, {OPTIONS: null});
   existingSuite.run(lab, {});
-  existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: false } });
-  existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
-  existingSuite.run(lab, { OPTIONS: { alwaysTransform: true, alwaysSet: false } });
-  existingSuite.run(lab, { OPTIONS: { alwaysTransform: false, alwaysSet: true } });
+  existingSuite.run(lab, {OPTIONS: {alwaysTransform: false, alwaysSet: false}});
+  existingSuite.run(lab, {OPTIONS: {alwaysTransform: false, alwaysSet: true}});
+  existingSuite.run(lab, {OPTIONS: {alwaysTransform: true, alwaysSet: false}});
+  existingSuite.run(lab, {OPTIONS: {alwaysTransform: false, alwaysSet: true}});
 
 });
 
@@ -573,7 +619,7 @@ group("the failureTransform as a option for default use", () => {
       "fooNull": "foo"
     };
 
-    const mapper = createMapper({ failureTransform: val => val === null ? "foo" : "from global"});
+    const mapper = createMapper({failureTransform: val => val === null ? "foo" : "from global"});
 
     mapper
       .map("foo1").to("foo1", null, "bar")

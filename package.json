@@ -1,6 +1,6 @@
 {
   "name": "map-factory",
-  "version": "3.7.3",
+  "version": "3.7.5",
   "description": "A simple object mapping utility that makes it easy to map data from one object to another. Create object mappers using fluent interface that supports deep references (dot notation), custom transformations, and object merging.",
   "main": "./dist/lib/index.js",
   "scripts": {
@@ -52,7 +52,7 @@
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^10.0.1",
     "babel-preset-es2015": "^6.24.1",
     "benchmark": "^2.1.3",
     "code": "^5.2.0",
