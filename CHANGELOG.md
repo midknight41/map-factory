@@ -1,3 +1,7 @@
+### 3.8.0
+
+Added ```sort()``` and ```reverseSort()``` pipeline transformations.
+
 ### 3.7.5
 
 Fixed a bug where ```{"alwaysSet":true}``` was not setting an empty array in all use cases.
