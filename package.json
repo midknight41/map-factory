@@ -59,7 +59,7 @@
     "coveralls": "^3.0.0",
     "eslint": "^5.6.0",
     "istanbul": "^0.4.4",
-    "lab": "^17.0.0",
+    "lab": "^18.0.2",
     "lab-suite": "^1.4.0",
     "lab-testing": "^3.0.0",
     "rimraf": "^2.6.0"
