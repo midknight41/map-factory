@@ -1,6 +1,6 @@
 {
   "name": "map-factory",
-  "version": "3.8.0",
+  "version": "3.8.1",
   "description": "A simple object mapping utility that makes it easy to map data from one object to another. Create object mappers using fluent interface that supports deep references (dot notation), custom transformations, and object merging.",
   "main": "./dist/lib/index.js",
   "scripts": {
