@@ -57,7 +57,7 @@
     "benchmark": "^2.1.4",
     "code": "^5.2.4",
     "coveralls": "^3.0.3",
-    "eslint": "^5.16.0",
+    "eslint": "^6.0.0",
     "istanbul": "^0.4.5",
     "lab": "^18.0.2",
     "lab-suite": "^1.4.0",
