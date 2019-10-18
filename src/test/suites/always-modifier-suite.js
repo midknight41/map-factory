@@ -1,4 +1,4 @@
-import { expect } from "code";
+import { expect } from "@hapi/code";
 import * as labSuite from "lab-suite";
 
 import createMapper from "../../lib/map-factory";
