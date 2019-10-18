@@ -1,4 +1,4 @@
-import * as Lab from "lab";
+import * as Lab from "@hapi/lab";
 import suite from "./suites/interface-suite";
 
 const lab = exports.lab = Lab.script();

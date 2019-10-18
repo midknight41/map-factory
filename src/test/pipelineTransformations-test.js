@@ -1,5 +1,5 @@
-import * as Lab from "lab";
-import {expect} from "code";
+import * as Lab from "@hapi/lab";
+import {expect} from "@hapi/code";
 import createMapper from "../lib";
 
 const {describe, it, before, beforeEach} = exports.lab = Lab.script();
