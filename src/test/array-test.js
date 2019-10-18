@@ -1,4 +1,4 @@
-import * as Lab from "lab";
+import * as Lab from "@hapi/lab";
 import notationSuite from "./suites/notation-suite";
 import manyMappings from "./suites/many-mappings-suite";
 import mappingSuite from "./suites/mapping-suite";
