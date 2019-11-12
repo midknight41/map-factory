@@ -1,5 +1,5 @@
-import * as Lab from "lab";
-import { expect, fail } from "code";
+import * as Lab from "@hapi/lab";
+import { expect, fail } from "@hapi/code";
 import createMapper from "../lib";
 import getHelper from "lab-testing";
 

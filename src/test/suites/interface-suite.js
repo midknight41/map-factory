@@ -1,4 +1,4 @@
-import { expect } from "code";
+import { expect } from "@hapi/code";
 import getHelper from "lab-testing";
 import * as labSuite from "lab-suite";
 
