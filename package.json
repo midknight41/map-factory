@@ -52,7 +52,7 @@
   "license": "MIT",
   "devDependencies": {
     "@hapi/code": "^7.0.0",
-    "@hapi/lab": "^21.0.0",
+    "@hapi/lab": "^22.0.1",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.3",
     "babel-preset-es2015": "^6.24.1",
