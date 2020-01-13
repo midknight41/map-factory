@@ -8,7 +8,7 @@ export interface IMapData {
 }
 export interface IMapFactory {
     (stringOrArray: string | string[]): IMapping;
-    map(stringOrArray: string | string[]): IMapping;
+    map(stringOrArray?: string | string[]): IMapping;
     execute(source: any, destination?: any): any;
     executeAsync(source: any, destination?: any): Promise<any>;
     each(sourceArray: any[]): any;
@@ -20,12 +20,22 @@ export interface IMapping {
     target: string;
     transform?: Function;
     to(target: string, fnc?: Function): any;
-    map(stringOrArray: string | string[]): IMapping;
+    map(stringOrArray?: string | string[]): IMapping;
     or(source: string): any;
     execute(source: any, destination?: any): any;
     executeAsync(source: any, destination?: any): Promise<any>;
     each(sourceArray: any[]): any;
-    chain(mapper: IMapFactory):IMapFactory;
+    chain(mapper: IMapFactory): IMapFactory;
+    each(sourceArray: any): any;
+    to(target: string, successFunc?: Function, notFoundFunc? : any): any;
+    always: IMapping;
+    existing: IMapping;
+    removing(keys: string | string[]): IMapping;
+    keep(keys: string | string[]): IMapping;
+    acceptIf(key: string, comparison: any): IMapping;
+    rejectIf(key: string, comparison: any): IMapping;
+    sort(comparer?: Function): IMapping;
+    reverseSort(comparer?: Function): IMapping;
 }
 export interface IOptions {
   experimental?: boolean;
