@@ -73,6 +73,7 @@ test/*.js.map
 test/*.js
 .idea
 .vscode/
+.npmrc
 
 #ncrunch
 *ncrunch*
