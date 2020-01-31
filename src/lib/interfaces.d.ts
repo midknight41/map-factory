@@ -36,6 +36,7 @@ export interface IMapping {
     rejectIf(key: string, comparison: any): IMapping;
     sort(comparer?: Function): IMapping;
     reverseSort(comparer?: Function): IMapping;
+    set(target: string, value: any): IMapping;
 }
 export interface IOptions {
   experimental?: boolean;
