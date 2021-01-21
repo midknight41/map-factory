@@ -62,7 +62,8 @@
     "istanbul": "^0.4.5",
     "lab-suite": "^1.4.0",
     "lab-testing": "^4.2.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "typescript": "^4.1.3"
   },
   "types": "./dist/lib/map-factory.d.ts",
   "typings": "./dist/lib/map-factory.d.ts",
