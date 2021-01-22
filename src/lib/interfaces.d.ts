@@ -9,6 +9,7 @@ export interface IMapData {
 export interface IMapFactory {
     (stringOrArray: string | string[]): IMapping;
     map(stringOrArray?: string | string[]): IMapping;
+    set(key: string, value: any): IMapping;
     execute(source: any, destination?: any): any;
     executeAsync(source: any, destination?: any): Promise<any>;
     each(sourceArray: any[]): any;
