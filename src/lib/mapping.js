@@ -1,8 +1,8 @@
-import cloneDeep from "lodash.clonedeep";
-import unset from "lodash.unset";
-import set from "lodash.set";
-import compact from "lodash.compact";
-import sortBy from "lodash.sortby";
+import cloneDeep from "lodash/clonedeep";
+import unset from "lodash/unset";
+import set from "lodash/set";
+import compact from "lodash/compact";
+import sortBy from "lodash/sortby";
 
 export default class Mapping {
 

@@ -71,12 +71,6 @@
     "dist"
   ],
   "dependencies": {
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.compact": "^3.0.1",
-    "lodash.flattendeep": "^4.4.0",
-    "lodash.flattendepth": "^4.7.0",
-    "lodash.set": "^4.3.2",
-    "lodash.sortby": "^4.7.0",
-    "lodash.unset": "^4.5.2"
+    "lodash": "^4.17.21"
   }
 }
