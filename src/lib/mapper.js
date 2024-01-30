@@ -1,7 +1,7 @@
 import Mapping from "./mapping";
-import flattenDeep from "lodash/flattendeep";
-import flattenDepth from "lodash/flattendepth";
-import cloneDeep from "lodash/clonedeep";
+import flattenDeep from "lodash/flattenDeep";
+import flattenDepth from "lodash/flattenDepth";
+import cloneDeep from "lodash/cloneDeep";
 
 const SINGLE_MODE = 0;
 const MULTI_MODE = 1;

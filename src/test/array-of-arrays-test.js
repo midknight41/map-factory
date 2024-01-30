@@ -3,7 +3,7 @@ import * as Lab from "@hapi/lab";
 import getHelper from "lab-testing";
 import manyMappings from "./suites/many-mappings-suite";
 import createMapper from "../lib";
-import flattenDeep from "lodash/flattendeep";
+import flattenDeep from "lodash/flattenDeep";
 
 const lab = exports.lab = Lab.script();
 const testing = getHelper(lab);

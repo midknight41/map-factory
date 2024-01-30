@@ -1,5 +1,5 @@
 /* eslint-disable */
-const flattenDeep = require("lodash/flattendeep");
+const flattenDeep = require("lodash/flattenDeep");
 
 'use strict';
 
