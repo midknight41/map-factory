@@ -289,17 +289,10 @@ export default class Mapper {
     }
 
     let values = [];
-    let anyValues = false;
 
     // Get source
     for (const fromKey of sourcePath) {
-
       const value = this.om.getValue(sourceObject, fromKey);
-
-      if (this.exists_(value)) {
-        anyValues = true;
-      }
-
       values.push(value);
     }
 
